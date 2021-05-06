@@ -2,6 +2,7 @@
 import { defineComponent, reactive, onMounted } from 'vue'
 import DPlayer from 'dplayer'
 import flvjs from 'flv.js'
+import { Button } from 'ant-design-vue'
 
 export default defineComponent({
 	name: 'Home',
@@ -40,54 +41,10 @@ export default defineComponent({
 			})
 		}
 
-		const initVideo = () => {
-			const video = document.querySelector('#video')
-			const audio = document.querySelector('#audio')
-			console.log(navigator.mediaDevices.getUserMedia)
-			navigator.getUserMedia =
-				navigator.getUserMedia ||
-				navigator.webkitGetUserMedia ||
-				navigator.mozGetUserMedia ||
-				navigator.msGetUserMedia
-
-			if (typeof navigator.mediaDevices.getUserMedia === 'undefined') {
-				navigator.getUserMedia(
-					{
-						audio: true,
-						video: true
-					},
-					response => {
-						video.srcObject = response
-						audio.srcObject = response
-					},
-					err => console.error(err)
-				)
-			} else {
-				navigator.mediaDevices
-					.getUserMedia({
-						audio: true,
-						video: true
-					})
-					.then(response => {
-						video.srcObject = response
-						audio.srcObject = response
-						console.log(response)
-					})
-					.catch(err => console.error(err))
-			}
-			// navigator.getUserMedia(
-			// 	{
-			// 		video: {},
-			// 		audio: {}
-			// 	},
-			// 	stream => (video.srcObject = stream),
-			// 	err => console.error(err)
-			// )
-		}
-
 		return () => {
 			return (
 				<div class="app-conter">
+					<Button>Button</Button>
 					<div id="player"></div>
 				</div>
 			)

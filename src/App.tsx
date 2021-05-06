@@ -1,4 +1,6 @@
 import { defineComponent } from 'vue'
+import { RouterView } from 'vue-router'
+import '@/paker/style/index.less'
 
 export default defineComponent({
 	name: 'App',
@@ -6,7 +8,7 @@ export default defineComponent({
 		return () => {
 			return (
 				<>
-					<router-view></router-view>
+					<RouterView></RouterView>
 				</>
 			)
 		}
