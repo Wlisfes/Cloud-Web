@@ -2,7 +2,6 @@
 import { defineComponent, reactive, onMounted } from 'vue'
 import DPlayer from 'dplayer'
 import flvjs from 'flv.js'
-import { Button } from 'ant-design-vue'
 
 export default defineComponent({
 	name: 'Home',
@@ -15,7 +14,7 @@ export default defineComponent({
 		})
 
 		onMounted(() => {
-			// initPlayer()
+			initPlayer()
 		})
 
 		const initPlayer = () => {
@@ -44,7 +43,11 @@ export default defineComponent({
 		return () => {
 			return (
 				<div class="app-conter">
-					<div id="player"></div>
+					<div class="player">
+						<div class="player-container">
+							<div id="player"></div>
+						</div>
+					</div>
 				</div>
 			)
 		}
@@ -56,11 +59,24 @@ export default defineComponent({
 .app-conter {
 	display: flex;
 	flex-direction: column;
-	#player {
-		width: 960px;
-		height: 540px;
+	padding: 12px;
+	.player {
+		width: 100%;
+		max-width: 1080px;
 		margin: 0 auto;
 		cursor: pointer;
+		position: relative;
+		&-container {
+			width: 100%;
+			padding-bottom: 56.25%;
+		}
+	}
+	#player {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
 		::v-deep(.dplayer-controller) {
 			opacity: 1;
 			padding: 0;
