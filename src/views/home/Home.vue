@@ -15,16 +15,16 @@ export default defineComponent({
 		})
 
 		onMounted(() => {
-			initPlayer()
+			// initPlayer()
 		})
 
 		const initPlayer = () => {
 			new DPlayer({
 				container: document.querySelector('#player'),
+				theme: '#fb7299',
 				video: {
 					url: state.flv,
 					type: 'customFlv',
-					theme: '#ff357f',
 					highlight:
 						'https://cloud.lisfes.cn/8e9070ddc9c542829e41ee21b0a3c3de/snapshots/c167ca71ad0d4e38bb27b1e7215fe239-00001.jpg',
 					customType: {
@@ -44,7 +44,6 @@ export default defineComponent({
 		return () => {
 			return (
 				<div class="app-conter">
-					<Button>Button</Button>
 					<div id="player"></div>
 				</div>
 			)

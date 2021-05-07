@@ -1,0 +1,17 @@
+import type { AxiosStatic } from 'axios'
+
+interface Response<T = any> {
+	data: T
+	timestamp: string
+	message: string
+	code: number
+	url?: string
+	method?: string
+	[key: string]: any
+}
+
+declare module 'axios' {
+	export interface Axios extends AxiosStatic {
+		<T = any, R = Response<T>>(config: AxiosRequestConfig): Promise<R>
+	}
+}
