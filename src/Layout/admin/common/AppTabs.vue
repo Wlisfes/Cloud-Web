@@ -33,6 +33,24 @@ export default defineComponent({
 	::v-deep(.ant-tabs-bar) {
 		margin: 0;
 		border: none;
+		.ant-tabs-tab {
+			height: 32px !important;
+			margin-right: 5px !important;
+			line-height: 32px !important;
+			background: #ffffff !important;
+			border: 1px solid #dedede !important;
+		}
+		.ant-tabs-tab-prev,
+		.ant-tabs-tab-next {
+			height: 32px !important;
+			line-height: 32px !important;
+		}
+		.ant-tab-tab-active {
+			border: 1px solid #1890ff !important;
+			.ant-tabs-close-x {
+				color: #1890ff !important;
+			}
+		}
 	}
 }
 </style>

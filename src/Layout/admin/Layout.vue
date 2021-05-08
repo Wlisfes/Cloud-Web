@@ -1,5 +1,6 @@
 <script>
-import { defineComponent, reactive, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
+import { defineComponent, reactive, watch, computed, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
+import { useStore, mapState } from 'vuex'
 import { RouterView, useRoute, RouterLink } from 'vue-router'
 import { Layout, Menu } from 'ant-design-vue'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
@@ -10,7 +11,9 @@ import { filterRoutes } from '@/utils/common'
 export default defineComponent({
 	name: 'Layout',
 	setup() {
+		const store = useStore('app')
 		const route = useRoute()
+		const app = computed(() => store.state)
 		const state = reactive({
 			width: 0,
 			mobile: false,
@@ -18,61 +21,65 @@ export default defineComponent({
 			menu: [],
 			routes: []
 		})
-		state.menu = filterRoutes(routes)
-		onMounted(() => {
-			onLayout()
-			console.log(state.menu)
-		})
-		onBeforeMount(() => {
-			window.addEventListener('resize', onLayout)
-		})
-		onBeforeUnmount(() => {
-			window.removeEventListener('resize', onLayout)
-		})
+
+		const width = computed(() => store.state)
+
+		console.log(app)
+		// state.menu = filterRoutes(routes)
+		// onMounted(() => {
+		// 	onLayout()
+		// 	console.log(state.menu)
+		// })
+		// onBeforeMount(() => {
+		// 	window.addEventListener('resize', onLayout)
+		// })
+		// onBeforeUnmount(() => {
+		// 	window.removeEventListener('resize', onLayout)
+		// })
 
 		const onTrigger = () => {
 			state.collapsed = !state.collapsed
 		}
-		const onLayout = () => {
-			const width = document.body.getBoundingClientRect().width
-			if (state.width !== width) {
-				const isMobile = width < 992
-				if (isMobile) {
-					state.collapsed = true
-				}
-				state.mobile = isMobile
-				state.width = width
-			}
-		}
+		// const onLayout = () => {
+		// 	const width = document.body.getBoundingClientRect().width
+		// 	if (state.width !== width) {
+		// 		const isMobile = width < 992
+		// 		if (isMobile) {
+		// 			state.collapsed = true
+		// 		}
+		// 		state.mobile = isMobile
+		// 		state.width = width
+		// 	}
+		// }
 
-		watch(
-			() => route,
-			async tag => {
-				console.log(tag)
-				if (tag.name && tag.meta && tag.meta.tagHidden !== true) {
-					let matched = [tag.name]
-					if (tag.matched) {
-						matched = tag.matched.map(item => item.name)
-					}
-					const params = {
-						path: tag.path,
-						fullPath: tag.fullPath,
-						query: tag.query,
-						params: tag.params,
-						name: tag.name,
-						matched: matched,
-						meta: { ...tag.meta }
-					}
-					const target = state.routes.find(item => item.path === params.path)
-					if (target) {
-						if (params.fullPath !== target.fullPath) Object.assign(target, params)
-						return
-					}
-					state.routes.push(Object.assign({}, params))
-				}
-			},
-			{ immediate: true }
-		)
+		// watch(
+		// 	() => route,
+		// 	async tag => {
+		// 		console.log(tag)
+		// 		if (tag.name && tag.meta && tag.meta.tagHidden !== true) {
+		// 			let matched = [tag.name]
+		// 			if (tag.matched) {
+		// 				matched = tag.matched.map(item => item.name)
+		// 			}
+		// 			const params = {
+		// 				path: tag.path,
+		// 				fullPath: tag.fullPath,
+		// 				query: tag.query,
+		// 				params: tag.params,
+		// 				name: tag.name,
+		// 				matched: matched,
+		// 				meta: { ...tag.meta }
+		// 			}
+		// 			const target = state.routes.find(item => item.path === params.path)
+		// 			if (target) {
+		// 				if (params.fullPath !== target.fullPath) Object.assign(target, params)
+		// 				return
+		// 			}
+		// 			state.routes.push(Object.assign({}, params))
+		// 		}
+		// 	},
+		// 	{ immediate: true }
+		// )
 
 		return () => {
 			return (
