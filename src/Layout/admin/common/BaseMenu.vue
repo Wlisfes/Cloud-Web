@@ -37,17 +37,25 @@ export default defineComponent({
 				>
 					{props.menu.map(k => {
 						if (k.meta.affix) {
-							if (k.children?.length) {
-								return k.children.map(v => (
-									<Menu.Item key={v.path}>
-										<RouterLink to={v.path}>
-											<BankOutlined />
-											<span>{v.meta.title}</span>
-										</RouterLink>
-									</Menu.Item>
-								))
-							}
-							return null
+							// if (k.children?.length) {
+							// 	return k.children.map(v => (
+							// 		<Menu.Item key={v.path}>
+							// 			<RouterLink to={v.path}>
+							// 				<BankOutlined />
+							// 				<span>{v.meta.title}</span>
+							// 			</RouterLink>
+							// 		</Menu.Item>
+							// 	))
+							// }
+							// return null
+							return k.children.map(v => (
+								<Menu.Item key={v.path}>
+									<RouterLink to={v.path}>
+										<BankOutlined />
+										<span>{v.meta.title}</span>
+									</RouterLink>
+								</Menu.Item>
+							))
 						} else {
 							if (k.children?.length) {
 								return (

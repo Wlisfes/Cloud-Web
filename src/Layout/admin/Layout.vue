@@ -81,7 +81,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .app-layout {
 	height: 100%;
 	&.is-mobile {

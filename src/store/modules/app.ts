@@ -1,5 +1,4 @@
-import type { Module, Store } from 'vuex'
-const createModule = <S, R>(module: Module<S, R>) => module as Store<S>
+import { createModule } from '@/utils/type'
 
 export interface AppState {
 	width: number
