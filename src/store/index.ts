@@ -1,7 +1,13 @@
-import { createStore } from 'vuex'
-import app from './modules/app'
+import { InjectionKey } from 'vue'
+import { createStore, Store, useStore as use } from 'vuex'
+import app from '@/store/modules/app'
 
-export default createStore({
+export interface State {
+	app: typeof app.state
+}
+
+export const key: InjectionKey<Store<State>> = Symbol('__paker__store__')
+const store = createStore({
 	state: {},
 	mutations: {},
 	actions: {},
@@ -9,3 +15,12 @@ export default createStore({
 		app
 	}
 })
+
+export default store
+export function useStore() {
+	return use(key)
+}
+
+declare module 'vuex' {
+	export function useStore<S = State>(): Store<S>
+}

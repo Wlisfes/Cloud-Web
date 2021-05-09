@@ -1,41 +1,75 @@
-import { Module, MutationTree, ActionTree } from 'vuex'
+import type { Module, Store } from 'vuex'
+const createModule = <S, R>(module: Module<S, R>) => module as Store<S>
 
 export interface AppState {
 	width: number
 	mobile: boolean
 	collapsed: boolean
 	theme: string
+	routes: Array<any>
+	menu: Array<any>
+	path: string
+	subKey: Array<string>
 }
-
-const createState = (): AppState => ({
-	width: 0,
-	mobile: false,
-	collapsed: false,
-	theme: 'dark'
-})
-
-const mutations: MutationTree<AppState> = {
-	SET_WIDTH: (state, width) => {
-		state.width = width
-	},
-	SET_MOBILE: (state, mobile) => {
-		state.mobile = mobile
-	},
-	SET_COLLAPSED: (state, collapsed) => {
-		state.collapsed = collapsed
-	},
-	SET_THEME: (state, theme) => {
-		state.theme = theme
-	}
-}
-
-const actions: ActionTree<AppState, any> = {}
-
-const app: Module<AppState, any> = {
+export default createModule<AppState, any>({
 	namespaced: true,
-	state: createState(),
-	mutations,
-	actions
-}
-
-export default app
+	state: (): AppState => ({
+		width: 0,
+		mobile: false,
+		collapsed: false,
+		theme: 'dark',
+		routes: [],
+		menu: [],
+		path: '',
+		subKey: []
+	}),
+	getters: {
+		collapsed: state => state.collapsed
+	},
+	mutations: {
+		SET_WIDTH: (state, width: number) => {
+			state.width = width
+		},
+		SET_MOBILE: (state, mobile: boolean) => {
+			state.mobile = mobile
+		},
+		SET_COLLAPSED: (state, collapsed: boolean) => {
+			state.collapsed = collapsed
+		},
+		SET_THEME: (state, theme: string) => {
+			state.theme = theme
+		},
+		SET_ROUTES: (state, route) => {
+			let target = state.routes.find((item: any) => item.path === route.path)
+			if (target) {
+				if (route.fullPath !== target.fullPath) Object.assign(target, route)
+				return
+			}
+			state.routes.push(Object.assign({}, route))
+		},
+		SET_MENU: (state, menu) => {
+			state.menu = menu
+		},
+		SET_PATH: (state, path: string) => {
+			state.path = path
+		},
+		SET_SUBKEY: (state, subKey: Array<string>) => {
+			state.subKey = subKey
+		},
+		SET_ROUTE: (state, route) => {
+			state.path = route.path
+			if (route.matched?.length) {
+				const { path } = route.matched[0]
+				state.subKey = [path]
+			}
+		}
+	},
+	actions: {
+		setRoutes: ({ commit }, route) => {
+			return new Promise((resolve: Function) => {
+				commit('SET_ROUTES', route)
+				resolve()
+			})
+		}
+	}
+})

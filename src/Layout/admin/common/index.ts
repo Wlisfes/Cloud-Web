@@ -1,1 +1,2 @@
-export { default as AppTabs } from './AppTabs.vue'
+export { default as BaseTabs } from './BaseTabs.vue'
+export { default as BaseMenu } from './BaseMenu.vue'

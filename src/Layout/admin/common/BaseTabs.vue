@@ -1,5 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import { Tabs } from 'ant-design-vue'
 
 export default defineComponent({
@@ -8,13 +9,18 @@ export default defineComponent({
 		routes: {
 			type: Array,
 			default: () => []
+		},
+		path: {
+			type: String
 		}
 	},
 	setup(props) {
+		const router = useRouter()
+
 		return () => {
 			return (
 				<div class="app-tabs">
-					<Tabs hideAdd type="editable-card">
+					<Tabs activeKey={props.path} hideAdd type="editable-card" onTabClick={path => router.push(path)}>
 						{props.routes.map(k => (
 							<Tabs.TabPane key={k.fullPath} tab={k.meta.title}></Tabs.TabPane>
 						))}
@@ -38,18 +44,18 @@ export default defineComponent({
 			margin-right: 5px !important;
 			line-height: 32px !important;
 			background: #ffffff !important;
-			border: 1px solid #dedede !important;
+			border: 1px solid #dedede;
+			&.ant-tabs-tab-active {
+				border: 1px solid #1890ff;
+				.ant-tabs-close-x {
+					color: #1890ff;
+				}
+			}
 		}
 		.ant-tabs-tab-prev,
 		.ant-tabs-tab-next {
 			height: 32px !important;
 			line-height: 32px !important;
-		}
-		.ant-tab-tab-active {
-			border: 1px solid #1890ff !important;
-			.ant-tabs-close-x {
-				color: #1890ff !important;
-			}
 		}
 	}
 }
