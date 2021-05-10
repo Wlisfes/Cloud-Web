@@ -38,11 +38,15 @@ export default defineComponent({
 		return () => {
 			return (
 				<Layout class={`app-layout ${store.state.app.mobile ? 'is-mobile' : ''}`}>
-					{!store.state.app.collapsed && store.state.app.mobile && (
-						<div class="app-sider-mask" onClick={onTrigger}></div>
-					)}
+					<transition name="mask" appear>
+						{!store.state.app.collapsed && store.state.app.mobile && (
+							<div class="app-sider-mask" onClick={onTrigger}></div>
+						)}
+					</transition>
+
 					<Layout.Sider
 						class="app-sider"
+						style={{ overflow: 'hidden' }}
 						v-model={[store.state.app.collapsed, 'collapsed']}
 						theme="dark"
 						breakpoint="xl"
@@ -115,5 +119,14 @@ export default defineComponent({
 		opacity: 0.5;
 		transition: all 300ms;
 	}
+}
+.mask-enter-active,
+.mask-leave-active {
+	transition: all 300ms;
+}
+
+.mask-enter-from,
+.mask-leave-to {
+	opacity: 0;
 }
 </style>
