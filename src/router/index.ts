@@ -4,7 +4,7 @@ import Layout from '@/Layout/admin'
 export const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
-		redirect: '/admin/home',
+		redirect: 'admin/home',
 		component: Layout,
 		meta: { title: '首页', affix: true },
 		children: [

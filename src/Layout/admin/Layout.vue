@@ -6,14 +6,15 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import { useStore } from '@/store'
 import { BaseTabs, BaseMenu } from '@/Layout/admin/common'
 import { routes } from '@/router'
-import { filterRoutes } from '@/utils/common'
+import web from '@/router/common/web'
 
 export default defineComponent({
 	name: 'Layout',
 	setup() {
 		const store = useStore()
 
-		store.commit('app/SET_MENU', filterRoutes(routes))
+		store.commit('app/SET_MENU', routes)
+		console.log(web.filter(k => k.meta.menu))
 
 		onMounted(() => onLayout())
 		onBeforeMount(() => window.addEventListener('resize', onLayout))
@@ -38,11 +39,9 @@ export default defineComponent({
 		return () => {
 			return (
 				<Layout class={`app-layout ${store.state.app.mobile ? 'is-mobile' : ''}`}>
-					<transition name="mask" appear>
-						{!store.state.app.collapsed && store.state.app.mobile && (
-							<div class="app-sider-mask" onClick={onTrigger}></div>
-						)}
-					</transition>
+					{!store.state.app.collapsed && store.state.app.mobile && (
+						<div class="app-sider-mask" onClick={onTrigger}></div>
+					)}
 
 					<Layout.Sider
 						class="app-sider"
@@ -119,14 +118,5 @@ export default defineComponent({
 		opacity: 0.5;
 		transition: all 300ms;
 	}
-}
-.mask-enter-active,
-.mask-leave-active {
-	transition: all 300ms;
-}
-
-.mask-enter-from,
-.mask-leave-to {
-	opacity: 0;
 }
 </style>

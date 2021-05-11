@@ -7,7 +7,7 @@ export default createRoute<RouteRecordRaw>([
 		path: '/',
 		redirect: '/home',
 		component: Layout,
-		meta: { title: '首页' },
+		meta: { title: '首页', menu: true },
 		children: [
 			{
 				path: '/home',
