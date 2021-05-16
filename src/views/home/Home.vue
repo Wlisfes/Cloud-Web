@@ -7,10 +7,8 @@ export default defineComponent({
 	name: 'Home',
 	setup() {
 		const state = reactive({
-			flv:
-				'https://cloud.lisfes.cn/customerTrans/7cfb694d9456cc5369e984004d41957f/2b9a89d6-178fdf22d0a-0005-5c87-c9a-697bc.flv',
-			url:
-				'https://cloud.lisfes.cn/8e9070ddc9c542829e41ee21b0a3c3de/63e7f3a43e4442fd8ec1d4dd43fb39cc-3cf2cb2c9aff46bbee33a8ba27aee685-hd.mp4'
+			flv: `https://cloud.lisfes.cn/customerTrans/7cfb694d9456cc5369e984004d41957f/12e10f3-17960a0e049-0005-5c87-c9a-697bc.flv`,
+			cover: `https://cloud.lisfes.cn/8e9070ddc9c542829e41ee21b0a3c3de/snapshots/c167ca71ad0d4e38bb27b1e7215fe239-00001.jpg`
 		})
 
 		onMounted(() => {
@@ -23,9 +21,8 @@ export default defineComponent({
 				theme: '#fb7299',
 				video: {
 					url: state.flv,
+					pic: state.cover,
 					type: 'customFlv',
-					highlight:
-						'https://cloud.lisfes.cn/8e9070ddc9c542829e41ee21b0a3c3de/snapshots/c167ca71ad0d4e38bb27b1e7215fe239-00001.jpg',
 					customType: {
 						customFlv: (video, player) => {
 							const flvPlayer = flvjs.createPlayer({

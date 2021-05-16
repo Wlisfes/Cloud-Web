@@ -50,11 +50,19 @@ module.exports = {
 		disableHostCheck: true,
 		proxy: {
 			[process.env.VUE_APP_BASE_API]: {
-				target: 'http://localhost:3003',
+				target: 'http://localhost:3005',
 				ws: false,
 				changeOrigin: true,
 				pathRewrite: {
 					[`^${[process.env.VUE_APP_BASE_API]}`]: ''
+				}
+			},
+			[process.env.VUE_APP_BASE_BING]: {
+				target: 'https://cn.bing.com',
+				ws: false,
+				changeOrigin: true,
+				pathRewrite: {
+					[`^${[process.env.VUE_APP_BASE_BING]}`]: ''
 				}
 			}
 		}

@@ -1,9 +1,11 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store, useStore as use } from 'vuex'
 import app from '@/store/modules/app'
+import root from '@/store/modules/root'
 
 export interface State {
 	app: typeof app.state
+	root: typeof root.state
 }
 
 export const key: InjectionKey<Store<State>> = Symbol('__paker__store__')
@@ -12,7 +14,8 @@ const store = createStore({
 	mutations: {},
 	actions: {},
 	modules: {
-		app
+		app,
+		root
 	}
 })
 

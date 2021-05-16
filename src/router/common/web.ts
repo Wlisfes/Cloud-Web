@@ -7,13 +7,12 @@ export default createRoute<RouteRecordRaw>([
 		path: '/',
 		redirect: '/home',
 		component: Layout,
-		meta: { title: '首页', menu: true },
 		children: [
 			{
 				path: '/home',
-				name: 'Home',
-				meta: { title: '首页', affix: true },
-				component: () => import('@/views/home')
+				name: 'AppHome',
+				meta: { title: '首页', active: 1 },
+				component: () => import('@/views/web/home/Home.vue')
 			}
 		]
 	}

@@ -11,7 +11,7 @@ interface Response<T = any> {
 }
 
 declare module 'axios' {
-	export interface Axios extends AxiosStatic {
+	export interface AxiosInstance extends AxiosStatic {
 		<T = any, R = Response<T>>(config: AxiosRequestConfig): Promise<R>
 	}
 }

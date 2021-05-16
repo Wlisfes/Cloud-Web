@@ -25,5 +25,3 @@ service.interceptors.response.use((response: AxiosResponse) => {
 }, useError)
 
 export default service
-
-// service()
