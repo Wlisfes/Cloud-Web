@@ -1,7 +1,7 @@
 <script>
 import { defineComponent, computed, ref } from 'vue'
 import { useStore } from '@/store'
-import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons-vue'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue'
 import day from 'dayjs'
 
 export default defineComponent({
@@ -30,8 +30,12 @@ export default defineComponent({
 						</div>
 					</div>
 					<div class="app-conter-curr">
-						<StepBackwardOutlined class="curr-icon" onClick={onPrve} />
-						<StepForwardOutlined class="curr-icon" onClick={onNext} />
+						<div class="curr-conter" onClick={onPrve}>
+							<LeftOutlined style={{ fontSize: '20px', color: '#fff' }} />
+						</div>
+						<div class="curr-conter" onClick={onNext}>
+							<RightOutlined style={{ fontSize: '20px', color: '#fff' }} />
+						</div>
 					</div>
 					<footer class="app-conter-footer">
 						Swpe Ant Design ©2019 Created by Wlisfes粤ICP备18016996号-1
@@ -68,6 +72,17 @@ export default defineComponent({
 		padding: 40px;
 		display: flex;
 		justify-content: flex-end;
+		.curr-conter {
+			width: 40px;
+			height: 40px;
+			border: 2px solid #ffffff;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-left: 20px;
+			cursor: pointer;
+		}
 		.curr-icon {
 			font-size: 40px;
 			color: #ffffff;
