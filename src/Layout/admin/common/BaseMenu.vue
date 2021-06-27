@@ -36,12 +36,12 @@ export default defineComponent({
 					inlineCollapsed={props.collapsed}
 				>
 					{props.menu.map(k => {
-						if (k.meta.affix) {
+						if (k.meta?.affix) {
 							return k.children.map(v => (
 								<Menu.Item key={v.path}>
 									<RouterLink to={v.path}>
 										<BankOutlined />
-										<span>{v.meta.title}</span>
+										<span>{v.meta?.title}</span>
 									</RouterLink>
 								</Menu.Item>
 							))
@@ -53,7 +53,7 @@ export default defineComponent({
 										title={
 											<>
 												<RadarChartOutlined />
-												<span>{k.meta.title}</span>
+												<span>{k.meta?.title}</span>
 											</>
 										}
 									>
@@ -61,7 +61,7 @@ export default defineComponent({
 											<Menu.Item key={v.path}>
 												<RouterLink to={v.path}>
 													<PieChartOutlined />
-													<span>{v.meta.title}</span>
+													<span>{v.meta?.title}</span>
 												</RouterLink>
 											</Menu.Item>
 										))}
@@ -72,7 +72,7 @@ export default defineComponent({
 								<Menu.Item key={k.path}>
 									<RouterLink to={k.path}>
 										<PieChartOutlined />
-										<span>{k.meta.title}</span>
+										<span>{k.meta?.title}</span>
 									</RouterLink>
 								</Menu.Item>
 							)

@@ -5,7 +5,7 @@ import { Layout } from 'ant-design-vue'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import { useStore } from '@/store'
 import { BaseTabs, BaseMenu } from '@/Layout/admin/common'
-// import { routes } from '@/router'
+import { routes } from '@/router'
 // import web from '@/router/common/web'
 
 export default defineComponent({
@@ -13,7 +13,7 @@ export default defineComponent({
 	setup() {
 		const store = useStore()
 
-		// store.commit('app/SET_MENU', routes)
+		store.commit('app/SET_MENU', routes)
 		// console.log(web.filter(k => k.meta.menu))
 
 		onMounted(() => onLayout())
