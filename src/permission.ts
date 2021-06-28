@@ -14,7 +14,7 @@ router.afterEach(async (to, form) => {
 		if (to.matched) {
 			matched = to.matched.map(item => item.name)
 		}
-		await store.dispatch('app/setRoutes', {
+		await store.dispatch('app/setMultiple', {
 			path: to.path,
 			fullPath: to.fullPath,
 			query: to.query,

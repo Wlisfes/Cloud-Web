@@ -1,16 +1,12 @@
-import { defineComponent } from 'vue'
-import { RouterView } from 'vue-router'
-import '@/paker/style/index.less'
+import { Vue, Component } from 'vue-property-decorator'
 
-export default defineComponent({
-	name: 'App',
-	setup() {
-		return () => {
-			return (
-				<>
-					<RouterView></RouterView>
-				</>
-			)
-		}
+@Component
+export default class App extends Vue {
+	render() {
+		return (
+			<div id="app" style={{ height: '100%' }}>
+				<router-view></router-view>
+			</div>
+		)
 	}
-})
+}

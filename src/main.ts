@@ -1,7 +1,18 @@
-import { createApp } from 'vue'
+import Vue from 'vue'
+import Antd from 'ant-design-vue'
 import App from '@/App'
+import './registerServiceWorker'
 import router from '@/router'
-import store, { key } from '@/store'
+import store from '@/store'
+import '@/style/index.less'
+import 'ant-design-vue/dist/antd.css'
 import '@/permission'
 
-createApp(App).use(store, key).use(router).mount('#app')
+Vue.use(Antd)
+Vue.config.productionTip = false
+
+new Vue({
+	router,
+	store,
+	render: h => h(App)
+}).$mount('#app')

@@ -1,0 +1,40 @@
+.app-admin-container {
+	height: 100%;
+	&-sider {
+		overflow: hidden;
+	}
+	&.is-mobile {
+		.app-admin-container-sider {
+			position: fixed;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			z-index: 999;
+		}
+	}
+	&-logo {
+		height: 64px;
+	}
+	&-trigger {
+		font-size: 18px;
+		cursor: pointer;
+		transition: color 0.3s;
+		line-height: 64px;
+		padding: 0 23px;
+		&:hover {
+			color: #1890ff;
+		}
+	}
+	&-mask {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 998;
+		overflow: hidden;
+		background: #000;
+		opacity: 0.5;
+		transition: all 300ms;
+	}
+}

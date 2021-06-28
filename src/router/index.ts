@@ -1,12 +1,13 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import web from '@/router/common/web'
-import admin from '@/router/common/admin'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import admin from './admin'
 
-export const routes: Array<RouteRecordRaw> = [...web, ...admin]
+Vue.use(VueRouter)
 
-const router = createRouter({
-	history: createWebHistory(process.env.BASE_URL),
-	scrollBehavior: () => ({ left: 0, top: 0 }),
+const routes = [...admin]
+const router = new VueRouter({
+	mode: 'history',
+	base: process.env.BASE_URL,
 	routes
 })
 
