@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import common from './common'
 import admin from './admin'
 import web from './web'
 
 Vue.use(VueRouter)
 
-const routes = [...web, ...admin]
+const routes = [...common, ...web, ...admin]
 const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,

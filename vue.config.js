@@ -51,6 +51,12 @@ module.exports = {
 		loaderOptions: {
 			less: {
 				javascriptEnabled: true
+			},
+			css: {
+				modules: {
+					localIdentName: '[name]-[local]'
+				}
+				// localsConvention: 'camelCase'
 			}
 		},
 		requireModuleExtension: true
