@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Button, Input, Checkbox } from 'ant-design-vue'
+import { FormModel, Button, Input, Checkbox, Row, Col } from 'ant-design-vue'
 
 @Component
 export default class Login extends Vue {
@@ -8,14 +8,16 @@ export default class Login extends Vue {
 	private state = {
 		form: {
 			username: '',
-			password: ''
+			password: '',
+			code: ''
 		},
 		rules: {
 			username: [{ required: true, message: '请输入用户名、邮箱、手机号', trigger: 'change' }],
 			password: [
 				{ required: true, message: '请输入密码', trigger: 'change' },
 				{ min: 6, message: '密码不能少于6位', trigger: 'blur' }
-			]
+			],
+			code: [{ required: true, message: '请输入验证码', trigger: 'change' }]
 		}
 	}
 
@@ -42,6 +44,16 @@ export default class Login extends Vue {
 							placeholder="密码"
 						></Input.Password>
 					</FormModel.Item>
+					<Row gutter={16}>
+						<Col span={16}>
+							<FormModel.Item prop="code">
+								<Input v-model={form.code} max-length={4} placeholder="验证码"></Input>
+							</FormModel.Item>
+						</Col>
+						<Col span={8}>
+							<img src="http://localhost:3005/api/user/code" />
+						</Col>
+					</Row>
 					<FormModel.Item>
 						<Button size="large" type="primary" style={{ width: '100%' }} onClick={this.onSubmit}>
 							登录
