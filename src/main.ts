@@ -9,6 +9,7 @@ import '@/permission'
 
 Vue.use(Antd)
 Vue.config.productionTip = false
+console.log(process.env)
 
 new Vue({
 	router,

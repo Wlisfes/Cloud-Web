@@ -22,3 +22,7 @@ package-lock.log*
 *.njsproj
 *.sln
 *.sw?
+
+#
+.env
+package-lock.json
