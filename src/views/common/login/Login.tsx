@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Button, Input, Checkbox, Row, Col } from 'ant-design-vue'
+import { FormModel, Button, Input, Checkbox } from 'ant-design-vue'
 
 @Component
 export default class Login extends Vue {
@@ -27,6 +27,11 @@ export default class Login extends Vue {
 		this.$refs.form.validate((err, form) => {})
 	}
 
+	//刷新验证码
+	private refCursor(e: { target: HTMLImageElement }) {
+		e.target.src = `${process.env.VUE_APP_BASE_API}/api/user/code?time=${Date.now()}`
+	}
+
 	protected render() {
 		const { form, rules } = this.state
 		return (
@@ -44,16 +49,18 @@ export default class Login extends Vue {
 							placeholder="密码"
 						></Input.Password>
 					</FormModel.Item>
-					<Row gutter={16}>
-						<Col span={16}>
-							<FormModel.Item prop="code">
-								<Input v-model={form.code} max-length={4} placeholder="验证码"></Input>
-							</FormModel.Item>
-						</Col>
-						<Col span={8}>
-							<img src="http://localhost:3005/api/user/code" />
-						</Col>
-					</Row>
+					<div style={{ display: 'flex' }}>
+						<FormModel.Item prop="code" style={{ flex: 1, marginRight: '12px' }}>
+							<Input v-model={form.code} max-length={4} placeholder="验证码"></Input>
+						</FormModel.Item>
+						<div style={{ paddingTop: '3px', width: '120px' }}>
+							<img
+								style={{ cursor: 'pointer' }}
+								src={`${process.env.VUE_APP_BASE_API}/api/user/code`}
+								onClick={this.refCursor}
+							/>
+						</div>
+					</div>
 					<FormModel.Item>
 						<Button size="large" type="primary" style={{ width: '100%' }} onClick={this.onSubmit}>
 							登录
