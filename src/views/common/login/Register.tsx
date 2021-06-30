@@ -88,30 +88,28 @@ export default class Register extends Vue {
 			<div>
 				<FormModel ref="form" {...{ props: { model: form, rules } }}>
 					<FormModel.Item prop="username">
-						<Input v-model={form.username} max-length={20} size="large" placeholder="用户名"></Input>
+						<Input v-model={form.username} max-length={20} placeholder="用户名"></Input>
 					</FormModel.Item>
 					<FormModel.Item prop="nickname">
-						<Input v-model={form.nickname} max-length={40} size="large" placeholder="用户昵称"></Input>
+						<Input v-model={form.nickname} max-length={40} placeholder="用户昵称"></Input>
 					</FormModel.Item>
 					<FormModel.Item prop="password">
 						<Input.Password
 							v-model={form.password}
 							type="password"
 							max-length={20}
-							size="large"
 							placeholder="密码"
 						></Input.Password>
 					</FormModel.Item>
 					<FormModel.Item prop="email">
-						<Input v-model={form.email} size="large" placeholder="邮箱"></Input>
+						<Input v-model={form.email} placeholder="邮箱"></Input>
 					</FormModel.Item>
 					<div style={{ display: 'flex' }}>
 						<FormModel.Item prop="code" style={{ flex: 1, marginRight: '12px' }}>
-							<Input v-model={form.code} max-length={6} size="large" placeholder="验证码"></Input>
+							<Input v-model={form.code} max-length={6} placeholder="验证码"></Input>
 						</FormModel.Item>
 						<FormModel.Item>
 							<Button
-								size="large"
 								disabled={!!cation.codeTime || !form.email}
 								loading={cation.loading}
 								onClick={this.nodeEmailCode}

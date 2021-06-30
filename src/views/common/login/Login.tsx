@@ -60,24 +60,18 @@ export default class Login extends Vue {
 			<div>
 				<FormModel ref="form" {...{ props: { model: form, rules } }}>
 					<FormModel.Item prop="username">
-						<Input v-model={form.username} max-length={20} size="large" placeholder="用户名、邮箱、手机号">
+						<Input v-model={form.username} max-length={20} placeholder="用户名、邮箱、手机号">
 							<Icon slot="prefix" type="user"></Icon>
 						</Input>
 					</FormModel.Item>
 					<FormModel.Item prop="password">
-						<Input.Password
-							v-model={form.password}
-							type="password"
-							max-length={20}
-							size="large"
-							placeholder="密码"
-						>
+						<Input.Password v-model={form.password} type="password" max-length={20} placeholder="密码">
 							<Icon slot="prefix" type="lock"></Icon>
 						</Input.Password>
 					</FormModel.Item>
 					<div style={{ display: 'flex' }}>
 						<FormModel.Item prop="code" style={{ flex: 1, marginRight: '12px' }}>
-							<Input v-model={form.code} max-length={4} size="large" placeholder="验证码">
+							<Input v-model={form.code} max-length={4} placeholder="验证码">
 								<Icon slot="prefix" type="alert"></Icon>
 							</Input>
 						</FormModel.Item>
@@ -85,8 +79,8 @@ export default class Login extends Vue {
 							<img
 								ref="cursor"
 								style={{
-									width: '120px',
-									height: '40px',
+									width: '100px',
+									height: '32px',
 									cursor: 'pointer',
 									display: 'block',
 									borderRadius: '2px'
