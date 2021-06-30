@@ -41,12 +41,12 @@ const admin: Array<RouteConfig> = [
 		]
 	},
 	{
-		path: '/cloud',
-		redirect: '/cloud/list',
+		path: '/admin/cloud',
+		redirect: '/admin/cloud/list',
 		component: Layout,
 		children: [
 			{
-				path: '/cloud/list',
+				path: '/admin/cloud/list',
 				name: 'Cloud-list',
 				meta: { title: 'Cloud', affix: true },
 				component: () => import('@/views/admin/cloud/Cloud')

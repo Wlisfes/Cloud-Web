@@ -29,7 +29,7 @@ export default class AppMenu extends Vue {
 					key="/admin/user"
 					title={
 						<div>
-							<Icon type="home" style={{ fontSize: '18px' }}></Icon>
+							<Icon type="user" style={{ fontSize: '18px' }}></Icon>
 							<span>User</span>
 						</div>
 					}
@@ -42,6 +42,21 @@ export default class AppMenu extends Vue {
 					<Menu.Item key="/admin/user/role">
 						<router-link to="/admin/user/role">
 							<span>Role</span>
+						</router-link>
+					</Menu.Item>
+				</Menu.SubMenu>
+				<Menu.SubMenu
+					key="/admin/cloud"
+					title={
+						<div>
+							<Icon type="cloud" style={{ fontSize: '18px' }}></Icon>
+							<span>Cloud</span>
+						</div>
+					}
+				>
+					<Menu.Item key="/admin/cloud/list">
+						<router-link to="/admin/cloud/list">
+							<span>Cloud</span>
 						</router-link>
 					</Menu.Item>
 				</Menu.SubMenu>

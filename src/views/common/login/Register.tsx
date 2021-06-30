@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Button, Input, Statistic, notification } from 'ant-design-vue'
+import { FormModel, Button, Input, Icon, Statistic, notification } from 'ant-design-vue'
 import { nodeEmailCode, register } from '@/api'
 import { HttpStatus } from '@/types'
 
@@ -49,7 +49,7 @@ export default class Register extends Vue {
 				const { code, data } = await nodeEmailCode({ email: this.state.form.email })
 				if (code === HttpStatus.OK) {
 					notification.success({ message: data.message, description: '' })
-					this.state.cation.codeTime = Date.now() + 1000 * 10
+					this.state.cation.codeTime = Date.now() + 1000 * 60
 					this.state.cation.loading = false
 				}
 			} catch (e) {
@@ -65,7 +65,7 @@ export default class Register extends Vue {
 			if (!valid) {
 				setTimeout(() => {
 					this.state.loading = false
-				}, 500)
+				}, 300)
 				return
 			}
 			try {
@@ -88,25 +88,30 @@ export default class Register extends Vue {
 			<div>
 				<FormModel ref="form" {...{ props: { model: form, rules } }}>
 					<FormModel.Item prop="username">
-						<Input v-model={form.username} max-length={20} placeholder="用户名"></Input>
+						<Input v-model={form.username} max-length={20} placeholder="用户名">
+							<Icon slot="prefix" type="user"></Icon>
+						</Input>
 					</FormModel.Item>
 					<FormModel.Item prop="nickname">
-						<Input v-model={form.nickname} max-length={40} placeholder="用户昵称"></Input>
+						<Input v-model={form.nickname} max-length={40} placeholder="用户昵称">
+							<Icon slot="prefix" type="crown"></Icon>
+						</Input>
 					</FormModel.Item>
 					<FormModel.Item prop="password">
-						<Input.Password
-							v-model={form.password}
-							type="password"
-							max-length={20}
-							placeholder="密码"
-						></Input.Password>
+						<Input.Password v-model={form.password} type="password" max-length={20} placeholder="密码">
+							<Icon slot="prefix" type="lock"></Icon>
+						</Input.Password>
 					</FormModel.Item>
 					<FormModel.Item prop="email">
-						<Input v-model={form.email} placeholder="邮箱"></Input>
+						<Input v-model={form.email} placeholder="邮箱">
+							<Icon slot="prefix" type="mail"></Icon>
+						</Input>
 					</FormModel.Item>
 					<div style={{ display: 'flex' }}>
 						<FormModel.Item prop="code" style={{ flex: 1, marginRight: '12px' }}>
-							<Input v-model={form.code} max-length={6} placeholder="验证码"></Input>
+							<Input v-model={form.code} max-length={6} placeholder="验证码">
+								<Icon slot="prefix" type="alert"></Icon>
+							</Input>
 						</FormModel.Item>
 						<FormModel.Item>
 							<Button
@@ -135,7 +140,7 @@ export default class Register extends Vue {
 							loading={state.loading}
 							onClick={this.onSubmit}
 						>
-							登录
+							注册
 						</Button>
 					</FormModel.Item>
 					<FormModel.Item>

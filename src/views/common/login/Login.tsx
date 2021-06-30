@@ -37,7 +37,7 @@ export default class Login extends Vue {
 				setTimeout(() => {
 					this.refCursor()
 					this.state.loading = false
-				}, 500)
+				}, 300)
 				return
 			}
 
@@ -85,7 +85,7 @@ export default class Login extends Vue {
 									display: 'block',
 									borderRadius: '2px'
 								}}
-								src={`${process.env.VUE_APP_BASE_API}/api/user/code?time=${Date.now()}`}
+								src={`${process.env.VUE_APP_BASE_API}/api/user/code`}
 								onClick={this.refCursor}
 							/>
 						</FormModel.Item>
