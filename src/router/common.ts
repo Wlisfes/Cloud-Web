@@ -3,7 +3,7 @@ import AppMain from '@/views/common/login/AppMain'
 
 const common: Array<RouteConfig> = [
 	{
-		path: '/',
+		path: '/main',
 		redirect: '/main/login',
 		component: AppMain,
 		children: [

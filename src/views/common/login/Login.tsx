@@ -1,11 +1,14 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Button, Input, Checkbox } from 'ant-design-vue'
+import { FormModel, Button, Input, Checkbox, Icon } from 'ant-design-vue'
+import { login } from '@/api'
+import { HttpStatus } from '@/types'
 
 @Component
 export default class Login extends Vue {
-	$refs!: { form: FormModel }
+	$refs!: { form: FormModel; cursor: HTMLImageElement }
 
 	private state = {
+		loading: false,
 		form: {
 			username: '',
 			password: '',
@@ -21,48 +24,86 @@ export default class Login extends Vue {
 		}
 	}
 
-	protected created() {}
-
-	private onSubmit() {
-		this.$refs.form.validate((err, form) => {})
+	/**刷新验证码**/
+	private refCursor() {
+		this.$refs.cursor.src = `${process.env.VUE_APP_BASE_API}/api/user/code?time=${Date.now()}`
 	}
 
-	//刷新验证码
-	private refCursor(e: { target: HTMLImageElement }) {
-		e.target.src = `${process.env.VUE_APP_BASE_API}/api/user/code?time=${Date.now()}`
+	/**登录**/
+	private onSubmit() {
+		this.state.loading = true
+		this.$refs.form.validate(async valid => {
+			if (!valid) {
+				setTimeout(() => {
+					this.refCursor()
+					this.state.loading = false
+				}, 500)
+				return
+			}
+
+			try {
+				const { code, data } = await login({ ...this.state.form })
+				if (code === HttpStatus.OK) {
+					this.$router.push('/')
+				}
+				this.state.loading = false
+			} catch (e) {
+				this.refCursor()
+				this.state.loading = false
+			}
+		})
 	}
 
 	protected render() {
-		const { form, rules } = this.state
+		const { form, rules, loading } = this.state
 		return (
 			<div>
-				<h1 style={{ textAlign: 'center' }}>欢迎到来、久违了</h1>
 				<FormModel ref="form" {...{ props: { model: form, rules } }}>
 					<FormModel.Item prop="username">
-						<Input v-model={form.username} max-length={20} placeholder="用户名、邮箱、手机号"></Input>
+						<Input v-model={form.username} max-length={20} size="large" placeholder="用户名、邮箱、手机号">
+							<Icon slot="prefix" type="user"></Icon>
+						</Input>
 					</FormModel.Item>
 					<FormModel.Item prop="password">
 						<Input.Password
 							v-model={form.password}
 							type="password"
 							max-length={20}
+							size="large"
 							placeholder="密码"
-						></Input.Password>
+						>
+							<Icon slot="prefix" type="lock"></Icon>
+						</Input.Password>
 					</FormModel.Item>
 					<div style={{ display: 'flex' }}>
 						<FormModel.Item prop="code" style={{ flex: 1, marginRight: '12px' }}>
-							<Input v-model={form.code} max-length={4} placeholder="验证码"></Input>
+							<Input v-model={form.code} max-length={4} size="large" placeholder="验证码">
+								<Icon slot="prefix" type="alert"></Icon>
+							</Input>
 						</FormModel.Item>
-						<div style={{ paddingTop: '3px', width: '120px' }}>
+						<FormModel.Item>
 							<img
-								style={{ cursor: 'pointer' }}
-								src={`${process.env.VUE_APP_BASE_API}/api/user/code`}
+								ref="cursor"
+								style={{
+									width: '120px',
+									height: '40px',
+									cursor: 'pointer',
+									display: 'block',
+									borderRadius: '2px'
+								}}
+								src={`${process.env.VUE_APP_BASE_API}/api/user/code?time=${Date.now()}`}
 								onClick={this.refCursor}
 							/>
-						</div>
+						</FormModel.Item>
 					</div>
 					<FormModel.Item>
-						<Button size="large" type="primary" style={{ width: '100%' }} onClick={this.onSubmit}>
+						<Button
+							size="large"
+							type="primary"
+							style={{ width: '100%' }}
+							loading={loading}
+							onClick={this.onSubmit}
+						>
 							登录
 						</Button>
 					</FormModel.Item>
