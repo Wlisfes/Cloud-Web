@@ -4,11 +4,11 @@ import app, { AppState } from './module/app'
 
 Vue.use(Vuex)
 
-export interface State {
+export interface RootState {
 	app: AppState
 }
 
-export default new Vuex.Store<State>({
+export default new Vuex.Store<RootState>({
 	modules: {
 		app
 	}
