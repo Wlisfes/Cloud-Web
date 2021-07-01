@@ -55,12 +55,17 @@ export default class Index extends Vue {
 					breakpoint="xl"
 					collapsed={this.collapsed}
 					collapsedWidth={this.mobile ? 0 : 80}
-					width={220}
+					width={240}
 					trigger={null}
 					collapsible
 					onBreakpoint={(type: boolean) => this.$store.commit('app/SET_COLLAPSED', type)}
 				>
-					<div class="app-admin-container-logo"></div>
+					<div class="app-admin-container-logo">
+						<router-link class="app-admin-container-logo-conter" to="/admin">
+							<img src="https://oss.lisfes.cn/cloud/stctic/1625035983457.png" />
+							{!this.collapsed && <h1 class="app-ellipsis">情雨随风的青春</h1>}
+						</router-link>
+					</div>
 					<AppMenu
 						dataSource={this.menu}
 						path={[this.path]}
@@ -78,7 +83,7 @@ export default class Index extends Vue {
 						></Icon>
 					</Layout.Header>
 					<AppMultiple dataSource={this.multiple} path={this.path}></AppMultiple>
-					<Layout.Content style={{ margin: '12px', backgroundColor: '#fff' }}>
+					<Layout.Content style={{ margin: '20px', backgroundColor: '#fff' }}>
 						<router-view></router-view>
 					</Layout.Content>
 				</Layout>
