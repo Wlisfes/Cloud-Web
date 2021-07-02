@@ -83,7 +83,7 @@ export default class Index extends Vue {
 						></Icon>
 					</Layout.Header>
 					<AppMultiple dataSource={this.multiple} path={this.path}></AppMultiple>
-					<Layout.Content style={{ margin: '20px', backgroundColor: '#fff' }}>
+					<Layout.Content style={{ margin: '10px', backgroundColor: '#fff' }}>
 						<router-view></router-view>
 					</Layout.Content>
 				</Layout>

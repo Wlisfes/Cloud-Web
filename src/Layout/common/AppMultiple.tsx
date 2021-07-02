@@ -15,10 +15,31 @@ export default class AppMultiple extends Vue {
 						type="editable-card"
 						size="small"
 						hideAdd
+						tabBarStyle={{ borderBottom: 'none', marginBottom: '10px' }}
 						onTabClick={(path: string) => this.$router.push(path)}
 					>
 						{Object.keys([...Array(10)]).map(k => (
-							<Tabs.TabPane key={k} closable={parseInt(k) > 6} tab={'🐖 猪头'}></Tabs.TabPane>
+							<Tabs.TabPane key={k}>
+								<span slot="tab">
+									<Dropdown trigger={['contextmenu']}>
+										<Menu slot="overlay">
+											<Menu.Item key="closeOthersTabs">
+												<a>关闭其他</a>
+											</Menu.Item>
+											<Menu.Item key="closeLeftTabs">
+												<a>关闭左侧</a>
+											</Menu.Item>
+											<Menu.Item key="closeRightTabs">
+												<a>关闭右侧</a>
+											</Menu.Item>
+											<Menu.Item key="closeAllTabs">
+												<a>关闭全部</a>
+											</Menu.Item>
+										</Menu>
+										<span>{'🐖 猪头'}</span>
+									</Dropdown>
+								</span>
+							</Tabs.TabPane>
 						))}
 						{this.dataSource.map(k => (
 							<Tabs.TabPane key={k.fullPath} tab={k.meta.title}></Tabs.TabPane>
