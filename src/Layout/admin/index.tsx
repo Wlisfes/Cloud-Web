@@ -1,5 +1,5 @@
 import { namespace } from 'vuex-class'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Layout, Icon } from 'ant-design-vue'
 import { AppMultiple, AppMenu } from '@/Layout/common'
 import { AppState } from '@/store/module/app'
@@ -12,7 +12,8 @@ export default class Index extends Vue {
 	@AppModule.State((state: AppState) => state.multiple) multiple!: Array<any>
 	@AppModule.State((state: AppState) => state.path) path!: string
 	@AppModule.State((state: AppState) => state.menu) menu!: Array<any>
-	@AppModule.State((state: AppState) => state.subKey) subKey!: Array<any>
+	@AppModule.State((state: AppState) => state.openKeys) openKeys!: string[]
+	@AppModule.State((state: AppState) => state.selectedKeys) selectedKeys!: string[]
 
 	protected mounted() {
 		this.onLayout()
@@ -26,10 +27,6 @@ export default class Index extends Vue {
 	//切换菜单收缩
 	protected onTrigger() {
 		this.$store.commit('app/SET_COLLAPSED', !this.collapsed)
-	}
-
-	protected onOpenChange(keys: Array<string>) {
-		this.$store.commit('app/SET_SUBKEY', keys)
 	}
 
 	//计算屏幕宽度显示mobile界面
@@ -67,11 +64,10 @@ export default class Index extends Vue {
 						</router-link>
 					</div>
 					<AppMenu
-						dataSource={this.menu}
-						path={[this.path]}
 						collapsed={this.collapsed}
-						subKey={this.subKey}
-						onOpenChange={this.onOpenChange}
+						dataSource={this.menu}
+						openKeys={this.openKeys}
+						selectedKeys={this.selectedKeys}
 					></AppMenu>
 				</Layout.Sider>
 				<Layout style={{ backgroundColor: '#ededed' }}>

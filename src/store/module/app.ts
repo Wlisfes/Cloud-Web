@@ -9,7 +9,8 @@ export interface AppState {
 	multiple: Array<any>
 	menu: Array<any>
 	path: string
-	subKey: Array<string>
+	openKeys: string[]
+	selectedKeys: string[]
 }
 
 const app: Module<AppState, RootState> = {
@@ -22,7 +23,8 @@ const app: Module<AppState, RootState> = {
 		multiple: [],
 		menu: [],
 		path: '',
-		subKey: []
+		openKeys: [],
+		selectedKeys: []
 	}),
 	mutations: {
 		SET_WIDTH: (state, width: number) => {
@@ -47,13 +49,14 @@ const app: Module<AppState, RootState> = {
 		},
 		SET_ROUTE: (state, route) => {
 			state.path = route.path
+			state.selectedKeys = [route.path]
 			if (route.matched?.length) {
 				const { path } = route.matched[0]
-				state.subKey = [path]
+				state.openKeys = [path]
 			}
 		},
 		SET_SUBKEY: (state, subKey: Array<string>) => {
-			state.subKey = subKey
+			state.openKeys = subKey
 		}
 	},
 	actions: {

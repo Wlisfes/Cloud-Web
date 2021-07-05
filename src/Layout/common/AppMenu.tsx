@@ -1,12 +1,30 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { Menu, Icon } from 'ant-design-vue'
 
 @Component
 export default class AppMenu extends Vue {
 	@Prop({ type: Array, default: () => [] }) dataSource!: Array<any>
-	@Prop({ type: Array, default: () => [] }) path!: Array<string>
 	@Prop({ type: Boolean, default: false }) collapsed!: boolean
-	@Prop({ type: Array, default: () => [] }) subKey!: Array<string>
+	@Prop({ type: Array, default: () => [] }) selectedKeys!: Array<string>
+	@Prop({ type: Array, default: () => [] }) openKeys!: Array<string>
+
+	private state = {
+		openKeys: []
+	}
+
+	@Watch('collapsed', { immediate: true })
+	onCollapsed() {
+		if (this.collapsed) {
+			this.state.openKeys = this.openKeys as never[]
+			this.$store.state.app.openKeys = []
+		} else {
+			this.$store.state.app.openKeys = this.state.openKeys
+		}
+	}
+
+	private onOpenChange(keys: Array<string>) {
+		this.$store.commit('app/SET_SUBKEY', keys)
+	}
 
 	protected render() {
 		return (
@@ -14,19 +32,19 @@ export default class AppMenu extends Vue {
 				style={{ width: '100%' }}
 				theme="dark"
 				mode="inline"
-				selectedKeys={this.path}
-				openKeys={this.subKey}
+				selectedKeys={this.selectedKeys}
+				openKeys={this.openKeys}
 				inlineCollapsed={this.collapsed}
-				onOpenChange={(keys: Array<string>) => this.$emit('openChange', keys)}
+				onOpenChange={this.onOpenChange}
 			>
-				<Menu.Item key="/admin/home">
+				<Menu.Item key="1" onClick={(a: any) => console.log(a)}>
 					<router-link to="/admin/home">
 						<Icon type="home" style={{ fontSize: '18px' }}></Icon>
 						<span>首页</span>
 					</router-link>
 				</Menu.Item>
 				<Menu.SubMenu
-					key="/admin/user"
+					key="2"
 					title={
 						<div>
 							<Icon type="user" style={{ fontSize: '18px' }}></Icon>
@@ -34,19 +52,19 @@ export default class AppMenu extends Vue {
 						</div>
 					}
 				>
-					<Menu.Item key="/admin/user/list">
+					<Menu.Item key="3">
 						<router-link to="/admin/user/list">
 							<span>User</span>
 						</router-link>
 					</Menu.Item>
-					<Menu.Item key="/admin/user/role">
+					<Menu.Item key="4">
 						<router-link to="/admin/user/role">
 							<span>Role</span>
 						</router-link>
 					</Menu.Item>
 				</Menu.SubMenu>
 				<Menu.SubMenu
-					key="/admin/cloud"
+					key="5"
 					title={
 						<div>
 							<Icon type="cloud" style={{ fontSize: '18px' }}></Icon>
@@ -54,7 +72,7 @@ export default class AppMenu extends Vue {
 						</div>
 					}
 				>
-					<Menu.Item key="/admin/cloud/list">
+					<Menu.Item key="6">
 						<router-link to="/admin/cloud/list">
 							<span>Cloud</span>
 						</router-link>
