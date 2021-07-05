@@ -1,5 +1,8 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
+import { getMenu } from '@/api'
+import { HttpStatus } from '@/types'
+import { listToTree } from '@/utils'
 
 export interface AppState {
 	width: number
@@ -47,6 +50,9 @@ const app: Module<AppState, RootState> = {
 			}
 			state.multiple.push(Object.assign({}, route))
 		},
+		SET_MENU: (state, menu) => {
+			state.menu = menu
+		},
 		SET_ROUTE: (state, route) => {
 			state.path = route.path
 			state.selectedKeys = [route.path]
@@ -64,6 +70,20 @@ const app: Module<AppState, RootState> = {
 			return new Promise((resolve: Function) => {
 				commit('SET_MULTIPLE', route)
 				resolve()
+			})
+		},
+		setMenu: ({ commit }) => {
+			return new Promise((resolve: Function, reject: Function) => {
+				getMenu()
+					.then(({ code, data }) => {
+						if (code === HttpStatus.OK) {
+							commit('SET_MENU', listToTree(data))
+							resolve(data)
+						} else {
+							resolve([])
+						}
+					})
+					.catch(e => reject(e))
 			})
 		}
 	}

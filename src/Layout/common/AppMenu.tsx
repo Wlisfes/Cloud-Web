@@ -37,7 +37,40 @@ export default class AppMenu extends Vue {
 				inlineCollapsed={this.collapsed}
 				onOpenChange={this.onOpenChange}
 			>
-				<Menu.Item key="1" onClick={(a: any) => console.log(a)}>
+				{this.dataSource.map(k => {
+					if (k.type === 1) {
+						return (
+							<Menu.SubMenu
+								key={k.id}
+								title={
+									<div>
+										<Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>
+										<span>{k.name}</span>
+									</div>
+								}
+							>
+								{k.children.map((v: any) => (
+									<Menu.Item key={v.id}>
+										<router-link to={v.router}>
+											<Icon type={v.icon} style={{ fontSize: '18px' }}></Icon>
+											<span>{v.name}</span>
+										</router-link>
+									</Menu.Item>
+								))}
+							</Menu.SubMenu>
+						)
+					} else if (k.type === 2) {
+						return (
+							<Menu.Item key={k.id}>
+								<router-link to={k.router}>
+									<Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>
+									<span>{k.name}</span>
+								</router-link>
+							</Menu.Item>
+						)
+					}
+				})}
+				{/* <Menu.Item key="1" onClick={(a: any) => console.log(a)}>
 					<router-link to="/admin/home">
 						<Icon type="home" style={{ fontSize: '18px' }}></Icon>
 						<span>首页</span>
@@ -77,7 +110,7 @@ export default class AppMenu extends Vue {
 							<span>Cloud</span>
 						</router-link>
 					</Menu.Item>
-				</Menu.SubMenu>
+				</Menu.SubMenu> */}
 			</Menu>
 		)
 	}
