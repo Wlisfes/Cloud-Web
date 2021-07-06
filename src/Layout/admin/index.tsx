@@ -1,5 +1,5 @@
 import { namespace } from 'vuex-class'
-import { Vue, Component, Watch } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 import { Layout, Icon } from 'ant-design-vue'
 import { AppMultiple, AppMenu } from '@/Layout/common'
 import { AppState } from '@/store/module/app'

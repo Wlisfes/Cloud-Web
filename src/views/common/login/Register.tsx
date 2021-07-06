@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Button, Input, Icon, Statistic, notification } from 'ant-design-vue'
-import { nodeEmailCode, register } from '@/api'
+import { nodeEmailCode } from '@/api'
 import { HttpStatus } from '@/types'
 
 @Component
@@ -69,15 +69,10 @@ export default class Register extends Vue {
 				return
 			}
 			try {
-				const { code, data } = await register({ ...this.state.form })
-				if (code === HttpStatus.OK) {
-					notification.success({ message: data.message, description: '' })
-					this.$router.replace('/main/login')
-				}
-				this.state.loading = false
-			} catch (e) {
-				this.state.loading = false
-			}
+				await this.$store.dispatch('user/register', { ...this.state.form })
+				this.$router.replace('/main/login')
+			} catch (e) {}
+			this.state.loading = false
 		})
 	}
 

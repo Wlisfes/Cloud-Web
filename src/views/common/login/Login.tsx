@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Button, Input, Checkbox, Icon } from 'ant-design-vue'
-import { login } from '@/api'
-import { HttpStatus } from '@/types'
+import { setCookie, getCookie, delCookie } from '@/utils/cookie'
+const __KEEP_KEY__ = '__KEEP_KEY__'
 
 @Component
 export default class Login extends Vue {
@@ -9,6 +9,7 @@ export default class Login extends Vue {
 
 	private state = {
 		loading: false,
+		keep: false,
 		form: {
 			username: '',
 			password: '',
@@ -21,6 +22,15 @@ export default class Login extends Vue {
 				{ min: 6, message: '密码不能少于6位', trigger: 'blur' }
 			],
 			code: [{ required: true, message: '请输入验证码', trigger: 'change' }]
+		}
+	}
+
+	protected created() {
+		const form = getCookie(__KEEP_KEY__)
+		if (form) {
+			this.state.form.username = form.username
+			this.state.form.password = form.password
+			this.state.keep = form.keep
 		}
 	}
 
@@ -42,15 +52,18 @@ export default class Login extends Vue {
 			}
 
 			try {
-				const { code, data } = await login({ ...this.state.form })
-				if (code === HttpStatus.OK) {
-					this.$router.push('/')
+				const { form, keep } = this.state
+				await this.$store.dispatch('user/login', { ...form })
+				if (keep) {
+					setCookie(__KEEP_KEY__, { keep, username: form.username, password: form.password })
+				} else {
+					delCookie(__KEEP_KEY__)
 				}
-				this.state.loading = false
+				this.$router.push('/')
 			} catch (e) {
 				this.refCursor()
-				this.state.loading = false
 			}
+			this.state.loading = false
 		})
 	}
 
@@ -103,7 +116,7 @@ export default class Login extends Vue {
 					</FormModel.Item>
 					<FormModel.Item>
 						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-							<Checkbox>
+							<Checkbox v-model={this.state.keep}>
 								<a style={{ color: '#1890ff' }}>记住密码</a>
 							</Checkbox>
 							<a onClick={() => this.$router.replace('/main/register')}>注册账号</a>
