@@ -18,7 +18,9 @@ const common: Array<RouteConfig> = [
 				component: () => import('@/views/common/login/Register')
 			}
 		]
-	}
+	},
+	{ path: '/404', component: () => import('@/views/common/result/404') },
+	{ path: '*', redirect: '/404' }
 ]
 
 export default common

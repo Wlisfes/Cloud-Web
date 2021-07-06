@@ -6,7 +6,7 @@ import web from './web'
 
 Vue.use(VueRouter)
 
-const routes = [...common, ...web, ...admin]
+const routes = [...web, ...admin, ...common]
 const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
