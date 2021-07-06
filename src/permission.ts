@@ -9,15 +9,24 @@ router.beforeEach(async (to, form, next) => {
 	NProgress.start()
 	const token = getToken()
 	if (token) {
+		if (store.getters['user/role'].length > 0) {
+			next()
+		} else {
+			try {
+				await store.dispatch('user/nodeUser')
+				const route = await store.dispatch('base/nodeMenu')
+				console.log(route)
+				next()
+			} catch (e) {}
+		}
 	} else {
 		if (isWhite(to.path)) {
 			next()
 		} else {
-			router.push({ path: '/main/login' })
+			next({ path: '/main/login' })
 			NProgress.done()
 		}
 	}
-	next()
 })
 
 router.afterEach(async (to, form) => {

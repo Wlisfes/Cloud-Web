@@ -1,8 +1,9 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
-import { login, register, getUser } from '@/api'
-import * as types from '@/types'
+import { login, register, nodeUser } from '@/api'
+import { setToken } from '@/utils/auth'
 import { notification } from 'ant-design-vue'
+import * as types from '@/types'
 
 export interface UserState {
 	uid: number | null
@@ -11,6 +12,7 @@ export interface UserState {
 	email: string | null
 	avatar: string | null
 	mobile: number | null
+	role: string[]
 	token: string | null | undefined
 }
 
@@ -23,8 +25,19 @@ const user: Module<UserState, RootState> = {
 		email: null,
 		avatar: null,
 		mobile: null,
+		role: [],
 		token: null
 	}),
+	getters: {
+		uid: state => state.uid,
+		username: state => state.username,
+		nickname: state => state.nickname,
+		email: state => state.email,
+		avatar: state => state.avatar,
+		mobile: state => state.mobile,
+		role: state => state.role,
+		token: state => state.token
+	},
 	mutations: {
 		SET_USER: (state, user: UserState) => {
 			state.uid = user.uid
@@ -33,8 +46,10 @@ const user: Module<UserState, RootState> = {
 			state.email = user.email
 			state.avatar = user.avatar
 			state.mobile = user.mobile
+			state.role = ['admin']
 		},
 		SET_TOKEN: (state, token: string) => {
+			setToken(token)
 			state.token = token
 		}
 	},
@@ -75,9 +90,9 @@ const user: Module<UserState, RootState> = {
 			})
 		},
 		/**拉取用户信息**/
-		getUser: ({ commit }) => {
+		nodeUser: ({ commit }) => {
 			return new Promise((resolve: Function, reject: Function) => {
-				getUser()
+				nodeUser()
 					.then(response => {
 						if (response.code === types.HttpStatus.OK) {
 							commit('SET_USER', response.data)

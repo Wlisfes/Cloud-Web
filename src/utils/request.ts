@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { notification } from 'ant-design-vue'
+import { getToken } from '@/utils/auth'
 
 const service: AxiosInstance = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API,
@@ -32,6 +33,10 @@ function useError(error: AxiosError) {
 
 //请求拦截
 service.interceptors.request.use((config: AxiosRequestConfig) => {
+	const token = getToken()
+	if (token) {
+		config.headers['app-token'] = token
+	}
 	return config
 }, useError)
 

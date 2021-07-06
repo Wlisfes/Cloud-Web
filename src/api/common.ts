@@ -11,7 +11,7 @@ export function nodeEmailCode(params: types.NodeEmailCodeParameter) {
 }
 
 /**获取菜单列表**/
-export function getMenu(params?: any) {
+export function nodeMenu(params?: any) {
 	return request({
 		url: `/api/menu/list`,
 		method: 'GET',

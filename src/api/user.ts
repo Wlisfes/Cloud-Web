@@ -20,7 +20,7 @@ export function register(params: types.RegisterParameter) {
 }
 
 /**用户信息**/
-export function getUser(params?: any) {
+export function nodeUser(params?: any) {
 	return request<types.GetUserResponse>({
 		url: `/api/user/info`,
 		method: 'GET',

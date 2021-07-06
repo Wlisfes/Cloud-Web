@@ -1,9 +1,10 @@
 import { Module } from 'vuex'
 import type { Route } from 'vue-router'
 import { RootState } from '@/store'
-import { getMenu } from '@/api'
+import { nodeMenu } from '@/api'
 import { HttpStatus } from '@/types'
-import { listToTree } from '@/utils'
+import { formatRoutes } from '@/utils'
+import Layout from '@/Layout/admin'
 
 export interface BaseState {
 	mobile: boolean
@@ -11,6 +12,7 @@ export interface BaseState {
 	theme: string
 	multiple: Array<any>
 	menu: Array<any>
+	list: Array<any>
 	path: string
 	openKeys: string[]
 	selectedKeys: string[]
@@ -24,10 +26,22 @@ const base: Module<BaseState, RootState> = {
 		theme: 'dark',
 		multiple: [],
 		menu: [],
+		list: [],
 		path: '',
 		openKeys: [],
 		selectedKeys: []
 	}),
+	getters: {
+		mobile: state => state.mobile,
+		collapsed: state => state.collapsed,
+		theme: state => state.theme,
+		multiple: state => state.multiple,
+		menu: state => state.menu,
+		list: state => state.list,
+		path: state => state.path,
+		openKeys: state => state.openKeys,
+		selectedKeys: state => state.selectedKeys
+	},
 	mutations: {
 		SET_MOBILE: (state, mobile: boolean) => {
 			state.mobile = mobile
@@ -42,6 +56,9 @@ const base: Module<BaseState, RootState> = {
 		SET_MENU: (state, menu) => {
 			state.menu = menu
 		},
+		SET_LIST: (state, list) => {
+			state.list = list
+		},
 		SET_PATH: (state, path: string) => {
 			state.path = path
 		},
@@ -53,10 +70,23 @@ const base: Module<BaseState, RootState> = {
 		}
 	},
 	actions: {
+		/**根据role获取菜单**/
+		nodeMenu: ({ commit }) => {
+			return new Promise((resolve: Function, rejcet: Function) => {
+				nodeMenu()
+					.then(response => {
+						console.log(response)
+						if (response.code == HttpStatus.OK) {
+							const menu = formatRoutes(response.data, Layout)
+							commit('SET_LIST', response.data)
+							resolve(menu)
+						}
+					})
+					.catch(e => rejcet(e))
+			})
+		},
 		setRoute: ({ commit }, route: Route) => {
 			return new Promise((resolve: Function) => {
-				console.log(route)
-
 				resolve()
 			})
 		}

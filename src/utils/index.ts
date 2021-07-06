@@ -18,3 +18,13 @@ export function listToTree(list: any[]) {
 	}
 	return tree
 }
+
+/**格式化路由菜单**/
+export function formatRoutes(routes: any[], Layout) {
+	const formatRoutesArr = []
+	routes.forEach(route => {
+		const router = {
+			meta: {}
+		}
+	})
+}
