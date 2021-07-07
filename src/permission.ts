@@ -9,19 +9,23 @@ router.beforeEach(async (to, form, next) => {
 	NProgress.start()
 	const token = getToken()
 	if (token) {
-		const roles = store.getters['user/role']
-		if (roles.length > 0) {
-			next()
+		if (to.path.indexOf('/main') !== -1) {
+			next({ path: '/', replace: true })
 		} else {
-			try {
-				await store.dispatch('user/nodeUser')
-				const routes = await store.dispatch('base/nodeMenu')
-				routes.forEach((route: any) => {
-					router.addRoute(route)
-				})
+			const roles = store.getters['user/role']
+			if (roles.length > 0) {
+				next()
+			} else {
+				try {
+					await store.dispatch('user/nodeUser')
+					const routes = await store.dispatch('base/nodeMenu')
+					routes.forEach((route: any) => {
+						router.addRoute(route)
+					})
 
-				next({ ...(to as any), replace: true })
-			} catch (e) {}
+					next({ ...(to as any), replace: true })
+				} catch (e) {}
+			}
 		}
 	} else {
 		if (isWhite(to.path)) {
