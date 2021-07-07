@@ -12,19 +12,19 @@ const routes: RouteConfig[] = [
 		component: () => import('@/views/web/home/Home')
 	},
 	/**admin**************************************************************************/
-	{
-		path: '/admin',
-		redirect: '/admin/home',
-		component: Layout,
-		children: [
-			{
-				path: '/admin/home',
-				name: 'Home',
-				meta: { title: '首页' },
-				component: () => import('@/views/admin/home/Home')
-			}
-		]
-	},
+	// {
+	// 	path: '/admin',
+	// 	redirect: '/admin/home',
+	// 	component: Layout,
+	// 	children: [
+	// 		{
+	// 			path: '/admin/home',
+	// 			name: 'Home',
+	// 			meta: { title: '首页' },
+	// 			component: () => import('@/views/admin/home/Home')
+	// 		}
+	// 	]
+	// },
 	/**common**************************************************************************/
 	{
 		path: '/main',
@@ -44,8 +44,8 @@ const routes: RouteConfig[] = [
 		]
 	},
 	{ path: '/404', component: () => import('@/views/common/result/404') },
-	{ path: '/', redirect: '/web/home' },
-	{ path: '*', redirect: '/404' }
+	{ path: '/', redirect: '/web/home' }
+	// { path: '*', redirect: '/404' }
 ]
 
 const router = new VueRouter({

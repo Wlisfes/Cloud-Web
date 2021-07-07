@@ -1,19 +1,17 @@
-import { namespace } from 'vuex-class'
+import { Getter } from 'vuex-class'
 import { Vue, Component } from 'vue-property-decorator'
 import { Layout, Icon } from 'ant-design-vue'
 import { AppMultiple, AppMenu } from '@/Layout/common'
-import { AppState } from '@/store/module/app'
-const AppModule = namespace('app')
 
 @Component
 export default class Index extends Vue {
-	@AppModule.State((state: AppState) => state.collapsed) collapsed!: boolean
-	@AppModule.State((state: AppState) => state.mobile) mobile!: boolean
-	@AppModule.State((state: AppState) => state.multiple) multiple!: Array<any>
-	@AppModule.State((state: AppState) => state.path) path!: string
-	@AppModule.State((state: AppState) => state.menu) menu!: Array<any>
-	@AppModule.State((state: AppState) => state.openKeys) openKeys!: string[]
-	@AppModule.State((state: AppState) => state.selectedKeys) selectedKeys!: string[]
+	@Getter('base/mobile') mobile!: boolean
+	@Getter('base/collapsed') collapsed!: boolean
+	@Getter('base/menu') menu!: Array<any>
+	@Getter('base/openKeys') openKeys!: Array<string>
+	@Getter('base/selectedKeys') selectedKeys!: Array<string>
+	@Getter('base/multiple') multiple!: Array<string>
+	@Getter('base/path') path!: string
 
 	protected mounted() {
 		this.onLayout()
@@ -26,7 +24,7 @@ export default class Index extends Vue {
 
 	//切换菜单收缩
 	protected onTrigger() {
-		this.$store.commit('app/SET_COLLAPSED', !this.collapsed)
+		this.$store.commit('base/SET_COLLAPSED', !this.collapsed)
 	}
 
 	//计算屏幕宽度显示mobile界面
@@ -34,9 +32,9 @@ export default class Index extends Vue {
 		const width = document.body.getBoundingClientRect().width
 		const isMobile = width < 992
 		if (isMobile) {
-			this.$store.commit('app/SET_COLLAPSED', true)
+			this.$store.commit('base/SET_COLLAPSED', true)
 		}
-		this.$store.commit('app/SET_MOBILE', isMobile)
+		this.$store.commit('base/SET_MOBILE', isMobile)
 	}
 
 	protected render() {
@@ -55,7 +53,7 @@ export default class Index extends Vue {
 					width={240}
 					trigger={null}
 					collapsible
-					onBreakpoint={(type: boolean) => this.$store.commit('app/SET_COLLAPSED', type)}
+					onBreakpoint={(type: boolean) => this.$store.commit('base/SET_COLLAPSED', type)}
 				>
 					<div class="app-admin-container-logo">
 						<router-link class="app-admin-container-logo-conter" to="/admin">

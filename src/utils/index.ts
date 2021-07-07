@@ -19,12 +19,24 @@ export function listToTree(list: any[]) {
 	return tree
 }
 
-/**格式化路由菜单**/
-export function formatRoutes(routes: any[], Layout) {
-	const formatRoutesArr = []
-	routes.forEach(route => {
-		const router = {
-			meta: {}
+/**回溯算法**/
+export function bfs(target: any[], id: number | string, key = 'children') {
+	const quene = [...target]
+	do {
+		const current = quene.shift()
+		if (current[key]) {
+			quene.push(
+				...current[key].map((x: any) => ({
+					...x,
+					path: (current.path || current.id) + '-' + x.id
+				}))
+			)
 		}
-	})
+		if (current.id === id) {
+			return {
+				...current
+			}
+		}
+	} while (quene.length)
+	return undefined
 }

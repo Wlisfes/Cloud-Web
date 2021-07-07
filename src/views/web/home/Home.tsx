@@ -1,6 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Cascader } from 'ant-design-vue'
-import request from '@/utils/request'
 
 @Component
 export default class Home extends Vue {
@@ -9,36 +8,6 @@ export default class Home extends Vue {
 			{ value: 'zhejiang', label: 'Zhejiang', isLeaf: false },
 			{ value: 'jiangsu', label: 'Jiangsu', isLeaf: false }
 		]
-	}
-
-	protected created() {
-		this.createMenu()
-	}
-
-	protected listToTree(list: any[]) {
-		var map: any = {},
-			node,
-			tree = [],
-			i
-		for (i = 0; i < list.length; i++) {
-			map[list[i].id] = list[i]
-			list[i].children = []
-		}
-		for (i = 0; i < list.length; i += 1) {
-			node = list[i]
-			if (node.parentId) {
-				if (map[node.parentId].children) map[node.parentId].children.push(node)
-			} else {
-				tree.push(node)
-			}
-		}
-		return tree
-	}
-
-	private createMenu() {
-		request.get('http://sdk.lisfes.cn/json/menu.json').then((response: any) => {
-			console.log(this.listToTree(response))
-		})
 	}
 
 	private loadData(selectedOptions: any[]) {

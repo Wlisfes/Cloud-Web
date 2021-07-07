@@ -1,5 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Tabs, Dropdown, Menu, Button, Icon } from 'ant-design-vue'
+import { Tabs, Dropdown, Menu, Icon } from 'ant-design-vue'
 
 @Component
 export default class AppMultiple extends Vue {
@@ -19,7 +19,7 @@ export default class AppMultiple extends Vue {
 						onTabClick={(path: string) => this.$router.push(path)}
 					>
 						{this.dataSource.map(k => (
-							<Tabs.TabPane key={k.fullPath}>
+							<Tabs.TabPane key={k.path} closable={!(k.path === '/admin/home')}>
 								<span slot="tab">
 									<Dropdown trigger={['contextmenu']}>
 										<Menu slot="overlay">
@@ -36,7 +36,7 @@ export default class AppMultiple extends Vue {
 												<a>关闭全部</a>
 											</Menu.Item>
 										</Menu>
-										<span>{k.meta.title}</span>
+										<span>{k.name}</span>
 									</Dropdown>
 								</span>
 							</Tabs.TabPane>

@@ -33,8 +33,8 @@ module.exports = {
 			alias: {
 				'@': resolve('src')
 			}
-		},
-		...configureWebpack()
+		}
+		// ...configureWebpack()
 	},
 	chainWebpack: config => {
 		if (process.env.NODE_ENV === 'production') {

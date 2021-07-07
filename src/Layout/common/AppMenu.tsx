@@ -8,22 +8,18 @@ export default class AppMenu extends Vue {
 	@Prop({ type: Array, default: () => [] }) selectedKeys!: Array<string>
 	@Prop({ type: Array, default: () => [] }) openKeys!: Array<string>
 
-	private state = {
-		openKeys: []
-	}
+	private keys: string[] = []
 
 	@Watch('collapsed', { immediate: true })
 	onCollapsed() {
 		if (this.collapsed) {
-			this.state.openKeys = this.openKeys as never[]
-			this.$store.state.app.openKeys = []
+			this.keys = this.openKeys
+			this.$store.commit('base/SET_OPENKEYS', [])
 		} else {
-			this.$store.state.app.openKeys = this.state.openKeys
+			if (this.keys.length) {
+				this.$store.commit('base/SET_OPENKEYS', this.keys)
+			}
 		}
-	}
-
-	private onOpenChange(keys: Array<string>) {
-		this.$store.commit('app/SET_SUBKEY', keys)
 	}
 
 	protected render() {
@@ -35,13 +31,15 @@ export default class AppMenu extends Vue {
 				selectedKeys={this.selectedKeys}
 				openKeys={this.openKeys}
 				inlineCollapsed={this.collapsed}
-				onOpenChange={this.onOpenChange}
+				onOpenChange={(keys: string) => {
+					this.$store.commit('base/SET_OPENKEYS', keys)
+				}}
 			>
 				{this.dataSource.map(k => {
 					if (k.type === 1) {
 						return (
 							<Menu.SubMenu
-								key={k.id}
+								key={k.router}
 								title={
 									<div>
 										<Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>
@@ -50,7 +48,7 @@ export default class AppMenu extends Vue {
 								}
 							>
 								{k.children.map((v: any) => (
-									<Menu.Item key={v.id}>
+									<Menu.Item key={v.router}>
 										<router-link to={v.router}>
 											<Icon type={v.icon} style={{ fontSize: '18px' }}></Icon>
 											<span>{v.name}</span>
@@ -61,7 +59,7 @@ export default class AppMenu extends Vue {
 						)
 					} else if (k.type === 2) {
 						return (
-							<Menu.Item key={k.id}>
+							<Menu.Item key={k.router}>
 								<router-link to={k.router}>
 									<Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>
 									<span>{k.name}</span>
@@ -70,47 +68,6 @@ export default class AppMenu extends Vue {
 						)
 					}
 				})}
-				{/* <Menu.Item key="1" onClick={(a: any) => console.log(a)}>
-					<router-link to="/admin/home">
-						<Icon type="home" style={{ fontSize: '18px' }}></Icon>
-						<span>首页</span>
-					</router-link>
-				</Menu.Item>
-				<Menu.SubMenu
-					key="2"
-					title={
-						<div>
-							<Icon type="user" style={{ fontSize: '18px' }}></Icon>
-							<span>User</span>
-						</div>
-					}
-				>
-					<Menu.Item key="3">
-						<router-link to="/admin/user/list">
-							<span>User</span>
-						</router-link>
-					</Menu.Item>
-					<Menu.Item key="4">
-						<router-link to="/admin/user/role">
-							<span>Role</span>
-						</router-link>
-					</Menu.Item>
-				</Menu.SubMenu>
-				<Menu.SubMenu
-					key="5"
-					title={
-						<div>
-							<Icon type="cloud" style={{ fontSize: '18px' }}></Icon>
-							<span>Cloud</span>
-						</div>
-					}
-				>
-					<Menu.Item key="6">
-						<router-link to="/admin/cloud/list">
-							<span>Cloud</span>
-						</router-link>
-					</Menu.Item>
-				</Menu.SubMenu> */}
 			</Menu>
 		)
 	}

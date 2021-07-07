@@ -3,8 +3,8 @@ import type { Route } from 'vue-router'
 import { RootState } from '@/store'
 import { nodeMenu } from '@/api'
 import { HttpStatus } from '@/types'
-import { formatRoutes } from '@/utils'
-import Layout from '@/Layout/admin'
+import { formatRoutes, formatMenus } from '@/utils/route'
+import { bfs } from '@/utils'
 
 export interface BaseState {
 	mobile: boolean
@@ -52,7 +52,12 @@ const base: Module<BaseState, RootState> = {
 		SET_THEME: (state, theme: string) => {
 			state.theme = theme
 		},
-		SET_MULTIPLE: state => {},
+		SET_MULTIPLE: (state, route) => {
+			const n = state.multiple.some(k => k.path === route.path)
+			if (!n) {
+				state.multiple.push({ name: route.meta.title, path: route.path })
+			}
+		},
 		SET_MENU: (state, menu) => {
 			state.menu = menu
 		},
@@ -75,18 +80,26 @@ const base: Module<BaseState, RootState> = {
 			return new Promise((resolve: Function, rejcet: Function) => {
 				nodeMenu()
 					.then(response => {
-						console.log(response)
 						if (response.code == HttpStatus.OK) {
-							const menu = formatRoutes(response.data, Layout)
+							const menu = formatMenus(response.data)
+							const routes = formatRoutes(menu)
 							commit('SET_LIST', response.data)
-							resolve(menu)
+							commit('SET_MENU', menu)
+							resolve(routes)
 						}
 					})
 					.catch(e => rejcet(e))
 			})
 		},
-		setRoute: ({ commit }, route: Route) => {
+		setRoute: ({ commit, state }, route: Route) => {
 			return new Promise((resolve: Function) => {
+				const props = bfs(state.menu, route?.meta?.parent)
+				const keys = [props.router, ...state.openKeys]
+
+				commit('SET_OPENKEYS', Array.from(new Set(keys)))
+				commit('SET_SELECTEDKEYS', [route.path])
+				commit('SET_MULTIPLE', route)
+				commit('SET_PATH', route.path)
 				resolve()
 			})
 		}
