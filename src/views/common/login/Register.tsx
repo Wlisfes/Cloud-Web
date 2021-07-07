@@ -14,14 +14,12 @@ export default class Register extends Vue {
 		},
 		loading: false,
 		form: {
-			username: '',
 			nickname: '',
 			password: '',
 			email: '',
 			code: ''
 		},
 		rules: {
-			username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
 			nickname: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }],
 			password: [
 				{ required: true, message: '请输入密码', trigger: 'blur' },
@@ -82,11 +80,6 @@ export default class Register extends Vue {
 		return (
 			<div>
 				<FormModel ref="form" {...{ props: { model: form, rules } }}>
-					<FormModel.Item prop="username">
-						<Input v-model={form.username} max-length={20} placeholder="用户名">
-							<Icon slot="prefix" type="user"></Icon>
-						</Input>
-					</FormModel.Item>
 					<FormModel.Item prop="nickname">
 						<Input v-model={form.nickname} max-length={40} placeholder="用户昵称">
 							<Icon slot="prefix" type="crown"></Icon>

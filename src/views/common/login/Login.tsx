@@ -11,12 +11,12 @@ export default class Login extends Vue {
 		loading: false,
 		keep: false,
 		form: {
-			username: '',
+			account: '',
 			password: '',
 			code: ''
 		},
 		rules: {
-			username: [{ required: true, message: '请输入用户名、邮箱、手机号', trigger: 'change' }],
+			account: [{ required: true, message: '请输入用户名、邮箱、手机号', trigger: 'change' }],
 			password: [
 				{ required: true, message: '请输入密码', trigger: 'change' },
 				{ min: 6, message: '密码不能少于6位', trigger: 'blur' }
@@ -28,7 +28,7 @@ export default class Login extends Vue {
 	protected created() {
 		const form = getCookie(__KEEP_KEY__)
 		if (form) {
-			this.state.form.username = form.username
+			this.state.form.account = form.account
 			this.state.form.password = form.password
 			this.state.keep = form.keep
 		}
@@ -55,7 +55,7 @@ export default class Login extends Vue {
 				const { form, keep } = this.state
 				await this.$store.dispatch('user/login', { ...form })
 				if (keep) {
-					setCookie(__KEEP_KEY__, { keep, username: form.username, password: form.password })
+					setCookie(__KEEP_KEY__, { keep, account: form.account, password: form.password })
 				} else {
 					delCookie(__KEEP_KEY__)
 				}
@@ -72,8 +72,8 @@ export default class Login extends Vue {
 		return (
 			<div>
 				<FormModel ref="form" {...{ props: { model: form, rules } }}>
-					<FormModel.Item prop="username">
-						<Input v-model={form.username} max-length={20} placeholder="用户名、邮箱、手机号">
+					<FormModel.Item prop="account">
+						<Input v-model={form.account} max-length={20} placeholder="账户、邮箱、手机号">
 							<Icon slot="prefix" type="user"></Icon>
 						</Input>
 					</FormModel.Item>

@@ -7,7 +7,7 @@ import * as types from '@/types'
 
 export interface UserState {
 	uid: number | null
-	username: string | null
+	account: number | null
 	nickname: string | null
 	email: string | null
 	avatar: string | null
@@ -20,7 +20,7 @@ const user: Module<UserState, RootState> = {
 	namespaced: true,
 	state: (): UserState => ({
 		uid: null,
-		username: null,
+		account: null,
 		nickname: null,
 		email: null,
 		avatar: null,
@@ -30,7 +30,7 @@ const user: Module<UserState, RootState> = {
 	}),
 	getters: {
 		uid: state => state.uid,
-		username: state => state.username,
+		account: state => state.account,
 		nickname: state => state.nickname,
 		email: state => state.email,
 		avatar: state => state.avatar,
@@ -41,7 +41,7 @@ const user: Module<UserState, RootState> = {
 	mutations: {
 		SET_USER: (state, user: UserState) => {
 			state.uid = user.uid
-			state.username = user.username
+			state.account = user.account
 			state.nickname = user.nickname
 			state.email = user.email
 			state.avatar = user.avatar

@@ -1,6 +1,6 @@
 /**登录*************************************************/
 export interface LoginParameter {
-	username: string
+	account: number
 	password: string
 	code: string
 }
@@ -10,7 +10,6 @@ export interface LoginResponse {
 
 /**注册*************************************************/
 export interface RegisterParameter {
-	username: string
 	nickname: string
 	password: string
 	email: string
@@ -24,7 +23,7 @@ export interface RegisterResponse {
 export interface GetUserResponse {
 	id: number
 	uid: number
-	username: string
+	account: number
 	nickname: string
 	email: string
 	password: string
