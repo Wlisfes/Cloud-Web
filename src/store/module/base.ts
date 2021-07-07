@@ -7,6 +7,7 @@ import { formatRoutes, formatMenus } from '@/utils/route'
 import { bfs } from '@/utils'
 
 export interface BaseState {
+	width: number
 	mobile: boolean
 	collapsed: boolean
 	theme: string
@@ -21,6 +22,7 @@ export interface BaseState {
 const base: Module<BaseState, RootState> = {
 	namespaced: true,
 	state: (): BaseState => ({
+		width: 0,
 		mobile: false,
 		collapsed: false,
 		theme: 'dark',
@@ -32,6 +34,7 @@ const base: Module<BaseState, RootState> = {
 		selectedKeys: []
 	}),
 	getters: {
+		width: state => state.width,
 		mobile: state => state.mobile,
 		collapsed: state => state.collapsed,
 		theme: state => state.theme,
@@ -43,6 +46,9 @@ const base: Module<BaseState, RootState> = {
 		selectedKeys: state => state.selectedKeys
 	},
 	mutations: {
+		SET_WIDTH: (state, width) => {
+			state.width = width
+		},
 		SET_MOBILE: (state, mobile: boolean) => {
 			state.mobile = mobile
 		},

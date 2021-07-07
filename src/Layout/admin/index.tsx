@@ -30,6 +30,7 @@ export default class Index extends Vue {
 		if (isMobile) {
 			this.$store.commit('base/SET_COLLAPSED', true)
 		}
+		this.$store.commit('base/SET_WIDTH', width)
 		this.$store.commit('base/SET_MOBILE', isMobile)
 	}
 

@@ -1,7 +1,7 @@
 import router from '@/router'
 import store from '@/store'
 import { isWhite } from '@/utils/white'
-import { getToken } from '@/utils/auth'
+import { getToken, delToken } from '@/utils/auth'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -24,7 +24,10 @@ router.beforeEach(async (to, form, next) => {
 					})
 
 					next({ ...(to as any), replace: true })
-				} catch (e) {}
+				} catch (e) {
+					delToken()
+					next({ path: '/main/login' })
+				}
 			}
 		}
 	} else {
