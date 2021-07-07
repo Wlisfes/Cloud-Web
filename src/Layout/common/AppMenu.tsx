@@ -1,12 +1,14 @@
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { Menu, Icon } from 'ant-design-vue'
 
 @Component
 export default class AppMenu extends Vue {
-	@Prop({ type: Array, default: () => [] }) dataSource!: Array<any>
-	@Prop({ type: Boolean, default: false }) collapsed!: boolean
-	@Prop({ type: Array, default: () => [] }) selectedKeys!: Array<string>
-	@Prop({ type: Array, default: () => [] }) openKeys!: Array<string>
+	@Getter('base/theme') theme!: string
+	@Getter('base/collapsed') collapsed!: boolean
+	@Getter('base/menu') dataSource!: Array<any>
+	@Getter('base/openKeys') openKeys!: Array<string>
+	@Getter('base/selectedKeys') selectedKeys!: Array<string>
 
 	private keys: string[] = []
 
@@ -26,7 +28,7 @@ export default class AppMenu extends Vue {
 		return (
 			<Menu
 				style={{ width: '100%' }}
-				theme="dark"
+				theme={this.theme}
 				mode="inline"
 				selectedKeys={this.selectedKeys}
 				openKeys={this.openKeys}

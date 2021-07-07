@@ -5,13 +5,9 @@ import { AppMultiple, AppMenu } from '@/Layout/common'
 
 @Component
 export default class Index extends Vue {
+	@Getter('base/theme') theme!: string
 	@Getter('base/mobile') mobile!: boolean
 	@Getter('base/collapsed') collapsed!: boolean
-	@Getter('base/menu') menu!: Array<any>
-	@Getter('base/openKeys') openKeys!: Array<string>
-	@Getter('base/selectedKeys') selectedKeys!: Array<string>
-	@Getter('base/multiple') multiple!: Array<string>
-	@Getter('base/path') path!: string
 
 	protected mounted() {
 		this.onLayout()
@@ -46,7 +42,7 @@ export default class Index extends Vue {
 
 				<Layout.Sider
 					class="app-admin-container-sider"
-					theme="dark"
+					theme={this.theme}
 					breakpoint="xl"
 					collapsed={this.collapsed}
 					collapsedWidth={this.mobile ? 0 : 80}
@@ -61,12 +57,7 @@ export default class Index extends Vue {
 							{!this.collapsed && <h1 class="app-ellipsis">情雨随风的青春</h1>}
 						</router-link>
 					</div>
-					<AppMenu
-						collapsed={this.collapsed}
-						dataSource={this.menu}
-						openKeys={this.openKeys}
-						selectedKeys={this.selectedKeys}
-					></AppMenu>
+					<AppMenu></AppMenu>
 				</Layout.Sider>
 				<Layout style={{ backgroundColor: '#ededed' }}>
 					<Layout.Header style={{ backgroundColor: '#ffffff', padding: 0 }}>
@@ -76,7 +67,7 @@ export default class Index extends Vue {
 							onClick={this.onTrigger}
 						></Icon>
 					</Layout.Header>
-					<AppMultiple dataSource={this.multiple} path={this.path}></AppMultiple>
+					<AppMultiple></AppMultiple>
 					<Layout.Content style={{ margin: '10px', backgroundColor: '#fff' }}>
 						<router-view></router-view>
 					</Layout.Content>

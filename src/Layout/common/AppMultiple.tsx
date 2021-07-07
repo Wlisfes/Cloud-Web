@@ -1,10 +1,11 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
+import { Vue, Component } from 'vue-property-decorator'
 import { Tabs, Dropdown, Menu, Icon } from 'ant-design-vue'
 
 @Component
 export default class AppMultiple extends Vue {
-	@Prop({ type: Array, required: true, default: () => [] }) dataSource!: Array<any>
-	@Prop({ type: String, default: '' }) path!: string
+	@Getter('base/multiple') multiple!: Array<any>
+	@Getter('base/path') path!: string
 
 	protected render() {
 		return (
@@ -18,7 +19,7 @@ export default class AppMultiple extends Vue {
 						tabBarStyle={{ borderBottom: 'none', marginBottom: '10px' }}
 						onTabClick={(path: string) => this.$router.push(path)}
 					>
-						{this.dataSource.map(k => (
+						{this.multiple.map(k => (
 							<Tabs.TabPane key={k.path} closable={!(k.path === '/admin/home')}>
 								<span slot="tab">
 									<Dropdown trigger={['contextmenu']}>
