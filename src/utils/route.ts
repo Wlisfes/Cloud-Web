@@ -1,4 +1,5 @@
 import Layout from '@/Layout/admin'
+import asyncRoutes from '@/router/router.env'
 
 /**菜单数组转树结果**/
 export function listToTree(list: any[]) {
@@ -21,21 +22,15 @@ export function listToTree(list: any[]) {
 	return tree
 }
 
-const load = (path: string) => () => import(`@${path}`)
-
-export const loadView = (view: string) => {
-	return (resolve: any) => require([`@${view}`], resolve)
-}
-
 /**格式化菜单**/
-export function formatMenus(routes: any[]) {
-	return listToTree(routes)
+export function formatMenus(list: any[]) {
+	return listToTree(list)
 }
 
 /**格式化路由**/
-export function formatRoutes(routes: any[]) {
+export function formatRoutes(list: any[]) {
 	const formatRoutesArr: any[] = []
-	routes.forEach(route => {
+	list.forEach(route => {
 		const router: any = {
 			meta: {}
 		}
@@ -43,9 +38,7 @@ export function formatRoutes(routes: any[]) {
 		if (route.path === 'Layout') {
 			router['component'] = Layout
 		} else {
-			// const t = `views/admin/user/User`
-			// router['component'] = () => import(`@${t}`)
-			router['component'] = () => import(`@/views/admin/user/User`)
+			router['component'] = asyncRoutes[route.path] //() => import(`@/views/admin/user/User`)
 		}
 
 		if (route.redirect) {

@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import AppMain from '@/views/common/login/AppMain'
-import Layout from '@/Layout/admin'
 
 Vue.use(VueRouter)
 
-const routes: RouteConfig[] = [
+export const routes: RouteConfig[] = [
 	/**web**************************************************************************/
 	{
 		path: '/web/home',
@@ -45,7 +44,6 @@ const routes: RouteConfig[] = [
 	},
 	{ path: '/404', component: () => import('@/views/common/result/404') },
 	{ path: '/', redirect: '/web/home' }
-	// { path: '*', redirect: '/404' }
 ]
 
 const router = new VueRouter({
