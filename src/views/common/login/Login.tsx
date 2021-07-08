@@ -40,7 +40,10 @@ export default class Login extends Vue {
 	}
 
 	/**登录**/
-	private onSubmit() {
+	private onSubmit(e: Event) {
+		e.preventDefault()
+		e.stopPropagation()
+
 		this.state.loading = true
 		this.$refs.form.validate(async valid => {
 			if (!valid) {
@@ -59,7 +62,7 @@ export default class Login extends Vue {
 				} else {
 					delCookie(__KEEP_KEY__)
 				}
-				this.$router.push('/')
+				this.$router.push('/admin')
 			} catch (e) {
 				this.refCursor()
 			}
@@ -68,10 +71,10 @@ export default class Login extends Vue {
 	}
 
 	protected render() {
-		const { form, rules, loading } = this.state
+		const { form, rules } = this.state
 		return (
 			<div>
-				<FormModel ref="form" {...{ props: { model: form, rules } }}>
+				<FormModel ref="form" {...{ props: { model: form, rules } }} onSubmit={this.onSubmit}>
 					<FormModel.Item prop="account">
 						<Input v-model={form.account} max-length={20} placeholder="账户、邮箱、手机号">
 							<Icon slot="prefix" type="user"></Icon>
@@ -107,9 +110,9 @@ export default class Login extends Vue {
 						<Button
 							size="large"
 							type="primary"
+							htmlType="submit"
 							style={{ width: '100%' }}
-							loading={loading}
-							onClick={this.onSubmit}
+							loading={this.state.loading}
 						>
 							登录
 						</Button>

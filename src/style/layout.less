@@ -76,12 +76,14 @@
 		background-color: #ffffff;
 		overflow: hidden;
 		&-trigger {
-			font-size: 24px;
+			font-size: 20px;
 			cursor: pointer;
 			transition: color 0.3s;
-			padding: 4px 0;
+			padding: 6px 0;
+			transition: all 500ms;
 			&:hover {
 				color: @primary-color;
+				transform: rotateZ(180deg);
 			}
 		}
 		&-left {
