@@ -1,8 +1,8 @@
 const asyncRoutes: { [key: string]: Function } = {
 	['/views/admin/home/Home']: () => import('@/views/admin/home/Home'),
-	['/views/admin/user/User']: () => import('@/views/admin/user/User'),
-	['/views/admin/user/Role']: () => import('@/views/admin/user/Role'),
-	['/views/admin/user/Auth']: () => import('@/views/admin/user/Auth'),
+	['/views/admin/setup/User']: () => import('@/views/admin/setup/User'),
+	['/views/admin/setup/Role']: () => import('@/views/admin/setup/Role'),
+	['/views/admin/setup/Auth']: () => import('@/views/admin/setup/Auth'),
 	['/views/admin/cloud/Cloud']: () => import('@/views/admin/cloud/Cloud')
 }
 
