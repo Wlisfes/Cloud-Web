@@ -4,5 +4,7 @@ export type Source<T> = {
 	total: number
 	loading: boolean
 	column: Array<any>
+	showSize: boolean
+	sizeOption: string[]
 	dataSource: T
 }

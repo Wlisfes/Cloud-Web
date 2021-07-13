@@ -51,9 +51,7 @@ export default class Role extends Vue {
 					{...{
 						scopedSlots: {
 							status: (props: NodeRolesRespone) => (
-								<Tag style={{ margin: 0 }} color={props.status ? 'green' : 'pink'}>
-									{props.status ? '正常' : '已禁用'}
-								</Tag>
+								<Tag color={props.status ? 'green' : 'pink'}>{props.status ? '正常' : '已禁用'}</Tag>
 							),
 							action: (props: NodeRolesRespone) => (
 								<Button.Group>

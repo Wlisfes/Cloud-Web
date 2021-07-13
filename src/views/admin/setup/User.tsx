@@ -8,18 +8,20 @@ import { HttpStatus, Source, NodeUserResponse } from '@/types'
 export default class User extends Vue {
 	private source: Source<Array<NodeUserResponse>> = {
 		column: [
-			{ title: '账号', dataIndex: 'account', width: '15%', align: 'center' },
-			{ title: '头像', align: 'center', width: 100, scopedSlots: { customRender: 'avatar' } },
-			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '15%' },
-			{ title: '邮箱', dataIndex: 'email', align: 'center', width: '15%' },
-			{ title: '备注', dataIndex: 'comment', align: 'center' },
-			{ title: '创建时间', dataIndex: 'createTime', width: '18.75%', align: 'center' },
-			{ title: '角色状态', align: 'center', width: '12.5%', scopedSlots: { customRender: 'status' } },
-			{ title: '操作', align: 'center', width: '12.5%', scopedSlots: { customRender: 'action' } }
+			{ title: '账号', dataIndex: 'account', align: 'center', width: '9%' },
+			{ title: '头像', align: 'center', width: '9%', scopedSlots: { customRender: 'avatar' } },
+			{ title: '昵称', dataIndex: 'nickname', align: 'center' },
+			{ title: '邮箱', dataIndex: 'email', width: '16%', align: 'center' },
+			{ title: '手机号', dataIndex: 'mobile', width: '12%', align: 'center' },
+			{ title: '注册时间', dataIndex: 'createTime', width: '15%', align: 'center' },
+			{ title: '状态', align: 'center', width: '10%', scopedSlots: { customRender: 'status' } },
+			{ title: '操作', align: 'center', width: '12%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
 		size: 10,
 		total: 0,
+		sizeOption: ['10', '20', '30', '40', '50'],
+		showSize: true,
 		loading: true,
 		dataSource: []
 	}
@@ -40,6 +42,10 @@ export default class User extends Vue {
 		this.source.loading = false
 	}
 
+	private onChange(pagination: any, filters: any, sorter: any, props: any) {
+		console.log(pagination, filters, sorter, props)
+	}
+
 	protected render() {
 		const { source } = this
 		return (
@@ -51,12 +57,12 @@ export default class User extends Vue {
 					loading={source.loading}
 					columns={source.column}
 					dataSource={source.dataSource}
-					scroll={{ x: 800 }}
+					scroll={{ x: 1000 }}
 					{...{
 						scopedSlots: {
 							avatar: (props: NodeUserResponse) => (
 								<Avatar
-									size={44}
+									size={40}
 									src={props.avatar}
 									username={props.nickname}
 									style={{ margin: '0 auto', cursor: 'pointer' }}
@@ -75,6 +81,14 @@ export default class User extends Vue {
 							)
 						}
 					}}
+					pagination={{
+						pageSize: source.size,
+						current: source.page,
+						pageSizeOptions: source.sizeOption,
+						showSizeChanger: source.showSize,
+						total: source.total
+					}}
+					onChange={this.onChange}
 				></Table>
 			</div>
 		)
