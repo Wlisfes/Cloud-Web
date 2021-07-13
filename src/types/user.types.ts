@@ -24,7 +24,7 @@ export interface RegisterResponse {
 }
 
 /**用户信息-Response*********************************************/
-export interface GetUserResponse extends DateInterface {
+export interface NodeUserResponse extends DateInterface {
 	id: number
 	uid: number
 	account: number
@@ -34,4 +34,15 @@ export interface GetUserResponse extends DateInterface {
 	avatar: string
 	mobile: number
 	status: number
+}
+
+/**用户列表-Parameter*********************************************/
+export interface NodeUsersParameter {
+	page: number
+	size: number
+}
+/**用户列表-Response**/
+export interface NodeUsersResponse extends NodeUsersParameter {
+	total: number
+	list: NodeUserResponse[]
 }

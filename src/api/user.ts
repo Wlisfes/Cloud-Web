@@ -21,8 +21,17 @@ export function register(params: types.RegisterParameter) {
 
 /**用户信息**/
 export function nodeUser(params?: any) {
-	return request<types.GetUserResponse>({
+	return request<types.NodeUserResponse>({
 		url: `/api/user/info`,
+		method: 'GET',
+		params
+	})
+}
+
+/**用户列表**/
+export function nodeUsers(params: types.NodeUsersParameter) {
+	return request<types.NodeUsersResponse>({
+		url: `/api/user/list`,
 		method: 'GET',
 		params
 	})

@@ -1,4 +1,4 @@
-import { DateInterface, GetUserResponse } from '@/types'
+import { DateInterface, NodeUserResponse } from '@/types'
 
 export interface RoleInterface extends DateInterface {
 	id: number
@@ -20,5 +20,5 @@ export interface NodeRoleParameter {
 /**用户角色信息-Respone*********************************************/
 export interface NodeUserRoleRespone extends RoleInterface {
 	children: RoleInterface[]
-	user: GetUserResponse
+	user: NodeUserResponse
 }
