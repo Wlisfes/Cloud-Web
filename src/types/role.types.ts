@@ -25,6 +25,6 @@ export interface NodeRoleParameter {
 }
 
 /**用户角色信息-Respone*********************************************/
-export interface NodeUserRoleRespone {
+export interface NodeUserRoleRespone extends NodeRoleResponse {
 	user: NodeUserResponse
 }

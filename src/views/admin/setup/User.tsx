@@ -80,14 +80,20 @@ export default class User extends Vue {
 								></Avatar>
 							),
 							status: (props: NodeUserResponse) => (
-								<Tag style={{ margin: 0 }} color={props.status ? 'green' : 'pink'}>
-									{props.status ? '启用' : '禁用'}
+								<Tag style={{ margin: 0 }} color={!!props.status ? 'green' : 'pink'}>
+									{!!props.status ? '启用' : '禁用'}
 								</Tag>
 							),
 							action: (props: NodeUserResponse) => (
 								<Button.Group>
 									<Button type="link">编辑</Button>
-									<Button type="link">{props.status ? '禁用' : '启用'}</Button>
+									<Button type="link">
+										{!!props.status ? (
+											<span style={{ color: '#eb2f96' }}>禁用</span>
+										) : (
+											<span style={{ color: '#52c41a' }}>启用</span>
+										)}
+									</Button>
 								</Button.Group>
 							)
 						}

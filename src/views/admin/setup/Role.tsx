@@ -1,10 +1,13 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button } from 'ant-design-vue'
+import { NodeRole } from '@/views/admin/setup/common'
 import { HttpStatus, Source, NodeRoleResponse } from '@/types'
 import { nodeRoles } from '@/api'
 
 @Component
 export default class Role extends Vue {
+	$refs!: { nodeRole: NodeRole }
+
 	private source: Source<Array<NodeRoleResponse>> = {
 		column: [
 			{ title: '角色名称', dataIndex: 'name', align: 'center', width: '15%' },
@@ -48,6 +51,8 @@ export default class Role extends Vue {
 		const { source } = this
 		return (
 			<div style={{ padding: '10px' }}>
+				<NodeRole ref="nodeRole"></NodeRole>
+
 				<Table
 					class="app-source"
 					bordered
@@ -67,12 +72,20 @@ export default class Role extends Vue {
 					{...{
 						scopedSlots: {
 							status: (props: NodeRoleResponse) => (
-								<Tag color={props.status ? 'green' : 'pink'}>{props.status ? '正常' : '已禁用'}</Tag>
+								<Tag color={props.status ? 'green' : 'pink'}>{props.status ? '启用' : '禁用'}</Tag>
 							),
 							action: (props: NodeRoleResponse) => (
 								<Button.Group>
-									<Button type="link">编辑</Button>
-									<Button type="link">{props.status ? '禁用' : '开放'}</Button>
+									<Button type="link" onClick={() => this.$refs.nodeRole.init(1)}>
+										编辑
+									</Button>
+									<Button type="link">
+										{!!props.status ? (
+											<span class="ant-tag-pink">禁用</span>
+										) : (
+											<span class="ant-tag-green">启用</span>
+										)}
+									</Button>
 								</Button.Group>
 							)
 						}
