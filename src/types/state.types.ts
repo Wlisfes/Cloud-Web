@@ -1,3 +1,4 @@
+/**表格配置****************************/
 export type Source<T> = {
 	page: number
 	size: number
@@ -7,4 +8,17 @@ export type Source<T> = {
 	showSize: boolean
 	sizeOption: string[]
 	dataSource: T
+	initSource: () => void
+	onChange?: (
+		pagination: {
+			current: number
+			pageSize: number
+			pageSizeOptions: string[]
+			showSizeChanger: boolean
+			total: number
+		},
+		filters?: any,
+		sorter?: any,
+		props?: any
+	) => void
 }

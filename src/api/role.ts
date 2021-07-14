@@ -2,8 +2,8 @@ import request from '@/utils/request'
 import * as types from '@/types'
 
 /**角色列表-不包括子类**/
-export function nodeRoles(params?: any) {
-	return request<Array<types.NodeRolesRespone>>({
+export function nodeRoles(params: types.NodeRolesParameter) {
+	return request<types.NodeRolesRespone>({
 		url: `/api/role/list`,
 		method: 'GET',
 		params
@@ -11,8 +11,8 @@ export function nodeRoles(params?: any) {
 }
 
 /**角色列表-包括子类**/
-export function nodeRolesChild(params?: any) {
-	return request<Array<types.NodeRolesRespone>>({
+export function nodeRolesChild(params: types.NodeRolesParameter) {
+	return request<types.NodeRolesRespone>({
 		url: `/api/role/list-node`,
 		method: 'GET',
 		params

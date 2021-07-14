@@ -1,11 +1,11 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button } from 'ant-design-vue'
-import { HttpStatus, Source, NodeRolesRespone } from '@/types'
+import { HttpStatus, Source, NodeRoleResponse } from '@/types'
 import { nodeRoles } from '@/api'
 
 @Component
 export default class Role extends Vue {
-	private source: Source<Array<NodeRolesRespone>> = {
+	private source: Source<Array<NodeRoleResponse>> = {
 		column: [
 			{ title: '角色名称', dataIndex: 'name', align: 'center', width: '15%' },
 			{ title: '角色唯一标识', dataIndex: 'primary', width: '15%', align: 'center' },
@@ -17,23 +17,31 @@ export default class Role extends Vue {
 		page: 1,
 		size: 10,
 		total: 0,
+		sizeOption: ['10', '20', '30', '40', '50'],
+		showSize: true,
 		loading: true,
-		dataSource: []
+		dataSource: [],
+		initSource: async () => {
+			try {
+				const { page, size } = this.source
+				const { code, data } = await nodeRoles({ page, size })
+				if (code === HttpStatus.OK) {
+					this.source.total = data.total
+					this.source.dataSource = data.list
+				}
+			} catch (e) {}
+			this.source.loading = false
+		},
+		onChange: pagination => {
+			this.source.page = pagination.current
+			this.source.size = pagination.pageSize
+			this.source.loading = true
+			this.$nextTick(() => this.source.initSource())
+		}
 	}
 
 	protected created() {
-		this.nodeRoles()
-	}
-
-	/**角色列表**/
-	public async nodeRoles() {
-		try {
-			const { code, data } = await nodeRoles()
-			if (code === HttpStatus.OK) {
-				this.source.dataSource = data
-			}
-		} catch (e) {}
-		this.source.loading = false
+		this.source.initSource()
 	}
 
 	protected render() {
@@ -48,12 +56,20 @@ export default class Role extends Vue {
 					columns={source.column}
 					dataSource={source.dataSource}
 					scroll={{ x: 800 }}
+					pagination={{
+						pageSize: source.size,
+						current: source.page,
+						pageSizeOptions: source.sizeOption,
+						showSizeChanger: source.showSize,
+						total: source.total
+					}}
+					onChange={source.onChange}
 					{...{
 						scopedSlots: {
-							status: (props: NodeRolesRespone) => (
+							status: (props: NodeRoleResponse) => (
 								<Tag color={props.status ? 'green' : 'pink'}>{props.status ? '正常' : '已禁用'}</Tag>
 							),
-							action: (props: NodeRolesRespone) => (
+							action: (props: NodeRoleResponse) => (
 								<Button.Group>
 									<Button type="link">编辑</Button>
 									<Button type="link">{props.status ? '禁用' : '开放'}</Button>
