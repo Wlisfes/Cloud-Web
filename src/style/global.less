@@ -25,3 +25,33 @@
 		}
 	}
 }
+
+.app-form {
+	@media (max-width: 575px) {
+		.ant-form-item-label {
+			display: inline-block;
+			overflow: hidden;
+			line-height: 39.9999px;
+			white-space: nowrap;
+			text-align: right;
+			vertical-align: middle;
+			> label::after {
+				display: inline-block;
+				content: ':';
+				position: relative;
+				top: -0.5px;
+				margin: 0 8px 0 2px;
+			}
+		}
+	}
+	@media (max-width: 475px) {
+		.ant-form-item-label,
+		.ant-form-item-control-wrapper {
+			width: 100% !important;
+			display: block;
+			text-align: left;
+			line-height: 22px;
+			padding-bottom: 0;
+		}
+	}
+}

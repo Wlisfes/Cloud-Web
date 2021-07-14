@@ -76,14 +76,14 @@ export default class Role extends Vue {
 							),
 							action: (props: NodeRoleResponse) => (
 								<Button.Group>
-									<Button type="link" onClick={() => this.$refs.nodeRole.init(1)}>
+									<Button type="link" onClick={() => this.$refs.nodeRole.init(props.id)}>
 										编辑
 									</Button>
 									<Button type="link">
 										{!!props.status ? (
-											<span class="ant-tag-pink">禁用</span>
+											<span style={{ color: '#eb2f96' }}>禁用</span>
 										) : (
-											<span class="ant-tag-green">启用</span>
+											<span style={{ color: '#52c41a' }}>启用</span>
 										)}
 									</Button>
 								</Button.Group>

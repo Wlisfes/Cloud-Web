@@ -21,7 +21,7 @@ export function nodeRolesChild(params: types.NodeRolesParameter) {
 
 /**角色信息**/
 export function nodeRole(params: types.NodeRoleParameter) {
-	return request<types.NodeRolesRespone>({
+	return request<types.NodeRoleResponse>({
 		url: `/api/role/node`,
 		method: 'GET',
 		params

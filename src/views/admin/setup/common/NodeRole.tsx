@@ -1,58 +1,150 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Input, Modal, Button, Row, Col } from 'ant-design-vue'
+import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Tree } from 'ant-design-vue'
+import { nodeRole } from '@/api'
+import { HttpStatus, NodeRoleResponse } from '@/types'
+type State = {
+	visible: boolean
+	loading: boolean
+	dataSource: NodeRoleResponse[]
+}
 
 @Component
 export default class NodeRole extends Vue {
 	$refs!: { form: FormModel }
-	private state = {
-		visible: false
+	private state: State = {
+		visible: false,
+		loading: true,
+		dataSource: []
 	}
 	private common = {
+		labelCol: { span: 4, style: { width: '100px' } },
+		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
+		loading: false,
 		form: {
-			primary: null,
-			name: null,
-			status: null
+			primary: '',
+			name: '',
+			status: 1,
+			comment: '',
+			role: []
 		},
-		rules: {}
+		rules: {
+			name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+			primary: [{ required: true, message: '请输入角色标识', trigger: 'blur' }]
+		}
 	}
 
-	public init(props: number) {
-		console.log(props)
+	/**角色信息**/
+	public nodeRole(id: number) {
+		nodeRole({ id })
+			.then(({ code, data }) => {
+				if (code === HttpStatus.OK) {
+					this.common.form.primary = data.primary
+					this.common.form.name = data.name
+					this.common.form.status = data.status
+					this.state.dataSource = data.children
+				}
+			})
+			.finally(() => {
+				this.state.loading = false
+			})
+	}
+
+	public init(id: number) {
+		this.nodeRole(id)
 		this.state.visible = true
 	}
 
 	private onClose() {
 		this.state.visible = false
+		setTimeout(() => {
+			this.state.loading = true
+			this.state.dataSource = []
+			this.common.form.primary = ''
+			this.common.form.name = ''
+			this.common.form.status = 1
+			this.common.form.comment = ''
+			this.common.form.role = []
+		}, 300)
 	}
 
-	private onSubmit() {}
+	private onSubmit() {
+		this.$refs.form.validate(async valid => {
+			this.common.loading = true
+			setTimeout(() => {
+				this.common.loading = false
+				this.onClose()
+			}, 1000)
+		})
+	}
 
 	protected render() {
 		const { state, common } = this
-
 		return (
-			<Modal v-model={state.visible} width={800} title="title">
-				<FormModel layout="inline" {...{ props: { model: common.form, rules: common.rules } }}>
-					<Row type="flex">
-						<Col flex={1}>
-							<FormModel.Item prop="primary" label="角色名称" style={{ width: '100%' }} required>
-								<Input v-model={common.form.primary} placeholder="角色名称"></Input>
-							</FormModel.Item>
-						</Col>
-						<Col flex={1}>
-							<FormModel.Item prop="primary" label="角色名称" style={{ width: '100%' }} required>
-								<Input v-model={common.form.primary} placeholder="角色名称"></Input>
-							</FormModel.Item>
-						</Col>
-					</Row>
-					<FormModel.Item prop="primary" label="角色名称" style={{ width: '100%' }} required>
-						<Input v-model={common.form.primary} placeholder="角色名称"></Input>
-					</FormModel.Item>
-				</FormModel>
+			<Modal
+				title="title"
+				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
+				v-model={state.visible}
+				width={880}
+				destroyOnClose
+				onCancel={this.onClose}
+			>
+				<Spin size="large" spinning={state.loading || common.loading}>
+					<FormModel
+						ref="form"
+						class="app-form"
+						{...{ props: { model: common.form, rules: common.rules } }}
+						labelCol={common.labelCol}
+						wrapperCol={common.wrapperCol}
+					>
+						<Row type="flex">
+							<Col flex={12}>
+								<FormModel.Item prop="name" label="角色名称" colon>
+									<Input v-model={common.form.name} placeholder="角色名称"></Input>
+								</FormModel.Item>
+							</Col>
+							<Col flex={12}>
+								<FormModel.Item prop="primary" label="角色标识">
+									<Input v-model={common.form.primary} placeholder="角色唯一标识"></Input>
+								</FormModel.Item>
+							</Col>
+						</Row>
+						<FormModel.Item prop="comment" label="角色备注">
+							<Input.TextArea
+								v-model={common.form.comment}
+								autoSize={{ minRows: 2, maxRows: 3 }}
+								placeholder="角色备注"
+							></Input.TextArea>
+						</FormModel.Item>
+						<FormModel.Item prop="comment" label="角色状态">
+							<Radio.Group v-model={common.form.status} style={{ marginLeft: '10px' }}>
+								<Radio value={1}>启用</Radio>
+								<Radio value={0}>禁用</Radio>
+							</Radio.Group>
+						</FormModel.Item>
+						<FormModel.Item prop="comment" label="角色权限">
+							{/* <TreeSelect
+								v-model={common.form.role}
+								treeData={state.dataSource}
+								show-checked-strategy="SHOW_ALL"
+								placeholder="角色权限"
+								replaceFields={{ children: 'children', title: 'name', value: 'id', key: 'id' }}
+								treeCheckable
+								allowClear
+								maxTagCount={5}
+							></TreeSelect> */}
+							<Tree
+								checkable
+								v-model={common.form.role}
+								treeData={state.dataSource}
+								replaceFields={{ children: 'children', title: 'name', value: 'id', key: 'id' }}
+							></Tree>
+						</FormModel.Item>
+					</FormModel>
+				</Spin>
 
 				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
 					<Button onClick={this.onClose}>取消</Button>
-					<Button type="primary" onClick={this.onSubmit}>
+					<Button type="primary" disabled={state.loading} loading={common.loading} onClick={this.onSubmit}>
 						确定
 					</Button>
 				</div>
