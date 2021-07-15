@@ -1,6 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Tree } from 'ant-design-vue'
 import { nodeRole } from '@/api'
+import { inteRole } from '@/utils/common'
 import { HttpStatus, NodeRoleResponse } from '@/types'
 type State = {
 	visible: boolean
@@ -21,6 +22,7 @@ export default class NodeRole extends Vue {
 		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
 		loading: false,
 		form: {
+			id: 0,
 			primary: '',
 			name: '',
 			status: 1,
@@ -42,6 +44,7 @@ export default class NodeRole extends Vue {
 					this.common.form.name = data.name
 					this.common.form.status = data.status
 					this.common.form.comment = data.comment
+					this.common.form.role = inteRole(data.children) as never[]
 					this.state.dataSource = data.children
 				}
 			})
@@ -52,6 +55,7 @@ export default class NodeRole extends Vue {
 
 	public init(id: number) {
 		this.nodeRole(id)
+		this.common.form.id = id
 		this.state.visible = true
 	}
 
