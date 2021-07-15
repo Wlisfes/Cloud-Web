@@ -5,6 +5,7 @@ export interface NodeRoleResponse extends DateInterface {
 	primary: string
 	name: string
 	status: number
+	comment: string
 	children: NodeRoleResponse[]
 }
 

@@ -41,6 +41,7 @@ export default class NodeRole extends Vue {
 					this.common.form.primary = data.primary
 					this.common.form.name = data.name
 					this.common.form.status = data.status
+					this.common.form.comment = data.comment
 					this.state.dataSource = data.children
 				}
 			})
@@ -115,23 +116,13 @@ export default class NodeRole extends Vue {
 								placeholder="角色备注"
 							></Input.TextArea>
 						</FormModel.Item>
-						<FormModel.Item prop="comment" label="角色状态">
+						<FormModel.Item prop="status" label="角色状态">
 							<Radio.Group v-model={common.form.status} style={{ marginLeft: '10px' }}>
 								<Radio value={1}>启用</Radio>
 								<Radio value={0}>禁用</Radio>
 							</Radio.Group>
 						</FormModel.Item>
-						<FormModel.Item prop="comment" label="角色权限">
-							{/* <TreeSelect
-								v-model={common.form.role}
-								treeData={state.dataSource}
-								show-checked-strategy="SHOW_ALL"
-								placeholder="角色权限"
-								replaceFields={{ children: 'children', title: 'name', value: 'id', key: 'id' }}
-								treeCheckable
-								allowClear
-								maxTagCount={5}
-							></TreeSelect> */}
+						<FormModel.Item prop="role" label="角色权限">
 							<Tree
 								checkable
 								v-model={common.form.role}
