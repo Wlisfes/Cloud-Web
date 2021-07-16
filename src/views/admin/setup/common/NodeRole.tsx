@@ -1,8 +1,9 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Tree } from 'ant-design-vue'
 import { nodeRole, updateNodeRole } from '@/api'
-import { inteRole } from '@/utils/common'
 import { HttpStatus, NodeRoleResponse } from '@/types'
+import { inteRole } from '@/utils/common'
+
 type State = {
 	visible: boolean
 	loading: boolean
@@ -64,6 +65,7 @@ export default class NodeRole extends Vue {
 		setTimeout(() => {
 			this.state.loading = true
 			this.state.dataSource = []
+			this.common.loading = false
 			this.common.form.primary = ''
 			this.common.form.name = ''
 			this.common.form.status = 1
@@ -82,16 +84,19 @@ export default class NodeRole extends Vue {
 
 			try {
 				const { form } = this.common
-				const { code, data } = await updateNodeRole({
+				const { code } = await updateNodeRole({
 					id: form.id,
 					status: form.status,
 					comment: form.comment,
 					role: form.role
 				})
 				if (code === HttpStatus.OK) {
-					console.log(data)
+					this.$emit('replay')
+					this.onClose()
 				}
-			} catch (e) {}
+			} catch (e) {
+				this.common.loading = false
+			}
 		})
 	}
 

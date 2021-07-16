@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button } from 'ant-design-vue'
+import { Table, Tag, Button, notification } from 'ant-design-vue'
 import { NodeRole } from '@/views/admin/setup/common'
+import { nodeRoles, nodeRoleCutover } from '@/api'
 import { HttpStatus, Source, NodeRoleResponse } from '@/types'
-import { nodeRoles } from '@/api'
 
 @Component
 export default class Role extends Vue {
@@ -26,6 +26,7 @@ export default class Role extends Vue {
 		dataSource: [],
 		initSource: async () => {
 			try {
+				this.source.loading = true
 				const { page, size } = this.source
 				const { code, data } = await nodeRoles({ page, size })
 				if (code === HttpStatus.OK) {
@@ -33,12 +34,14 @@ export default class Role extends Vue {
 					this.source.dataSource = data.list
 				}
 			} catch (e) {}
+			this.source.onClose()
+		},
+		onClose: () => {
 			this.source.loading = false
 		},
 		onChange: pagination => {
 			this.source.page = pagination.current
 			this.source.size = pagination.pageSize
-			this.source.loading = true
 			this.$nextTick(() => this.source.initSource())
 		}
 	}
@@ -47,11 +50,25 @@ export default class Role extends Vue {
 		this.source.initSource()
 	}
 
+	/**切换角色状态**/
+	private async nodeRoleCutover(id: number) {
+		try {
+			this.source.loading = true
+			const { code, data } = await nodeRoleCutover({ id })
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+			}
+			this.source.initSource()
+		} catch (e) {
+			this.source.onClose()
+		}
+	}
+
 	protected render() {
 		const { source } = this
 		return (
 			<div style={{ padding: '10px' }}>
-				<NodeRole ref="nodeRole"></NodeRole>
+				<NodeRole ref="nodeRole" onReplay={() => this.source.initSource()}></NodeRole>
 
 				<Table
 					class="app-source"
@@ -79,7 +96,7 @@ export default class Role extends Vue {
 									<Button type="link" onClick={() => this.$refs.nodeRole.init(props.id)}>
 										编辑
 									</Button>
-									<Button type="link">
+									<Button type="link" onClick={() => this.nodeRoleCutover(props.id)}>
 										{!!props.status ? (
 											<span style={{ color: '#eb2f96' }}>禁用</span>
 										) : (

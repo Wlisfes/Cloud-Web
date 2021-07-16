@@ -45,3 +45,12 @@ export function updateNodeRole(params: types.UpdateNodeRoleParameter) {
 		data: params
 	})
 }
+
+/**切换角色状态**/
+export function nodeRoleCutover(params: types.NodeRoleCutoverParameter) {
+	return request<types.NodeRoleCutoverRespone>({
+		url: `/api/role/cutover`,
+		method: 'PUT',
+		data: params
+	})
+}

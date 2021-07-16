@@ -5,6 +5,7 @@ export interface NodeRoleResponse extends DateInterface {
 	primary: string
 	name: string
 	status: number
+	type: number
 	comment: string
 	children: NodeRoleResponse[]
 }
@@ -37,6 +38,16 @@ export interface UpdateNodeRoleParameter {
 	comment: string
 	role: number[]
 }
+/**修改角色权限-Respone**/
+export interface UpdateNodeRoleRespone {
+	message: string
+}
 
-/**修改角色权限-Respone*********************************************/
-export interface UpdateNodeRoleRespone {}
+/**切换角色状态-Parameter*************************************************/
+export interface NodeRoleCutoverParameter {
+	id: number
+}
+/**切换角色状态-Respone**/
+export interface NodeRoleCutoverRespone {
+	message: string
+}

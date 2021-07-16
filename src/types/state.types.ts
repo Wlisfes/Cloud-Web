@@ -9,6 +9,7 @@ export type Source<T> = {
 	sizeOption: string[]
 	dataSource: T
 	initSource: () => void
+	onClose: () => void
 	onChange?: (
 		pagination: {
 			current: number

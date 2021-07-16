@@ -35,6 +35,9 @@ export default class User extends Vue {
 					this.source.dataSource = data.list
 				}
 			} catch (e) {}
+			this.source.onClose()
+		},
+		onClose: () => {
 			this.source.loading = false
 		},
 		onChange: pagination => {
