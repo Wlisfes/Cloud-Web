@@ -121,13 +121,13 @@ export default class NodeRole extends Vue {
 					>
 						<Row type="flex">
 							<Col flex={12}>
-								<FormModel.Item prop="name" label="角色名称" colon>
-									<Input v-model={common.form.name} placeholder="角色名称"></Input>
+								<FormModel.Item prop="name" label="角色名称">
+									<Input v-model={common.form.name} disabled placeholder="角色名称"></Input>
 								</FormModel.Item>
 							</Col>
 							<Col flex={12}>
 								<FormModel.Item prop="primary" label="角色标识">
-									<Input v-model={common.form.primary} placeholder="角色唯一标识"></Input>
+									<Input v-model={common.form.primary} disabled placeholder="角色唯一标识"></Input>
 								</FormModel.Item>
 							</Col>
 						</Row>
