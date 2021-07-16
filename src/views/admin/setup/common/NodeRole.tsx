@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Tree } from 'ant-design-vue'
-import { nodeRole } from '@/api'
+import { nodeRole, updateNodeRole } from '@/api'
 import { inteRole } from '@/utils/common'
 import { HttpStatus, NodeRoleResponse } from '@/types'
 type State = {
@@ -75,10 +75,23 @@ export default class NodeRole extends Vue {
 	private onSubmit() {
 		this.$refs.form.validate(async valid => {
 			this.common.loading = true
-			setTimeout(() => {
-				this.common.loading = false
-				this.onClose()
-			}, 1000)
+			if (!valid) {
+				setTimeout(() => (this.common.loading = false), 500)
+				return
+			}
+
+			try {
+				const { form } = this.common
+				const { code, data } = await updateNodeRole({
+					id: form.id,
+					status: form.status,
+					comment: form.comment,
+					role: form.role
+				})
+				if (code === HttpStatus.OK) {
+					console.log(data)
+				}
+			} catch (e) {}
 		})
 	}
 

@@ -29,3 +29,14 @@ export interface NodeRoleParameter {
 export interface NodeUserRoleRespone extends NodeRoleResponse {
 	user: NodeUserResponse
 }
+
+/**修改角色权限-Parameter*************************************************/
+export interface UpdateNodeRoleParameter {
+	id: number
+	status: number
+	comment: string
+	role: number[]
+}
+
+/**修改角色权限-Respone*********************************************/
+export interface UpdateNodeRoleRespone {}

@@ -36,3 +36,12 @@ export function nodeUserRole(params?: any) {
 		params
 	})
 }
+
+/**修改角色权限**/
+export function updateNodeRole(params: types.UpdateNodeRoleParameter) {
+	return request<types.UpdateNodeRoleRespone>({
+		url: `/api/role/update`,
+		method: 'PUT',
+		data: params
+	})
+}
