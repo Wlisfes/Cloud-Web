@@ -1,5 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Tree } from 'ant-design-vue'
+import { AppCover } from '@/components/common'
 import { nodeUidUser } from '@/api'
 import { HttpStatus } from '@/types'
 
@@ -83,7 +84,7 @@ export default class NodeUser extends Vue {
 						wrapperCol={common.wrapperCol}
 					>
 						<FormModel.Item label="头像">
-							<div>1</div>
+							<AppCover cover={common.form.avatar}></AppCover>
 						</FormModel.Item>
 						<Row type="flex">
 							<Col flex={12}>
