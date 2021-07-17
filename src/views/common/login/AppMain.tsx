@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import style from '@/style/common/app.main.module.less'
+import style from '@/style/admin/app.main.module.less'
 
 @Component
 export default class AppMain extends Vue {

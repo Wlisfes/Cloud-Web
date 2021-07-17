@@ -23,6 +23,10 @@ export interface RegisterResponse {
 	message: string
 }
 
+/**用户信息-Parameter**/
+export interface NodeUidUserParameter {
+	uid: number
+}
 /**用户信息-Response*********************************************/
 export interface NodeUserResponse extends DateInterface {
 	id: number
@@ -34,6 +38,7 @@ export interface NodeUserResponse extends DateInterface {
 	avatar: string
 	mobile: number
 	status: number
+	comment: string
 }
 
 /**用户列表-Parameter*********************************************/

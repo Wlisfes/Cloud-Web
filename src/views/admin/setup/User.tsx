@@ -1,23 +1,26 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button } from 'ant-design-vue'
+import { NodeUser } from '@/views/admin/setup/common'
 import Avatar from 'vue-avatar'
 import { nodeUsers } from '@/api'
 import { HttpStatus, Source, NodeUserResponse } from '@/types'
-import style from '@/style/common/admin.user.module.less'
+import style from '@/style/admin/admin.user.module.less'
 
 @Component
 export default class User extends Vue {
+	$refs!: { nodeUser: NodeUser }
+
 	private source: Source<Array<NodeUserResponse>> = {
 		column: [
 			{ title: '账号', dataIndex: 'account', align: 'center', width: '8.333%' },
-			{ title: '头像', align: 'center', width: 80, scopedSlots: { customRender: 'avatar' } },
-			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '13.333%', ellipsis: true },
+			{ title: '头像', align: 'center', width: '6.666%', scopedSlots: { customRender: 'avatar' } },
+			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '12.5%', ellipsis: true },
 			{ title: '邮箱', dataIndex: 'email', width: '13.333%', align: 'center' },
 			{ title: '手机号', dataIndex: 'mobile', width: '10.833%', align: 'center' },
 			{ title: '备注', dataIndex: 'comment', align: 'center', ellipsis: true },
 			{ title: '注册时间', dataIndex: 'createTime', width: '12.5%', align: 'center' },
 			{ title: '状态', align: 'center', width: '8.333%', scopedSlots: { customRender: 'status' } },
-			{ title: '操作', align: 'center', width: 130, scopedSlots: { customRender: 'action' } }
+			{ title: '操作', align: 'center', width: '12.5%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
 		size: 10,
@@ -56,6 +59,7 @@ export default class User extends Vue {
 		const { source } = this
 		return (
 			<div class={style['app-conter']}>
+				<NodeUser ref="nodeUser"></NodeUser>
 				<Table
 					class="app-source"
 					bordered
@@ -89,7 +93,12 @@ export default class User extends Vue {
 							),
 							action: (props: NodeUserResponse) => (
 								<Button.Group>
-									<Button type="link">编辑</Button>
+									<Button type="link" onClick={() => this.$refs.nodeUser.init(props.uid)}>
+										编辑
+									</Button>
+									<Button type="link" onClick={() => this.$refs.nodeUser.init(props.uid)}>
+										角色
+									</Button>
 									<Button type="link">
 										{!!props.status ? (
 											<span style={{ color: '#eb2f96' }}>禁用</span>

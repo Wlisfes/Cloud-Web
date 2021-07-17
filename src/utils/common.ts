@@ -8,3 +8,12 @@ export function inteRole(list: types.NodeRoleResponse[]): number[] {
 			.filter(curr => !!curr)
 	}, [])
 }
+
+/**创建data对象**/
+export function create<T>(props: T): T {
+	const result = <T>{}
+	for (const key in props) {
+		;(<any>result)[key] = (<any>props)[key]
+	}
+	return result
+}
