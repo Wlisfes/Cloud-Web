@@ -1,3 +1,4 @@
-export * from './common'
-export * from './user'
-export * from './role'
+export * from './common.service'
+export * from './user.service'
+export * from './role.service'
+export * from './aliyun.service'

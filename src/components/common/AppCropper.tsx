@@ -1,6 +1,9 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Modal, Icon, Button, Upload } from 'ant-design-vue'
 import Cropper from 'cropperjs'
+import { nodeOssSts } from '@/api'
+import { HttpStatus } from '@/types'
+import { AliyunOSSModule } from '@/utils/aliyun-oss'
 import style from '@/style/common/app.cropper.module.less'
 import 'cropperjs/dist/cropper.min.css'
 
@@ -19,22 +22,22 @@ export default class AppCropper extends Vue {
 	public upload(cover?: string) {
 		this.visible = true
 
-		// if (cover) {
-		// 	this.cover = cover
-		// 	this.name = cover.split('.').pop()?.toLowerCase() || ''
-		// 	this.$nextTick(() => {
-		// 		if (!this.cropper) {
-		// 			this.cropper = new Cropper(this.$refs.cover, {
-		// 				aspectRatio: this.ratio,
-		// 				initialAspectRatio: 1,
-		// 				viewMode: 1,
-		// 				dragMode: 'move'
-		// 			})
-		// 		} else {
-		// 			this.cropper.replace(cover)
-		// 		}
-		// 	})
-		// }
+		if (cover) {
+			this.cover = cover
+			this.name = cover.split('.').pop()?.toLowerCase() || ''
+			this.$nextTick(() => {
+				if (!this.cropper) {
+					this.cropper = new Cropper(this.$refs.cover, {
+						aspectRatio: this.ratio,
+						initialAspectRatio: 1,
+						viewMode: 1,
+						dragMode: 'move'
+					})
+				} else {
+					this.cropper.replace(cover)
+				}
+			})
+		}
 	}
 
 	private onClose() {
@@ -49,19 +52,50 @@ export default class AppCropper extends Vue {
 
 	private onSubmit() {
 		this.loading = true
-		this.cropper?.getCroppedCanvas().toBlob(async blob => {
-			const cover = URL.createObjectURL(blob)
-			this.$emit('submit', {
-				cover
-			})
+		nodeOssSts()
+			.then(({ code, data }) => {
+				if (code === HttpStatus.OK) {
+					try {
+						const oss = new AliyunOSSModule({
+							accessKeyId: data.accessKeyId,
+							accessKeySecret: data.accessKeySecret,
+							stsToken: data.stsToken,
+							refreshSTSToken: async () => {
+								const response = await nodeOssSts()
+								return {
+									accessKeyId: response.data.accessKeyId,
+									accessKeySecret: response.data.accessKeySecret,
+									stsToken: response.data.stsToken
+								}
+							}
+						})
 
-			this.onClose()
-		})
+						this.cropper?.getCroppedCanvas().toBlob(async blob => {
+							const buffer = await oss.Buffer(blob as Blob)
+							const key = oss.create(this.name, 'avatar')
+							const response = await oss.client.put(key, buffer)
+							if (response.res.status === HttpStatus.OK) {
+								this.$emit('submit', {
+									name: response.name,
+									path: `${data.path}/${response.name}`
+								})
+								this.onClose()
+							}
+						})
+					} catch (e) {
+						this.loading = false
+						console.log(e)
+					}
+				}
+			})
+			.catch(() => {
+				this.loading = false
+			})
 	}
 
 	private beforeUpload(file: File) {
 		const cover = URL.createObjectURL(file)
-		this.name = file.name.split('.').pop()?.toLowerCase() || ''
+		this.name = file.name
 		this.cover = cover
 		this.$nextTick(() => {
 			if (!this.cropper) {
@@ -91,7 +125,7 @@ export default class AppCropper extends Vue {
 					<div class={style['app-cropper-ratio']}>
 						<div class={style['app-cropper-ratio-absolute']}>
 							{this.cover ? (
-								<div class={style['app-cropper-conter']}>
+								<div class={`${style['app-cropper-conter']} cropper-bg`}>
 									<img class={style['root-cover']} ref="cover" src={this.cover} />
 								</div>
 							) : (

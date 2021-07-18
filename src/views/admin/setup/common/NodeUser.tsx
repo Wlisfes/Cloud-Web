@@ -86,7 +86,7 @@ export default class NodeUser extends Vue {
 						<FormModel.Item label="头像">
 							<AppCover
 								cover={common.form.avatar}
-								onSubmit={(props: { cover: string }) => (common.form.avatar = props.cover)}
+								onSubmit={(props: { path: string }) => (common.form.avatar = props.path)}
 							></AppCover>
 						</FormModel.Item>
 						<Row type="flex">
