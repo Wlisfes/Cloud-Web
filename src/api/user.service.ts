@@ -10,9 +10,18 @@ export function login(params: types.LoginParameter) {
 	})
 }
 
-/**注册**/
+/**注册用户**/
 export function register(params: types.RegisterParameter) {
 	return request<types.RegisterResponse>({
+		url: `/api/user/register`,
+		method: 'POST',
+		data: params
+	})
+}
+
+/**创建用户**/
+export function createUser(params: types.CreateUserParameter) {
+	return request<types.CreateUserResponse>({
 		url: `/api/user/create`,
 		method: 'POST',
 		data: params

@@ -94,10 +94,10 @@ export default class User extends Vue {
 							),
 							action: (props: NodeUserResponse) => (
 								<Button.Group>
-									<Button type="link" onClick={() => this.$refs.nodeUser.init(props.uid)}>
+									<Button type="link" onClick={() => this.$refs.nodeUser.init('create', props.uid)}>
 										编辑
 									</Button>
-									<Button type="link" onClick={() => this.$refs.nodeUser.init(props.uid)}>
+									<Button type="link" onClick={() => this.$refs.nodeUser.init('update', props.uid)}>
 										角色
 									</Button>
 									<Button type="link">

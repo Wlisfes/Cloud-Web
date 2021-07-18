@@ -1,26 +1,44 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Tree } from 'ant-design-vue'
+import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Select } from 'ant-design-vue'
 import { AppCover } from '@/components/common'
-import { nodeUidUser } from '@/api'
-import { HttpStatus } from '@/types'
+import { nodeUidUser, createUser, nodeRoles } from '@/api'
+import { HttpStatus, NodeRoleResponse } from '@/types'
 
 @Component
 export default class NodeUser extends Vue {
 	$refs!: { form: FormModel }
 	private state = {
+		active: 'create',
 		visible: false,
-		loading: true,
-		dataSource: []
+		loading: false,
+		roles: []
 	}
 	private common = {
-		labelCol: { span: 4, style: { width: '100px' } },
-		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
-		form: { account: '', avatar: '', nickname: '', email: '', mobile: '', comment: '', status: 1 },
+		labelCol: { span: 4, style: { width: '85px' } },
+		wrapperCol: { span: 20, style: { width: 'calc(100% - 85px)' } },
+		form: {
+			account: '',
+			avatar: '',
+			nickname: '',
+			password: '',
+			email: '',
+			role: 2,
+			mobile: null,
+			comment: '',
+			status: 1
+		},
 		rules: {
-			nickname: [{ required: true, message: '请输入角色昵称', trigger: 'blur' }]
+			nickname: [{ required: true, message: '请输入角色昵称', trigger: 'blur' }],
+			password: [
+				{ required: true, message: '请输入密码', trigger: 'change' },
+				{ min: 6, message: '密码不能少于6位', trigger: 'blur' }
+			],
+			role: [{ required: true, message: '请选择角色', trigger: 'blur' }],
+			status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
 		}
 	}
 
+	/**用户信息-uid**/
 	private nodeUidUser(uid: number) {
 		this.state.loading = true
 		nodeUidUser({ uid })
@@ -42,25 +60,71 @@ export default class NodeUser extends Vue {
 			})
 	}
 
-	public init(uid: number) {
-		this.nodeUidUser(uid)
-		this.state.visible = true
+	/**角色列表-不包括子类**/
+	async nodeRoles() {
+		try {
+			const { code, data } = await nodeRoles({ page: 1, size: 100 })
+			if (code === HttpStatus.OK) {
+				this.state.roles = data.list as never[]
+			}
+		} catch (e) {}
 	}
 
+	/**创建用户**/
+	private async createUser() {
+		try {
+			const { code } = await createUser({ ...this.common.form })
+			if (code === HttpStatus.OK) {
+			}
+		} catch (e) {}
+	}
+
+	/**更新用户**/
+	private async upadteUser() {
+		try {
+		} catch (e) {}
+	}
+
+	/**初始化组件**/
+	public init(active: 'create' | 'update', uid?: number) {
+		this.state.active = active
+		this.state.visible = true
+		if (uid && active === 'update') {
+			this.nodeUidUser(uid)
+		} else {
+			this.nodeRoles()
+		}
+	}
+
+	/**取消重置**/
 	private onClose() {
-		this.state = Object.assign(this.state, { visible: false, loading: true, dataSource: [] })
+		this.state = Object.assign(this.state, { active: 'create', visible: false, loading: false, roles: [] })
 		this.common.form = Object.assign(this.common.form, {
 			account: '',
 			avatar: '',
 			nickname: '',
+			password: '',
 			email: '',
-			mobile: '',
+			role: 0,
+			mobile: null,
 			status: 1
 		})
 	}
 
+	/**提交验证**/
 	private onSubmit() {
-		this.$refs.form.validate(async valid => {})
+		this.$refs.form.validate(valid => {
+			if (valid) {
+				switch (this.state.active) {
+					case 'create':
+						this.createUser()
+						break
+					case 'update':
+						this.upadteUser()
+						break
+				}
+			}
+		})
 	}
 
 	protected render() {
@@ -68,7 +132,7 @@ export default class NodeUser extends Vue {
 
 		return (
 			<Modal
-				title="title"
+				title={state.active === 'create' ? '创建用户' : '更新用户'}
 				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
 				v-model={state.visible}
 				width={880}
@@ -90,28 +154,52 @@ export default class NodeUser extends Vue {
 							></AppCover>
 						</FormModel.Item>
 						<Row type="flex">
-							<Col flex={12}>
+							<Col xs={24} sm={12} md={12}>
 								<FormModel.Item prop="nickname" label="昵称">
 									<Input v-model={common.form.nickname} placeholder="昵称"></Input>
 								</FormModel.Item>
 							</Col>
-							<Col flex={12}>
-								<FormModel.Item prop="account" label="账号">
-									<Input v-model={common.form.account} disabled placeholder="账号"></Input>
-								</FormModel.Item>
+							<Col xs={24} sm={12} md={12}>
+								{state.active === 'create' ? (
+									<FormModel.Item prop="password" label="密码">
+										<Input.Password
+											v-model={common.form.password}
+											max-length={20}
+											placeholder="密码"
+										></Input.Password>
+									</FormModel.Item>
+								) : (
+									<FormModel.Item required label="账号">
+										<Input v-model={common.form.account} disabled placeholder="账号"></Input>
+									</FormModel.Item>
+								)}
 							</Col>
 						</Row>
 						<Row type="flex">
-							<Col flex={12}>
+							<Col xs={24} sm={12} md={12}>
 								<FormModel.Item prop="email" label="邮箱">
 									<Input v-model={common.form.email} placeholder="邮箱"></Input>
 								</FormModel.Item>
 							</Col>
-							<Col flex={12}>
+							<Col xs={24} sm={12} md={12}>
 								<FormModel.Item prop="mobile" label="手机号">
 									<Input v-model={common.form.mobile} placeholder="手机号"></Input>
 								</FormModel.Item>
 							</Col>
+						</Row>
+						<Row type="flex">
+							<Col xs={24} sm={12} md={12}>
+								<FormModel.Item prop="role" label="角色">
+									<Select v-model={common.form.role} allowClear placeholder="请选择角色">
+										{state.roles.map((k: NodeRoleResponse) => (
+											<Select.Option key={k.id} disabled={!k.status}>
+												{k.name}
+											</Select.Option>
+										))}
+									</Select>
+								</FormModel.Item>
+							</Col>
+							<Col xs={24} sm={12} md={12}></Col>
 						</Row>
 						<FormModel.Item prop="comment" label="备注">
 							<Input.TextArea

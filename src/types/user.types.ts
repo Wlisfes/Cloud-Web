@@ -11,15 +11,31 @@ export interface LoginResponse {
 	token: string
 }
 
-/**注册-Parameter*************************************************/
+/**注册用户-Parameter*************************************************/
 export interface RegisterParameter {
 	nickname: string
 	password: string
 	email: string
 	code: string
 }
-/**注册-Response**/
+/**注册用户-Response**/
 export interface RegisterResponse {
+	message: string
+}
+
+/**创建用户-Parameter*************************************************/
+export interface CreateUserParameter {
+	nickname: string
+	password: string
+	status: number
+	role: number | null
+	email?: string
+	avatar?: string
+	mobile?: number | null
+	comment?: string
+}
+/**创建用户-Response**/
+export interface CreateUserResponse {
 	message: string
 }
 
