@@ -83,7 +83,8 @@ export default class User extends Vue {
 									size={40}
 									src={props.avatar}
 									username={props.nickname}
-									style={{ margin: '0 auto', cursor: 'pointer' }}
+									rounded={false}
+									style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '4px' }}
 								></Avatar>
 							),
 							status: (props: NodeUserResponse) => (

@@ -58,7 +58,7 @@ export default class Index extends Vue {
 							{!this.collapsed && <h1 class="app-ellipsis">情雨随风的青春</h1>}
 						</router-link>
 					</div>
-					<AppMenu></AppMenu>
+					<AppMenu onTrigger={this.onTrigger}></AppMenu>
 				</Layout.Sider>
 				<Layout style={{ backgroundColor: '#ededed' }}>
 					<Layout.Header style={{ backgroundColor: '#ffffff', padding: 0 }}>

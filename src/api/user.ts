@@ -22,7 +22,7 @@ export function register(params: types.RegisterParameter) {
 /**用户信息-uid**/
 export function nodeUidUser(params: types.NodeUidUserParameter) {
 	return request<types.NodeUserResponse>({
-		url: `/api/user/info-uid`,
+		url: `/api/user/uid-info`,
 		method: 'GET',
 		params
 	})

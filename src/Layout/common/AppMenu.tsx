@@ -33,6 +33,7 @@ export default class AppMenu extends Vue {
 				selectedKeys={this.selectedKeys}
 				openKeys={this.openKeys}
 				inlineCollapsed={this.collapsed}
+				onClick={() => this.$emit('trigger')}
 				onOpenChange={(keys: string) => {
 					this.$store.commit('base/SET_OPENKEYS', keys)
 				}}
