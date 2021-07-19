@@ -19,12 +19,12 @@ export default class Index extends Vue {
 	}
 
 	//切换菜单收缩
-	protected onTrigger() {
+	private onTrigger() {
 		this.$store.commit('base/SET_COLLAPSED', !this.collapsed)
 	}
 
 	//计算屏幕宽度显示mobile界面
-	protected onLayout() {
+	private onLayout() {
 		const width = document.body.getBoundingClientRect().width
 		const isMobile = width < 992
 		if (isMobile) {
@@ -58,7 +58,7 @@ export default class Index extends Vue {
 							{!this.collapsed && <h1 class="app-ellipsis">情雨随风的青春</h1>}
 						</router-link>
 					</div>
-					<AppMenu onTrigger={this.onTrigger}></AppMenu>
+					<AppMenu></AppMenu>
 				</Layout.Sider>
 				<Layout style={{ backgroundColor: '#ededed' }}>
 					<Layout.Header style={{ backgroundColor: '#ffffff', padding: 0 }}>

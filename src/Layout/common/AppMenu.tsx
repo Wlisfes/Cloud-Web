@@ -6,6 +6,7 @@ import { Menu, Icon } from 'ant-design-vue'
 export default class AppMenu extends Vue {
 	@Getter('base/theme') theme!: string
 	@Getter('base/collapsed') collapsed!: boolean
+	@Getter('base/mobile') mobile!: boolean
 	@Getter('base/menu') dataSource!: Array<any>
 	@Getter('base/openKeys') openKeys!: Array<string>
 	@Getter('base/selectedKeys') selectedKeys!: Array<string>
@@ -24,6 +25,16 @@ export default class AppMenu extends Vue {
 		}
 	}
 
+	private onTrigger() {
+		if (this.mobile) {
+			this.$store.commit('base/SET_COLLAPSED', true)
+		}
+	}
+
+	private onChange(keys: string) {
+		this.$store.commit('base/SET_OPENKEYS', keys)
+	}
+
 	protected render() {
 		return (
 			<Menu
@@ -33,10 +44,8 @@ export default class AppMenu extends Vue {
 				selectedKeys={this.selectedKeys}
 				openKeys={this.openKeys}
 				inlineCollapsed={this.collapsed}
-				onClick={() => this.$emit('trigger')}
-				onOpenChange={(keys: string) => {
-					this.$store.commit('base/SET_OPENKEYS', keys)
-				}}
+				onClick={this.onTrigger}
+				onOpenChange={this.onChange}
 			>
 				{this.dataSource.map(k => {
 					if (k.type === 1) {
