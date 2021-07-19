@@ -114,7 +114,7 @@ export default class NodeUser extends Vue {
 			nickname: '',
 			password: '',
 			email: null,
-			role: null,
+			role: 2,
 			mobile: null,
 			status: 1
 		})

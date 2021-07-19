@@ -20,7 +20,7 @@ export default class User extends Vue {
 			{ title: '备注', dataIndex: 'comment', align: 'center', ellipsis: true },
 			{ title: '注册时间', dataIndex: 'createTime', width: '12.5%', align: 'center' },
 			{ title: '状态', align: 'center', width: '8.333%', scopedSlots: { customRender: 'status' } },
-			{ title: '操作', align: 'center', width: '12.5%', scopedSlots: { customRender: 'action' } }
+			{ title: '操作', align: 'center', width: '10.5%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
 		size: 10,
@@ -66,6 +66,15 @@ export default class User extends Vue {
 			this.source.initSource()
 		} catch (e) {
 			this.source.onClose()
+		}
+	}
+
+	/**操作**/
+	private onAction(key: string, uid: number) {
+		switch (key) {
+			case 'update':
+				this.$refs.nodeUser.init('update', uid)
+				break
 		}
 	}
 
@@ -115,7 +124,10 @@ export default class User extends Vue {
 								<Button.Group>
 									<Dropdown trigger={['click']}>
 										<Button type="link">操作</Button>
-										<Menu slot="overlay" onClick={(key: string) => console.log(key)}>
+										<Menu
+											slot="overlay"
+											onClick={({ key }: { key: string }) => this.onAction(key, props.uid)}
+										>
 											<Menu.Item key="update" style={{ color: '#1890ff' }}>
 												<Icon type="edit"></Icon>
 												<span>编辑</span>
@@ -131,7 +143,6 @@ export default class User extends Vue {
 										</Menu>
 									</Dropdown>
 									<Divider type="vertical" style={{ margin: 'auto' }}></Divider>
-
 									<Button type="link" onClick={() => this.nodeUserCutover(props.uid)}>
 										{!!props.status ? (
 											<span style={{ color: '#eb2f96' }}>禁用</span>

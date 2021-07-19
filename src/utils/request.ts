@@ -4,7 +4,7 @@ import { getToken } from '@/utils/auth'
 
 const service: AxiosInstance = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API,
-	timeout: 30000
+	timeout: 60000
 })
 
 //错误拦截处理
