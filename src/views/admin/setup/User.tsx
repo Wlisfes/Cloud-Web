@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button } from 'ant-design-vue'
+import { Table, Tag, Button, Menu, Dropdown, Icon, Divider, notification } from 'ant-design-vue'
 import { NodeUser } from '@/views/admin/setup/common'
 import Avatar from 'vue-avatar'
-import { nodeUsers } from '@/api'
+import { nodeUsers, nodeUserCutover } from '@/api'
 import { HttpStatus, Source, NodeUserResponse } from '@/types'
 import style from '@/style/admin/admin.user.module.less'
 
@@ -55,11 +55,30 @@ export default class User extends Vue {
 		this.source.initSource()
 	}
 
+	/**切换用户状态**/
+	private async nodeUserCutover(uid: number) {
+		try {
+			this.source.loading = true
+			const { code, data } = await nodeUserCutover({ uid })
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+			}
+			this.source.initSource()
+		} catch (e) {
+			this.source.onClose()
+		}
+	}
+
 	protected render() {
 		const { source } = this
 		return (
 			<div class={style['app-conter']}>
 				<NodeUser ref="nodeUser"></NodeUser>
+
+				<Button type="primary" onClick={() => this.$refs.nodeUser.init('create')}>
+					新增
+				</Button>
+
 				<Table
 					class="app-source"
 					bordered
@@ -94,13 +113,26 @@ export default class User extends Vue {
 							),
 							action: (props: NodeUserResponse) => (
 								<Button.Group>
-									<Button type="link" onClick={() => this.$refs.nodeUser.init('create', props.uid)}>
-										编辑
-									</Button>
-									<Button type="link" onClick={() => this.$refs.nodeUser.init('update', props.uid)}>
-										角色
-									</Button>
-									<Button type="link">
+									<Dropdown trigger={['click']}>
+										<Button type="link">操作</Button>
+										<Menu slot="overlay" onClick={(key: string) => console.log(key)}>
+											<Menu.Item key="update" style={{ color: '#1890ff' }}>
+												<Icon type="edit"></Icon>
+												<span>编辑</span>
+											</Menu.Item>
+											<Menu.Item key="role" style={{ color: '#fa8c16' }}>
+												<Icon type="safety"></Icon>
+												<span>权限</span>
+											</Menu.Item>
+											<Menu.Item key="reset" style={{ color: '#f5222d' }}>
+												<Icon type="reload"></Icon>
+												<span>重置密码</span>
+											</Menu.Item>
+										</Menu>
+									</Dropdown>
+									<Divider type="vertical" style={{ margin: 'auto' }}></Divider>
+
+									<Button type="link" onClick={() => this.nodeUserCutover(props.uid)}>
 										{!!props.status ? (
 											<span style={{ color: '#eb2f96' }}>禁用</span>
 										) : (

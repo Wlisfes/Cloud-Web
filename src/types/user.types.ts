@@ -29,7 +29,7 @@ export interface CreateUserParameter {
 	password: string
 	status: number
 	role: number | null
-	email?: string
+	email?: string | null
 	avatar?: string
 	mobile?: number | null
 	comment?: string
@@ -66,4 +66,13 @@ export interface NodeUsersParameter {
 export interface NodeUsersResponse extends NodeUsersParameter {
 	total: number
 	list: NodeUserResponse[]
+}
+
+/**切换用户状态-Parameter*********************************************/
+export type NodeUserCutoverParameter = {
+	uid: number
+}
+/**切换用户状态-Response**/
+export type NodeUserCutoverResponse = {
+	message: string
 }

@@ -54,3 +54,12 @@ export function nodeUsers(params: types.NodeUsersParameter) {
 		params
 	})
 }
+
+/**切换用户状态**/
+export function nodeUserCutover(params: types.NodeUserCutoverParameter) {
+	return request<types.NodeUserCutoverResponse>({
+		url: `/api/user/cutover`,
+		method: 'PUT',
+		data: params
+	})
+}

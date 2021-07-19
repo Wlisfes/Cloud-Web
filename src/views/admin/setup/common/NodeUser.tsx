@@ -21,8 +21,8 @@ export default class NodeUser extends Vue {
 			avatar: '',
 			nickname: '',
 			password: '',
-			email: '',
-			role: 2,
+			email: null,
+			role: null,
 			mobile: null,
 			comment: '',
 			status: 1
@@ -40,9 +40,9 @@ export default class NodeUser extends Vue {
 
 	/**用户信息-uid**/
 	private nodeUidUser(uid: number) {
-		this.state.loading = true
-		nodeUidUser({ uid })
-			.then(({ code, data }) => {
+		return new Promise(async (resolve, rejcect) => {
+			try {
+				const { code, data } = await nodeUidUser({ uid })
 				if (code === HttpStatus.OK) {
 					this.common.form = Object.assign(this.common.form, {
 						account: data.account,
@@ -54,20 +54,26 @@ export default class NodeUser extends Vue {
 						status: data.status
 					})
 				}
-			})
-			.finally(() => {
-				this.state.loading = false
-			})
+				resolve(data)
+			} catch (e) {
+				rejcect(e)
+			}
+		})
 	}
 
 	/**角色列表-不包括子类**/
-	async nodeRoles() {
-		try {
-			const { code, data } = await nodeRoles({ page: 1, size: 100 })
-			if (code === HttpStatus.OK) {
-				this.state.roles = data.list as never[]
+	private nodeRoles() {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const { code, data } = await nodeRoles({ page: 1, size: 10 })
+				if (code === HttpStatus.OK) {
+					this.state.roles = data.list as never[]
+				}
+				resolve(data)
+			} catch (e) {
+				reject(e)
 			}
-		} catch (e) {}
+		})
 	}
 
 	/**创建用户**/
@@ -86,26 +92,29 @@ export default class NodeUser extends Vue {
 	}
 
 	/**初始化组件**/
-	public init(active: 'create' | 'update', uid?: number) {
-		this.state.active = active
-		this.state.visible = true
-		if (uid && active === 'update') {
-			this.nodeUidUser(uid)
-		} else {
-			this.nodeRoles()
+	public async init(active: 'create' | 'update', uid?: number) {
+		try {
+			this.state = Object.assign(this.state, { active: active, visible: true, loading: true })
+			if (uid && active === 'update') {
+				await this.nodeUidUser(uid)
+			}
+			await this.nodeRoles()
+			this.state.loading = false
+		} catch (e) {
+			this.state.loading = false
 		}
 	}
 
 	/**取消重置**/
 	private onClose() {
-		this.state = Object.assign(this.state, { active: 'create', visible: false, loading: false, roles: [] })
+		this.state = Object.assign(this.state, { active: 'create', visible: false, loading: true, roles: [] })
 		this.common.form = Object.assign(this.common.form, {
 			account: '',
 			avatar: '',
 			nickname: '',
 			password: '',
-			email: '',
-			role: 0,
+			email: null,
+			role: null,
 			mobile: null,
 			status: 1
 		})
