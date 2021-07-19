@@ -103,5 +103,18 @@
 				</div>
 			</div>
 		</div>
+
+		<script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js"></script>
+		<script>
+			window.fbAsyncInit = function () {
+				FB.init({
+					appId: 255826854894709,
+					// appId: 615376049407012,
+					autoLogAppEvents: true,
+					xfbml: true,
+					version: 'v2.12'
+				})
+			}
+		</script>
 	</body>
 </html>
