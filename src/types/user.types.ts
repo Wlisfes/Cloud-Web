@@ -24,7 +24,7 @@ export interface RegisterResponse {
 }
 
 /**创建用户-Parameter*************************************************/
-export interface CreateUserParameter {
+export interface NodeCreateUserParameter {
 	nickname: string
 	password: string
 	status: number
@@ -35,7 +35,7 @@ export interface CreateUserParameter {
 	comment?: string | null
 }
 /**创建用户-Response**/
-export interface CreateUserResponse {
+export interface NodeCreateUserResponse {
 	message: string
 }
 
@@ -69,10 +69,26 @@ export interface NodeUsersResponse extends NodeUsersParameter {
 }
 
 /**切换用户状态-Parameter*********************************************/
-export type NodeUserCutoverParameter = {
+export interface NodeUserCutoverParameter {
 	uid: number
 }
 /**切换用户状态-Response**/
-export type NodeUserCutoverResponse = {
+export interface NodeUserCutoverResponse {
+	message: string
+}
+
+/**修改用户信息-Parameter*********************************************/
+export interface NodeUpdateUserParameter {
+	uid: number
+	nickname: string
+	status: number
+	password?: string | null
+	email?: string | null
+	avatar?: string | null
+	mobile?: number | string | null
+	comment?: string | null
+}
+/**修改用户信息-Response**/
+export interface NodeUpdateUserResponse {
 	message: string
 }

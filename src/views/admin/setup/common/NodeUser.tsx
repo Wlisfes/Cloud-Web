@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Select, notification } from 'ant-design-vue'
 import { AppCover } from '@/components/common'
-import { nodeUidUser, createUser, nodeRoles } from '@/api'
+import { nodeUidUser, nodeCreateUser, nodeUpdateUser, nodeRoles } from '@/api'
 import { HttpStatus, NodeRoleResponse } from '@/types'
 
 @Component
@@ -17,6 +17,7 @@ export default class NodeUser extends Vue {
 		labelCol: { span: 4, style: { width: '85px' } },
 		wrapperCol: { span: 20, style: { width: 'calc(100% - 85px)' } },
 		form: {
+			uid: 0,
 			account: '',
 			avatar: '',
 			nickname: '',
@@ -45,6 +46,7 @@ export default class NodeUser extends Vue {
 				const { code, data } = await nodeUidUser({ uid })
 				if (code === HttpStatus.OK) {
 					this.common.form = Object.assign(this.common.form, {
+						uid: uid,
 						nickname: data.nickname,
 						account: data.account,
 						status: data.status,
@@ -77,11 +79,11 @@ export default class NodeUser extends Vue {
 	}
 
 	/**创建用户**/
-	private async createUser() {
+	private async nodeCreateUser() {
 		try {
 			this.state.loading = true
 			const { form } = this.common
-			const { code, data } = await createUser({
+			const { code, data } = await nodeCreateUser({
 				nickname: form.nickname,
 				password: form.password,
 				role: form.role,
@@ -102,9 +104,28 @@ export default class NodeUser extends Vue {
 	}
 
 	/**更新用户**/
-	private async upadteUser() {
+	private async nodeUpdateUser() {
 		try {
-		} catch (e) {}
+			this.state.loading = true
+			const { form } = this.common
+			const { code, data } = await nodeUpdateUser({
+				uid: form.uid,
+				nickname: form.nickname,
+				status: form.status,
+				avatar: form.avatar || null,
+				email: form.email || null,
+				mobile: form.mobile || null,
+				comment: form.comment || null,
+				password: form.password || null
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$emit('replay')
+				this.onClose()
+			}
+		} catch (e) {
+			this.state.loading = false
+		}
 	}
 
 	/**初始化组件**/
@@ -128,6 +149,7 @@ export default class NodeUser extends Vue {
 		setTimeout(() => {
 			this.state = Object.assign(this.state, { active: 'create', loading: true, roles: [] })
 			this.common.form = Object.assign(this.common.form, {
+				uid: 0,
 				account: '',
 				avatar: '',
 				nickname: '',
@@ -146,10 +168,10 @@ export default class NodeUser extends Vue {
 			if (valid) {
 				switch (this.state.active) {
 					case 'create':
-						this.createUser()
+						this.nodeCreateUser()
 						break
 					case 'update':
-						this.upadteUser()
+						this.nodeUpdateUser()
 						break
 				}
 			}

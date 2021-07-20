@@ -20,8 +20,8 @@ export function register(params: types.RegisterParameter) {
 }
 
 /**创建用户**/
-export function createUser(params: types.CreateUserParameter) {
-	return request<types.CreateUserResponse>({
+export function nodeCreateUser(params: types.NodeCreateUserParameter) {
+	return request<types.NodeCreateUserResponse>({
 		url: `/api/user/create`,
 		method: 'POST',
 		data: params
@@ -59,6 +59,15 @@ export function nodeUsers(params: types.NodeUsersParameter) {
 export function nodeUserCutover(params: types.NodeUserCutoverParameter) {
 	return request<types.NodeUserCutoverResponse>({
 		url: `/api/user/cutover`,
+		method: 'PUT',
+		data: params
+	})
+}
+
+/**修改用户信息**/
+export function nodeUpdateUser(params: types.NodeUpdateUserParameter) {
+	return request<types.NodeUpdateUserResponse>({
+		url: `/api/user/update`,
 		method: 'PUT',
 		data: params
 	})

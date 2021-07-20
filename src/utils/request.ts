@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { notification } from 'ant-design-vue'
-import { getToken } from '@/utils/auth'
+import { getToken, delToken } from '@/utils/auth'
+import router from '@/router'
 
 const service: AxiosInstance = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API,
@@ -17,9 +18,13 @@ function useError(error: AxiosError) {
 				break
 			case 401:
 				notification.error({ message: '守卫拦截', description: data.message })
+				delToken()
+				router.replace(`/main/login`)
 				break
 			case 403:
 				notification.error({ message: '账号异常', description: data.message })
+				delToken()
+				router.replace(`/main/login`)
 				break
 			default:
 				notification.error({ message: '服务器开了小个差', description: data.message })
