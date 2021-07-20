@@ -28,11 +28,11 @@ export interface CreateUserParameter {
 	nickname: string
 	password: string
 	status: number
-	role: number | null
+	role: number
 	email?: string | null
-	avatar?: string
-	mobile?: number | null
-	comment?: string
+	avatar?: string | null
+	mobile?: number | string | null
+	comment?: string | null
 }
 /**创建用户-Response**/
 export interface CreateUserResponse {

@@ -55,14 +55,17 @@ export default class NodeRole extends Vue {
 	}
 
 	private onClose() {
-		this.state = Object.assign(this.state, { visible: false, loading: true, dataSource: [] })
-		this.common.form = Object.assign(this.common.form, {
-			primary: '',
-			name: '',
-			status: 1,
-			comment: '',
-			role: []
-		})
+		this.state.visible = false
+		setTimeout(() => {
+			this.state = Object.assign(this.state, { loading: true, dataSource: [] })
+			this.common.form = Object.assign(this.common.form, {
+				primary: '',
+				name: '',
+				status: 1,
+				comment: '',
+				role: []
+			})
+		}, 300)
 	}
 
 	private onSubmit() {

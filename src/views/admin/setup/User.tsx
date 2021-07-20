@@ -82,7 +82,7 @@ export default class User extends Vue {
 		const { source } = this
 		return (
 			<div class={style['app-conter']}>
-				<NodeUser ref="nodeUser"></NodeUser>
+				<NodeUser ref="nodeUser" onReplay={() => this.source.initSource()}></NodeUser>
 
 				<Button type="primary" onClick={() => this.$refs.nodeUser.init('create')}>
 					新增
