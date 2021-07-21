@@ -1,4 +1,4 @@
-import { DateInterface } from '@/types'
+import { DateInterface, NodeRoleResponse } from '@/types'
 
 /**登录-Parameter*************************************************/
 export interface LoginParameter {
@@ -55,6 +55,7 @@ export interface NodeUserResponse extends DateInterface {
 	mobile: number
 	status: number
 	comment: string
+	role: NodeRoleResponse[]
 }
 
 /**用户列表-Parameter*********************************************/

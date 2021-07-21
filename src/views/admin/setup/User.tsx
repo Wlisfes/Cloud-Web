@@ -12,15 +12,16 @@ export default class User extends Vue {
 
 	private source: Source<Array<NodeUserResponse>> = {
 		column: [
-			{ title: '账号', dataIndex: 'account', align: 'center', width: '8.333%' },
-			{ title: '头像', align: 'center', width: '6.666%', scopedSlots: { customRender: 'avatar' } },
-			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '12.5%', ellipsis: true },
-			{ title: '邮箱', dataIndex: 'email', width: '13.333%', align: 'center' },
-			{ title: '手机号', dataIndex: 'mobile', width: '10.833%', align: 'center' },
+			{ title: '账号', dataIndex: 'account', align: 'center', width: '8%' },
+			{ title: '头像', align: 'center', width: '6%', scopedSlots: { customRender: 'avatar' } },
+			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '12%', ellipsis: true },
+			{ title: '邮箱', dataIndex: 'email', width: '13%', align: 'center' },
+			{ title: '手机号', dataIndex: 'mobile', width: '10.5%', align: 'center' },
+			{ title: '角色', align: 'center', width: '7.5%', scopedSlots: { customRender: 'role' } },
 			{ title: '备注', dataIndex: 'comment', align: 'center', ellipsis: true },
-			{ title: '注册时间', dataIndex: 'createTime', width: '12.5%', align: 'center' },
-			{ title: '状态', align: 'center', width: '8.333%', scopedSlots: { customRender: 'status' } },
-			{ title: '操作', align: 'center', width: '10.5%', scopedSlots: { customRender: 'action' } }
+			{ title: '注册时间', dataIndex: 'createTime', width: '12%', align: 'center' },
+			{ title: '状态', align: 'center', width: '6%', scopedSlots: { customRender: 'status' } },
+			{ title: '操作', align: 'center', width: '10%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
 		size: 10,
@@ -95,7 +96,7 @@ export default class User extends Vue {
 					loading={source.loading}
 					columns={source.column}
 					dataSource={source.dataSource}
-					scroll={{ x: 1200 }}
+					scroll={{ x: 1280 }}
 					pagination={{
 						pageSize: source.size,
 						current: source.page,
@@ -114,6 +115,11 @@ export default class User extends Vue {
 									rounded={false}
 									style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '4px' }}
 								></Avatar>
+							),
+							role: (props: NodeUserResponse) => (
+								<Tag style={{ margin: 0 }} color="cyan">
+									{props.role[0]?.name}
+								</Tag>
 							),
 							status: (props: NodeUserResponse) => (
 								<Tag style={{ margin: 0 }} color={!!props.status ? 'green' : 'pink'}>
