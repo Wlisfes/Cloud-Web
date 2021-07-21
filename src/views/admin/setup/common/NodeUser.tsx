@@ -50,10 +50,10 @@ export default class NodeUser extends Vue {
 						nickname: data.nickname,
 						account: data.account,
 						status: data.status,
-						avatar: data.avatar || null,
-						email: data.email || null,
-						mobile: data.mobile || null,
-						comment: data.comment || null
+						avatar: data.avatar,
+						email: data.email,
+						mobile: data.mobile,
+						comment: data.comment
 					})
 				}
 				resolve(data)
@@ -88,10 +88,10 @@ export default class NodeUser extends Vue {
 				password: form.password,
 				role: form.role,
 				status: form.status,
-				avatar: form.avatar || null,
-				email: form.email || null,
-				mobile: form.mobile || null,
-				comment: form.comment || null
+				avatar: form.avatar,
+				email: form.email,
+				mobile: form.mobile,
+				comment: form.comment
 			})
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
@@ -112,11 +112,11 @@ export default class NodeUser extends Vue {
 				uid: form.uid,
 				nickname: form.nickname,
 				status: form.status,
-				avatar: form.avatar || null,
-				email: form.email || null,
-				mobile: form.mobile || null,
-				comment: form.comment || null,
-				password: form.password || null
+				avatar: form.avatar,
+				email: form.email,
+				mobile: form.mobile,
+				comment: form.comment,
+				password: form.password
 			})
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
