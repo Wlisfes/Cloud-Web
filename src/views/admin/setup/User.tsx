@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button, Menu, Dropdown, Icon, Divider, notification } from 'ant-design-vue'
-import { NodeUser } from '@/views/admin/setup/common'
+import { NodeUser, NodeReset } from '@/views/admin/setup/common'
 import Avatar from 'vue-avatar'
 import { nodeUsers, nodeUserCutover } from '@/api'
 import { HttpStatus, Source, NodeUserResponse } from '@/types'
@@ -8,7 +8,7 @@ import style from '@/style/admin/admin.user.module.less'
 
 @Component
 export default class User extends Vue {
-	$refs!: { nodeUser: NodeUser }
+	$refs!: { nodeUser: NodeUser; nodeReset: NodeReset }
 
 	private source: Source<Array<NodeUserResponse>> = {
 		column: [
@@ -76,6 +76,9 @@ export default class User extends Vue {
 			case 'update':
 				this.$refs.nodeUser.init('update', uid)
 				break
+			case 'reset':
+				this.$refs.nodeReset.init(uid)
+				break
 		}
 	}
 
@@ -84,6 +87,7 @@ export default class User extends Vue {
 		return (
 			<div class={style['app-conter']}>
 				<NodeUser ref="nodeUser" onReplay={() => this.source.initSource()}></NodeUser>
+				<NodeReset ref="nodeReset"></NodeReset>
 
 				<Button type="primary" onClick={() => this.$refs.nodeUser.init('create')}>
 					新增
@@ -110,7 +114,7 @@ export default class User extends Vue {
 							avatar: (props: NodeUserResponse) => (
 								<Avatar
 									size={40}
-									src={props.avatar}
+									src={`${props.avatar}?x-oss-process=style/resize`}
 									username={props.nickname}
 									rounded={false}
 									style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '4px' }}
