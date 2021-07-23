@@ -14,9 +14,9 @@ export default class User extends Vue {
 		column: [
 			{ title: '账号', dataIndex: 'account', align: 'center', width: '8%' },
 			{ title: '头像', align: 'center', width: '6%', scopedSlots: { customRender: 'avatar' } },
-			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '12%', ellipsis: true },
+			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '10%', ellipsis: true },
 			{ title: '邮箱', dataIndex: 'email', width: '13%', align: 'center' },
-			{ title: '手机号', dataIndex: 'mobile', width: '10.5%', align: 'center' },
+			{ title: '手机号', dataIndex: 'mobile', width: '9%', align: 'center' },
 			{ title: '角色', align: 'center', width: '7.5%', scopedSlots: { customRender: 'role' } },
 			{ title: '备注', dataIndex: 'comment', align: 'center', ellipsis: true },
 			{ title: '注册时间', dataIndex: 'createTime', width: '12%', align: 'center' },
@@ -87,7 +87,7 @@ export default class User extends Vue {
 		return (
 			<div class={style['app-conter']}>
 				<NodeUser ref="nodeUser" onReplay={() => this.source.initSource()}></NodeUser>
-				<NodeReset ref="nodeReset"></NodeReset>
+				<NodeReset ref="nodeReset" onReplay={() => this.source.initSource()}></NodeReset>
 
 				<Button type="primary" onClick={() => this.$refs.nodeUser.init('create')}>
 					新增

@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Modal, Spin, FormModel, Input, Button } from 'ant-design-vue'
-import { nodeUidUser } from '@/api'
+import { Modal, Spin, FormModel, Input, Button, notification } from 'ant-design-vue'
+import { nodeUpdatePwsUser } from '@/api'
 import { HttpStatus } from '@/types'
 
 @Component
@@ -34,11 +34,35 @@ export default class NodeUser extends Vue {
 
 	/**取消重置**/
 	private onClose() {
+		this.state.visible = false
 		this.state.loading = false
+		this.common.form = Object.assign(this.common.form, {
+			uid: 0,
+			password: ''
+		})
 	}
 
 	/**提交验证**/
-	private onSubmit() {}
+	private onSubmit() {
+		this.$refs.form.validate(async valid => {
+			if (valid) {
+				try {
+					this.state.loading = true
+					const { code, data } = await nodeUpdatePwsUser({
+						uid: this.common.form.uid,
+						password: this.common.form.password
+					})
+					if (code === HttpStatus.OK) {
+						notification.success({ message: data.message, description: '' })
+						this.$emit('replay')
+						this.onClose()
+					}
+				} catch (e) {
+					this.state.loading = false
+				}
+			}
+		})
+	}
 
 	protected render() {
 		const { state, common } = this
@@ -50,7 +74,7 @@ export default class NodeUser extends Vue {
 				v-model={state.visible}
 				width={480}
 				destroyOnClose
-				onCancel={this.onClose}
+				onClose={this.onClose}
 			>
 				<Spin size="large" spinning={state.loading}>
 					<FormModel
@@ -63,7 +87,7 @@ export default class NodeUser extends Vue {
 						<FormModel.Item prop="password" label="密码">
 							<Input.Password
 								v-model={common.form.password}
-								max-length={20}
+								max-length={16}
 								placeholder="密码"
 							></Input.Password>
 						</FormModel.Item>

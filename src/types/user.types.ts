@@ -93,3 +93,13 @@ export interface NodeUpdateUserParameter {
 export interface NodeUpdateUserResponse {
 	message: string
 }
+
+/**修改用户信息-Parameter*********************************************/
+export interface NodeUpdatePwsUserParameter {
+	uid: number
+	password: string | null
+}
+/**修改用户信息-Response**/
+export interface NodeUpdatePwsUserResponse {
+	message: string
+}

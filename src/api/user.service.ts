@@ -72,3 +72,12 @@ export function nodeUpdateUser(params: types.NodeUpdateUserParameter) {
 		data: params
 	})
 }
+
+/**重置用户密码**/
+export function nodeUpdatePwsUser(params: types.NodeUpdatePwsUserParameter) {
+	return request<types.NodeUpdatePwsUserResponse>({
+		url: `/api/user/update-reset`,
+		method: 'PUT',
+		data: params
+	})
+}
