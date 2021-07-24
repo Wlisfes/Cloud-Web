@@ -37,10 +37,28 @@ export function nodeUserRole(params?: any) {
 	})
 }
 
+/**用户角色信息-uid**/
+export function nodeUserUidRole(params: types.NodeUserUidRoleParameter) {
+	return request<types.NodeUserUidRoleRespone>({
+		url: `/api/role/user-uid-node`,
+		method: 'GET',
+		params
+	})
+}
+
 /**修改角色权限**/
 export function updateNodeRole(params: types.UpdateNodeRoleParameter) {
 	return request<types.UpdateNodeRoleRespone>({
 		url: `/api/role/update`,
+		method: 'PUT',
+		data: params
+	})
+}
+
+/**修改用户角色权限**/
+export function nodeUpdateUserRole(params: any) {
+	return request<types.UpdateNodeRoleRespone>({
+		url: `/api/role/update/user`,
 		method: 'PUT',
 		data: params
 	})

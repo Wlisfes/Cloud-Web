@@ -31,6 +31,16 @@ export interface NodeUserRoleRespone extends NodeRoleResponse {
 	user: NodeUserResponse
 }
 
+/**角色信息-uid-Parameter*************************************************/
+export interface NodeUserUidRoleParameter {
+	uid: number
+}
+
+/**用户角色信息-uid-Respone*********************************************/
+export interface NodeUserUidRoleRespone extends NodeRoleResponse {
+	user: NodeUserResponse
+}
+
 /**修改角色权限-Parameter*************************************************/
 export interface UpdateNodeRoleParameter {
 	id: number
