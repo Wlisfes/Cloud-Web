@@ -47,7 +47,7 @@ export default class Index extends Vue {
 					breakpoint="xl"
 					collapsed={this.collapsed}
 					collapsedWidth={this.mobile ? 0 : 80}
-					width={240}
+					width={220}
 					trigger={null}
 					collapsible
 					onBreakpoint={(type: boolean) => this.$store.commit('base/SET_COLLAPSED', type)}
