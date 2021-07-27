@@ -1,3 +1,7 @@
+export type NodeDate = {
+	createTime: string
+	updateTime: string
+}
 export interface DateInterface {
 	createTime: string
 	updateTime: string

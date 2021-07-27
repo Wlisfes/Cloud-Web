@@ -1,105 +1,73 @@
-import { DateInterface, NodeRoleResponse } from '@/types'
+import { NodeDate, NodeRoleResponse } from '@/types'
 
-/**登录-Parameter*************************************************/
-export interface LoginParameter {
-	account: number
-	password: string
-	code: string
-}
-/**登录-Response**/
-export interface LoginResponse {
-	token: string
-}
-
-/**注册用户-Parameter*************************************************/
-export interface RegisterParameter {
-	nickname: string
-	password: string
-	email: string
-	code: string
-}
-/**注册用户-Response**/
-export interface RegisterResponse {
-	message: string
-}
-
-/**创建用户-Parameter*************************************************/
-export interface NodeCreateUserParameter {
-	nickname: string
-	password: string
-	status: number
-	role: number
-	email?: string | null
-	avatar?: string | null
-	mobile?: number | string | null
-	comment?: string | null
-}
-/**创建用户-Response**/
-export interface NodeCreateUserResponse {
-	message: string
-}
-
-/**用户信息-Parameter**/
-export interface NodeUidUserParameter {
-	uid: number
-}
-/**用户信息-Response*********************************************/
-export interface NodeUserResponse extends DateInterface {
+export type NodeUserParameter = {
 	id: number
 	uid: number
 	account: number
 	nickname: string
-	email: string
+	email: string | null
+	avatar: string | null
+	comment: string | null
+	mobile: number | string | null
 	password: string
-	avatar: string
-	mobile: number
 	status: number
-	comment: string
-	role: NodeRoleResponse[]
-}
-
-/**用户列表-Parameter*********************************************/
-export interface NodeUsersParameter {
+	code: string
+	token: string
+	message: string
 	page: number
 	size: number
-}
-/**用户列表-Response**/
-export interface NodeUsersResponse extends NodeUsersParameter {
 	total: number
-	list: NodeUserResponse[]
 }
 
-/**切换用户状态-Parameter*********************************************/
-export interface NodeUserCutoverParameter {
-	uid: number
-}
-/**切换用户状态-Response**/
-export interface NodeUserCutoverResponse {
-	message: string
-}
+/**
+ * 登录
+ */
+export type LoginParameter = Pick<NodeUserParameter, 'account' | 'password' | 'code'>
+export type LoginResponse = Pick<NodeUserParameter, 'token'>
 
-/**修改用户信息-Parameter*********************************************/
-export interface NodeUpdateUserParameter {
-	uid: number
-	nickname: string
-	status: number
-	password?: string | null
-	email?: string | null
-	avatar?: string | null
-	mobile?: number | string | null
-	comment?: string | null
-}
-/**修改用户信息-Response**/
-export interface NodeUpdateUserResponse {
-	message: string
-}
+/**
+ * 注册
+ */
+export type RegisterParameter = Pick<NodeUserParameter, 'nickname' | 'password' | 'email' | 'code'>
+export type RegisterResponse = Pick<NodeUserParameter, 'message'>
 
-/**修改用户信息-Parameter*********************************************/
-export interface NodeUpdatePwsUserParameter {
-	uid: number
-	password: string | null
-}
-/**修改用户信息-Response**/
-export interface NodeUpdatePwsUserResponse {
-	message: string
-}
+/**
+ * 创建用户
+ */
+export type NodeCreateUserParameter = Pick<NodeUserParameter, 'nickname' | 'password' | 'status'> &
+	Partial<Pick<NodeUserParameter, 'email' | 'avatar' | 'mobile' | 'comment'>> & { role: number }
+export type NodeCreateUserResponse = Pick<NodeUserParameter, 'message'>
+
+/**
+ * 用户信息
+ */
+export type NodeUidUserParameter = Pick<NodeUserParameter, 'uid'>
+export type NodeUserResponse = Pick<
+	NodeUserParameter,
+	'id' | 'uid' | 'account' | 'nickname' | 'email' | 'password' | 'avatar' | 'mobile' | 'status' | 'comment'
+> & { role: NodeRoleResponse[] } & NodeDate
+
+/**
+ * 用户列表
+ */
+export type NodeUsersParameter = Pick<NodeUserParameter, 'page' | 'size'>
+export type NodeUsersResponse = Pick<NodeUserParameter, 'page' | 'size' | 'total'> & { list: NodeUserResponse[] }
+
+/**
+ * 切换用户状态
+ */
+export type NodeUserCutoverParameter = Pick<NodeUserParameter, 'uid'>
+export type NodeUserCutoverResponse = Pick<NodeUserParameter, 'message'>
+
+/**
+ * 修改用户信息
+ */
+export type NodeUpdateUserParameter = Pick<NodeUserParameter, 'uid' | 'nickname' | 'status'> &
+	Partial<Pick<NodeUserParameter, 'password' | 'email' | 'avatar' | 'mobile' | 'comment'>>
+export type NodeUpdateUserResponse = Pick<NodeUserParameter, 'message'>
+
+/**
+ * 重置用户密码
+ */
+export type NodeUpdatePwsUserParameter = Pick<NodeUserParameter, 'uid' | 'password'>
+export type NodeUpdatePwsUserResponse = Pick<NodeUserParameter, 'message'>
