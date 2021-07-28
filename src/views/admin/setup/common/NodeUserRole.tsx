@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Tree, Select, notification } from 'ant-design-vue'
-import { nodeRoles, updateNodeRole, nodeUserUidRole } from '@/api'
+import { nodeRoles, nodeUpdateUserRole, nodeUserUidRole } from '@/api'
 import { HttpStatus, NodeRoleResponse } from '@/types'
 import { inteRole } from '@/utils/common'
 
@@ -86,11 +86,17 @@ export default class NodeUserRole extends Vue {
 				return
 			}
 
-			setTimeout(() => {
-				notification.success({ message: '修改成功', description: '' })
-				this.$emit('replay')
-				this.onClose()
-			}, 1000)
+			try {
+				const { uid, primary, status, comment, role } = this.common.form
+				const { code, data } = await nodeUpdateUserRole({ uid, primary, status, comment, role })
+				if (code === HttpStatus.OK) {
+					notification.success({ message: data.message, description: '' })
+					this.$emit('replay')
+					this.onClose()
+				}
+			} catch (e) {
+				this.loading = false
+			}
 		})
 	}
 

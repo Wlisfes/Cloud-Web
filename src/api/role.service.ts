@@ -47,8 +47,8 @@ export function nodeUserUidRole(params: types.NodeUserUidRoleParameter) {
 }
 
 /**修改角色权限**/
-export function updateNodeRole(params: types.UpdateNodeRoleParameter) {
-	return request<types.UpdateNodeRoleRespone>({
+export function updateNodeRole(params: types.NodeUpdateRoleParameter) {
+	return request<types.NodeUpdateRoleRespone>({
 		url: `/api/role/update`,
 		method: 'PUT',
 		data: params
@@ -56,8 +56,8 @@ export function updateNodeRole(params: types.UpdateNodeRoleParameter) {
 }
 
 /**修改用户角色权限**/
-export function nodeUpdateUserRole(params: any) {
-	return request<types.UpdateNodeRoleRespone>({
+export function nodeUpdateUserRole(params: types.NodeUpdateUserRoleParameter) {
+	return request<types.NodeUpdateUserRoleRespone>({
 		url: `/api/role/update-user`,
 		method: 'PUT',
 		data: params

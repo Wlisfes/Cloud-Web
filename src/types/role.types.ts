@@ -37,8 +37,16 @@ export type NodeUserUidRoleRespone = NodeRoleResponse & { user: NodeUserResponse
 /**
  * 修改角色权限
  */
-export type UpdateNodeRoleParameter = Pick<NodeRoleResponse, 'id' | 'status' | 'comment'> & { role: number[] }
-export type UpdateNodeRoleRespone = Pick<NodeRoleResponse, 'message'>
+export type NodeUpdateRoleParameter = Pick<NodeRoleResponse, 'id' | 'status' | 'comment'> & { role: number[] }
+export type NodeUpdateRoleRespone = Pick<NodeRoleResponse, 'message'>
+
+/**
+ * 修改用户角色权限
+ */
+export type NodeUpdateUserRoleParameter = Pick<NodeRoleResponse, 'uid' | 'status' | 'primary' | 'comment'> & {
+	role: number[]
+}
+export type NodeUpdateUserRoleRespone = Pick<NodeRoleResponse, 'message'>
 
 /**
  * 切换角色状态
