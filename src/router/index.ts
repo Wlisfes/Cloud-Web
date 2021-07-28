@@ -11,19 +11,19 @@ export const routes: RouteConfig[] = [
 		component: () => import('@/views/web/home/Home')
 	},
 	/**admin**************************************************************************/
-	// {
-	// 	path: '/admin',
-	// 	redirect: '/admin/home',
-	// 	component: Layout,
-	// 	children: [
-	// 		{
-	// 			path: '/admin/home',
-	// 			name: 'Home',
-	// 			meta: { title: '首页' },
-	// 			component: () => import('@/views/admin/home/Home')
-	// 		}
-	// 	]
-	// },
+	{
+		path: '/admin',
+		redirect: '/admin/home',
+		component: () => import('@/Layout/admin'),
+		children: [
+			{
+				path: '/admin/home',
+				name: 'Home',
+				meta: { title: '首页' },
+				component: () => import('@/views/admin/setup/Menu')
+			}
+		]
+	},
 	/**common**************************************************************************/
 	{
 		path: '/main',

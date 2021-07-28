@@ -27,11 +27,27 @@
 }
 
 .app-form {
+	.ant-form-item {
+		margin-bottom: 22px;
+		&.ant-form-item-with-help {
+			margin-bottom: 3px;
+		}
+		.ant-form-explain {
+			font-size: 12px;
+			line-height: 22px;
+		}
+	}
+	.ant-form-item-control {
+		line-height: 32px;
+	}
+	.ant-form-item-label {
+		line-height: 32px;
+	}
 	@media (max-width: 575px) {
 		.ant-form-item-label {
 			display: inline-block;
 			overflow: hidden;
-			line-height: 39.9999px;
+			line-height: 32px;
 			white-space: nowrap;
 			text-align: right;
 			vertical-align: middle;
@@ -50,7 +66,7 @@
 			width: 100% !important;
 			display: block;
 			text-align: left;
-			line-height: 22px;
+			line-height: 25px;
 			padding-bottom: 0;
 		}
 	}

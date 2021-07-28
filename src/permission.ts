@@ -18,10 +18,10 @@ router.beforeEach(async (to, form, next) => {
 			} else {
 				try {
 					await store.dispatch('user/nodeUser')
-					const routes = await store.dispatch('base/nodeMenu')
-					routes.forEach((route: any) => {
-						router.addRoute(route)
-					})
+					// const routes = await store.dispatch('base/nodeMenu')
+					// routes.forEach((route: any) => {
+					// 	router.addRoute(route)
+					// })
 
 					next({ ...(to as any), replace: true })
 				} catch (e) {
@@ -42,7 +42,7 @@ router.beforeEach(async (to, form, next) => {
 
 router.afterEach(async (to, form) => {
 	if (to.path.indexOf('/admin/') !== -1) {
-		await store.dispatch('base/setRoute', to)
+		// await store.dispatch('base/setRoute', to)
 	}
 	NProgress.done()
 })
