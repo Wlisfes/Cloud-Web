@@ -17,3 +17,12 @@ export function create<T>(props: T): T {
 	}
 	return result
 }
+
+/**遍历views页面文件**/
+export function ctxFile() {
+	const file = require.context('@/views', true, /\.tsx$/)
+	return file
+		.keys()
+		.filter(name => name.indexOf('common') === -1)
+		.map(k => k.slice(1, k.lastIndexOf('.')))
+}

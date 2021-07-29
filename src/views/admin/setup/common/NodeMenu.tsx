@@ -1,10 +1,16 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Input, Modal, Button, InputNumber, Col, Spin, Radio, Switch, TreeSelect } from 'ant-design-vue'
+import { FormModel, Input, Modal, Button, InputNumber, Select } from 'ant-design-vue'
+import { Spin, Radio, Switch, TreeSelect, notification } from 'ant-design-vue'
+import { nodeCreateMenu, nodeMenu } from '@/api'
+import { HttpStatus, NodeMenuParameter } from '@/types'
+import { ctxFile } from '@/utils/common'
 
 @Component
 export default class NodeMenu extends Vue {
 	$refs!: { form: FormModel }
 
+	private file: string[] = ctxFile()
+	private treeNode: NodeMenuParameter[] = []
 	private visible: boolean = false
 	private loading: boolean = false
 	private state = {
@@ -15,8 +21,8 @@ export default class NodeMenu extends Vue {
 			name: '',
 			router: '',
 			redirect: '',
-			keepAlive: 1,
-			ststus: true,
+			keepAlive: true,
+			status: true,
 			path: '',
 			icon: '',
 			order: 1,
@@ -24,20 +30,64 @@ export default class NodeMenu extends Vue {
 		},
 		rules: {
 			name: [{ required: true, message: '请输入节点名称', trigger: 'blur' }],
-			primary: [{ required: true, message: '请输入角色标识', trigger: 'blur' }]
+			router: [{ required: true, message: '请输入节点路由', trigger: 'blur' }],
+			path: [{ required: true, message: '请输入文件路径', trigger: 'blur' }]
+		}
+	}
+
+	/**菜单列表**/
+	private async nodeMenu() {
+		try {
+			const { code, data } = await nodeMenu()
+			if (code === HttpStatus.OK) {
+				this.treeNode = data
+			}
+		} catch (e) {}
+	}
+
+	/**创建菜单节点**/
+	private async nodeCreateMenu() {
+		try {
+			this.loading = true
+			const { form } = this.state
+			const { code, data } = await nodeCreateMenu({
+				type: form.type,
+				name: form.name,
+				router: form.router,
+				path: form.path,
+				keepAlive: +form.keepAlive,
+				status: +form.status,
+				redirect: form.redirect,
+				icon: form.icon,
+				order: form.order,
+				parent: form.parent
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$emit('replay')
+				this.onClose()
+			}
+		} catch (e) {
+			this.loading = false
 		}
 	}
 
 	public init() {
+		this.nodeMenu()
 		this.visible = true
 	}
 
 	private onClose() {
+		this.loading = false
 		this.visible = false
 	}
 
 	private onSubmit() {
-		this.$refs.form.validate(async valid => {})
+		this.$refs.form.validate(async valid => {
+			if (valid) {
+				this.nodeCreateMenu()
+			}
+		})
 	}
 
 	protected render() {
@@ -47,7 +97,7 @@ export default class NodeMenu extends Vue {
 				title="title"
 				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
 				v-model={this.visible}
-				width={600}
+				width={800}
 				destroyOnClose
 				onCancel={this.onClose}
 			>
@@ -60,14 +110,30 @@ export default class NodeMenu extends Vue {
 						wrapperCol={wrapperCol}
 					>
 						<FormModel.Item prop="status" label="节点类型">
-							<Radio.Group V-model={form.type}>
+							<Radio.Group v-model={form.type}>
 								<Radio value={1}>目录</Radio>
 								<Radio value={2}>菜单</Radio>
-								<Radio value={3}>权限</Radio>
 							</Radio.Group>
 						</FormModel.Item>
 						<FormModel.Item label="节点名称" prop="name">
 							<Input v-model={form.name}></Input>
+						</FormModel.Item>
+						<FormModel.Item label="节点路由" prop="router">
+							<Input v-model={form.router}></Input>
+						</FormModel.Item>
+						<FormModel.Item label="文件路径" prop="path">
+							<Select v-model={form.path} allowClear show-search>
+								{this.file.map((name, index) => {
+									return (
+										<Select.Option key={index} value={name}>
+											{name}
+										</Select.Option>
+									)
+								})}
+							</Select>
+						</FormModel.Item>
+						<FormModel.Item label="重定向地址">
+							<Input v-model={form.redirect}></Input>
 						</FormModel.Item>
 						<FormModel.Item label="上级节点">
 							<TreeSelect
@@ -77,39 +143,22 @@ export default class NodeMenu extends Vue {
 								tree-default-expand-all
 								dropdown-style={{ maxHeight: '300px', overflow: 'auto' }}
 							>
-								<TreeSelect.TreeNode key="1" value="parent 1" title="parent 1">
-									<TreeSelect.TreeNode
-										key="1-1"
-										value="parent 1-1-1"
-										title="parent 1-1-2"
-									></TreeSelect.TreeNode>
-									<TreeSelect.TreeNode
-										key="1-2"
-										value="parent 1-2-1"
-										title="parent 1-2-2"
-									></TreeSelect.TreeNode>
-								</TreeSelect.TreeNode>
-								<TreeSelect.TreeNode key="2" value="parent 2" title="parent 2">
-									<TreeSelect.TreeNode
-										key="2-1"
-										value="parent 2-1-1"
-										title="parent 2-1-2"
-									></TreeSelect.TreeNode>
-									<TreeSelect.TreeNode
-										key="2-2"
-										value="parent 2-2-1"
-										title="parent 2-2-2"
-									></TreeSelect.TreeNode>
-								</TreeSelect.TreeNode>
+								{this.treeNode.map(k => {
+									return (
+										<TreeSelect.TreeNode key={k.id} value={k.id} title={k.name}>
+											{k.children.map(v => {
+												return (
+													<TreeSelect.TreeNode
+														key={v.id}
+														value={v.id}
+														title={v.name}
+													></TreeSelect.TreeNode>
+												)
+											})}
+										</TreeSelect.TreeNode>
+									)
+								})}
 							</TreeSelect>
-						</FormModel.Item>
-						<FormModel.Item label="节点状态">
-							<Switch
-								v-model={form.ststus}
-								checked-children="开"
-								un-checked-children="关"
-								default-checked
-							></Switch>
 						</FormModel.Item>
 						<FormModel.Item label="节点图标">
 							<Input v-model={form.icon}></Input>
@@ -117,6 +166,24 @@ export default class NodeMenu extends Vue {
 						<FormModel.Item label="排序号">
 							<InputNumber v-model={form.order}></InputNumber>
 						</FormModel.Item>
+						<FormModel.Item label="节点状态">
+							<Switch
+								v-model={form.status}
+								checked-children="开"
+								un-checked-children="关"
+								default-checked
+							></Switch>
+						</FormModel.Item>
+						{form.type === 2 && (
+							<FormModel.Item label="路由缓存">
+								<Switch
+									v-model={form.keepAlive}
+									checked-children="开"
+									un-checked-children="关"
+									default-checked
+								></Switch>
+							</FormModel.Item>
+						)}
 					</FormModel>
 				</Spin>
 				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
