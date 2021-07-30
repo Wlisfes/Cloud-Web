@@ -47,31 +47,85 @@ export default class AppMenu extends Vue {
 				onClick={this.onTrigger}
 				onOpenChange={this.onChange}
 			>
+				{/* <AppMenuSource dataSource={this.dataSource}></AppMenuSource> */}
 				{this.dataSource.map(k => {
 					if (k.type === 1) {
 						return (
 							<Menu.SubMenu
-								key={k.router}
+								key={k.id}
 								title={
 									<div>
-										<Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>
+										{k.icon && <Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>}
 										<span>{k.name}</span>
 									</div>
 								}
 							>
-								{k.children.map((v: any) => (
-									<Menu.Item key={v.router}>
-										<router-link to={v.router}>
-											<Icon type={v.icon} style={{ fontSize: '18px' }}></Icon>
-											<span>{v.name}</span>
-										</router-link>
-									</Menu.Item>
-								))}
+								{k.children.map((v: any) => {
+									if (v.type === 1) {
+										return (
+											<Menu.SubMenu
+												key={v.id}
+												title={
+													<div>
+														{v.icon && (
+															<Icon type={v.icon} style={{ fontSize: '18px' }}></Icon>
+														)}
+														<span>{v.name}</span>
+													</div>
+												}
+											>
+												{v.children.map((x: any) => {
+													if (x.type === 1) {
+														return (
+															<Menu.SubMenu
+																key={x.id}
+																title={
+																	<div>
+																		{x.icon && (
+																			<Icon
+																				type={x.icon}
+																				style={{ fontSize: '18px' }}
+																			></Icon>
+																		)}
+																		<span>{x.name}</span>
+																	</div>
+																}
+															></Menu.SubMenu>
+														)
+													} else {
+														return (
+															<Menu.Item key={x.id}>
+																<router-link to={x.router}>
+																	{x.icon && (
+																		<Icon
+																			type={x.icon}
+																			style={{ fontSize: '18px' }}
+																		></Icon>
+																	)}
+																	<span>{x.name}</span>
+																</router-link>
+															</Menu.Item>
+														)
+													}
+												})}
+											</Menu.SubMenu>
+										)
+									} else {
+										return (
+											<Menu.Item key={v.id}>
+												<router-link to={v.router}>
+													{v.icon && <Icon type={v.icon} style={{ fontSize: '18px' }}></Icon>}
+													<span>{v.name}</span>
+												</router-link>
+											</Menu.Item>
+										)
+									}
+								})}
 							</Menu.SubMenu>
 						)
 					} else if (k.type === 2) {
 						return (
-							<Menu.Item key={k.router}>
+							<Menu.Item key={k.id}>
 								<router-link to={k.router}>
 									<Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>
 									<span>{k.name}</span>

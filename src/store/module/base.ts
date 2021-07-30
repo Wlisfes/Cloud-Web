@@ -87,10 +87,9 @@ const base: Module<BaseState, RootState> = {
 				nodeMenuRouter()
 					.then(({ code, data }) => {
 						if (code === HttpStatus.OK) {
-							const routes = formatRoutes(data)
-							console.log(data)
-							console.log(routes)
-							resolve(data)
+							const route = formatRoutes(data)
+							commit('SET_LIST', data)
+							resolve(route)
 						}
 					})
 					.catch(e => reject(e))
@@ -98,30 +97,30 @@ const base: Module<BaseState, RootState> = {
 		},
 		/**根据role获取菜单**/
 		nodeMenu: ({ commit }) => {
-			return new Promise((resolve: Function, rejcet: Function) => {
+			return new Promise((resolve, rejcet) => {
 				nodeMenu()
-					.then(response => {
-						if (response.code == HttpStatus.OK) {
-							const menu = formatMenus(response.data)
-							const routes = formatRoutes(menu)
-							commit('SET_LIST', response.data)
-							commit('SET_MENU', menu)
-							resolve(routes)
+					.then(({ code, data }) => {
+						if (code == HttpStatus.OK) {
+							commit('SET_MENU', data)
+							resolve(data)
 						}
 					})
 					.catch(e => rejcet(e))
 			})
 		},
 		setRoute: ({ commit, state }, route: Route) => {
-			return new Promise((resolve: Function) => {
-				const props = bfs(state.menu, route?.meta?.parent)
-				const keys = [props.router, ...state.openKeys]
+			return new Promise(resolve => {
+				const { id } = state.list.find(k => k.router === route.path)
+				const props = bfs(state.menu, id)
+				const path = props.path.split('-').map((k: any) => Number(k))
+				const keys = state.openKeys.concat(path)
 
 				commit('SET_OPENKEYS', Array.from(new Set(keys)))
-				commit('SET_SELECTEDKEYS', [route.path])
+				commit('SET_SELECTEDKEYS', [id])
 				commit('SET_MULTIPLE', route)
 				commit('SET_PATH', route.path)
-				resolve()
+
+				resolve(route)
 			})
 		}
 	}

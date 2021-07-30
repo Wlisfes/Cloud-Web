@@ -63,5 +63,10 @@ export function formatRoutes(list: any[]) {
 		formatRoutesArr.push(router)
 	})
 
-	return formatRoutesArr
+	return {
+		path: '/admin',
+		redirect: '/admin/setup/home',
+		component: Layout,
+		children: formatRoutesArr
+	}
 }
