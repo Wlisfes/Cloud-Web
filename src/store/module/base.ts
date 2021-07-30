@@ -1,7 +1,7 @@
 import { Module } from 'vuex'
 import type { Route } from 'vue-router'
 import { RootState } from '@/store'
-import { nodeMenu } from '@/api'
+import { nodeMenu, nodeMenuRouter } from '@/api'
 import { HttpStatus } from '@/types'
 import { formatRoutes, formatMenus } from '@/utils/route'
 import { bfs } from '@/utils'
@@ -81,6 +81,21 @@ const base: Module<BaseState, RootState> = {
 		}
 	},
 	actions: {
+		/**动态路由**/
+		useRouter: ({ commit }) => {
+			return new Promise((resolve, reject) => {
+				nodeMenuRouter()
+					.then(({ code, data }) => {
+						if (code === HttpStatus.OK) {
+							const routes = formatRoutes(data)
+							console.log(data)
+							console.log(routes)
+							resolve(data)
+						}
+					})
+					.catch(e => reject(e))
+			})
+		},
 		/**根据role获取菜单**/
 		nodeMenu: ({ commit }) => {
 			return new Promise((resolve: Function, rejcet: Function) => {

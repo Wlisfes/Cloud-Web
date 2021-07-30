@@ -18,7 +18,8 @@ router.beforeEach(async (to, form, next) => {
 			} else {
 				try {
 					await store.dispatch('user/nodeUser')
-					// const routes = await store.dispatch('base/nodeMenu')
+					const routes = await store.dispatch('base/useRouter')
+
 					// routes.forEach((route: any) => {
 					// 	router.addRoute(route)
 					// })

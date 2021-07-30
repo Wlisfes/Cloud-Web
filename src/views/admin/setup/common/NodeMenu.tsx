@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, InputNumber, Select } from 'ant-design-vue'
 import { Spin, Radio, Switch, TreeSelect, notification } from 'ant-design-vue'
-import { nodeCreateMenu, nodeMenu } from '@/api'
+import { nodeCreateMenu, nodeMenuConter } from '@/api'
 import { HttpStatus, NodeMenuParameter } from '@/types'
 import { ctxFile } from '@/utils/common'
 
@@ -35,10 +35,10 @@ export default class NodeMenu extends Vue {
 		}
 	}
 
-	/**菜单列表**/
-	private async nodeMenu() {
+	/**目录节点**/
+	private async nodeMenuConter() {
 		try {
-			const { code, data } = await nodeMenu()
+			const { code, data } = await nodeMenuConter()
 			if (code === HttpStatus.OK) {
 				this.treeNode = data
 			}
@@ -73,7 +73,7 @@ export default class NodeMenu extends Vue {
 	}
 
 	public init() {
-		this.nodeMenu()
+		this.nodeMenuConter()
 		this.visible = true
 	}
 
@@ -115,74 +115,91 @@ export default class NodeMenu extends Vue {
 								<Radio value={2}>菜单</Radio>
 							</Radio.Group>
 						</FormModel.Item>
-						<FormModel.Item label="节点名称" prop="name">
-							<Input v-model={form.name}></Input>
-						</FormModel.Item>
-						<FormModel.Item label="节点路由" prop="router">
-							<Input v-model={form.router}></Input>
-						</FormModel.Item>
-						<FormModel.Item label="文件路径" prop="path">
-							<Select v-model={form.path} allowClear show-search>
-								{this.file.map((name, index) => {
-									return (
-										<Select.Option key={index} value={name}>
-											{name}
-										</Select.Option>
-									)
-								})}
-							</Select>
-						</FormModel.Item>
-						<FormModel.Item label="重定向地址">
-							<Input v-model={form.redirect}></Input>
-						</FormModel.Item>
-						<FormModel.Item label="上级节点">
-							<TreeSelect
-								v-model={form.parent}
-								show-search
-								allow-clear
-								tree-default-expand-all
-								dropdown-style={{ maxHeight: '300px', overflow: 'auto' }}
-							>
-								{this.treeNode.map(k => {
-									return (
-										<TreeSelect.TreeNode key={k.id} value={k.id} title={k.name}>
-											{k.children.map(v => {
-												return (
-													<TreeSelect.TreeNode
-														key={v.id}
-														value={v.id}
-														title={v.name}
-													></TreeSelect.TreeNode>
-												)
-											})}
-										</TreeSelect.TreeNode>
-									)
-								})}
-							</TreeSelect>
-						</FormModel.Item>
-						<FormModel.Item label="节点图标">
-							<Input v-model={form.icon}></Input>
-						</FormModel.Item>
-						<FormModel.Item label="排序号">
-							<InputNumber v-model={form.order}></InputNumber>
-						</FormModel.Item>
-						<FormModel.Item label="节点状态">
-							<Switch
-								v-model={form.status}
-								checked-children="开"
-								un-checked-children="关"
-								default-checked
-							></Switch>
-						</FormModel.Item>
-						{form.type === 2 && (
-							<FormModel.Item label="路由缓存">
-								<Switch
-									v-model={form.keepAlive}
-									checked-children="开"
-									un-checked-children="关"
-									default-checked
-								></Switch>
-							</FormModel.Item>
+						{form.type === 1 ? (
+							<div>
+								<FormModel.Item label="节点名称" prop="name">
+									<Input v-model={form.name}></Input>
+								</FormModel.Item>
+								<FormModel.Item label="节点图标">
+									<Input v-model={form.icon}></Input>
+								</FormModel.Item>
+								<FormModel.Item label="上级节点">
+									<TreeSelect
+										v-model={form.parent}
+										tree-data={this.treeNode}
+										show-search
+										allow-clear
+										tree-default-expand-all
+										replaceFields={{ children: 'children', title: 'name', key: 'id', value: 'id' }}
+										dropdown-style={{ maxHeight: '300px', overflow: 'auto' }}
+									></TreeSelect>
+								</FormModel.Item>
+								<FormModel.Item label="排序号">
+									<InputNumber v-model={form.order}></InputNumber>
+								</FormModel.Item>
+								<FormModel.Item label="节点状态">
+									<Switch
+										v-model={form.status}
+										checked-children="开"
+										un-checked-children="关"
+										default-checked
+									></Switch>
+								</FormModel.Item>
+							</div>
+						) : (
+							<div>
+								<FormModel.Item label="节点名称" prop="name">
+									<Input v-model={form.name}></Input>
+								</FormModel.Item>
+								<FormModel.Item label="节点路由" prop="router">
+									<Input v-model={form.router}></Input>
+								</FormModel.Item>
+								<FormModel.Item label="文件路径" prop="path">
+									<Select v-model={form.path} allowClear show-search>
+										<Select.Option value="Layout">Layout</Select.Option>
+										{this.file.map((name, index) => {
+											return (
+												<Select.Option key={index} value={name}>
+													{name}
+												</Select.Option>
+											)
+										})}
+									</Select>
+								</FormModel.Item>
+								<FormModel.Item label="上级节点">
+									<TreeSelect
+										v-model={form.parent}
+										tree-data={this.treeNode}
+										show-search
+										allow-clear
+										tree-default-expand-all
+										replaceFields={{ children: 'children', title: 'name', key: 'id', value: 'id' }}
+										dropdown-style={{ maxHeight: '300px', overflow: 'auto' }}
+									></TreeSelect>
+								</FormModel.Item>
+								<FormModel.Item label="节点图标">
+									<Input v-model={form.icon}></Input>
+								</FormModel.Item>
+								<FormModel.Item label="排序号">
+									<InputNumber v-model={form.order}></InputNumber>
+								</FormModel.Item>
+								<FormModel.Item label="节点状态">
+									<Switch
+										v-model={form.status}
+										checked-children="开"
+										un-checked-children="关"
+										default-checked
+									></Switch>
+								</FormModel.Item>
+								<FormModel.Item label="路由缓存">
+									<Switch
+										v-model={form.keepAlive}
+										checked-children="开"
+										un-checked-children="关"
+										default-checked
+									></Switch>
+								</FormModel.Item>
+							</div>
 						)}
 					</FormModel>
 				</Spin>
