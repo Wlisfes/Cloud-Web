@@ -55,7 +55,7 @@ export default class AppMenu extends Vue {
 								key={k.id}
 								title={
 									<div>
-										{k.icon && <Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>}
+										{k.icon && <Icon type={k.icon} style={{ fontSize: '16px' }}></Icon>}
 										<span>{k.name}</span>
 									</div>
 								}
@@ -68,7 +68,7 @@ export default class AppMenu extends Vue {
 												title={
 													<div>
 														{v.icon && (
-															<Icon type={v.icon} style={{ fontSize: '18px' }}></Icon>
+															<Icon type={v.icon} style={{ fontSize: '14px' }}></Icon>
 														)}
 														<span>{v.name}</span>
 													</div>
@@ -84,7 +84,7 @@ export default class AppMenu extends Vue {
 																		{x.icon && (
 																			<Icon
 																				type={x.icon}
-																				style={{ fontSize: '18px' }}
+																				style={{ fontSize: '14px' }}
 																			></Icon>
 																		)}
 																		<span>{x.name}</span>
@@ -99,7 +99,7 @@ export default class AppMenu extends Vue {
 																	{x.icon && (
 																		<Icon
 																			type={x.icon}
-																			style={{ fontSize: '18px' }}
+																			style={{ fontSize: '14px' }}
 																		></Icon>
 																	)}
 																	<span>{x.name}</span>
@@ -114,7 +114,7 @@ export default class AppMenu extends Vue {
 										return (
 											<Menu.Item key={v.id}>
 												<router-link to={v.router}>
-													{v.icon && <Icon type={v.icon} style={{ fontSize: '18px' }}></Icon>}
+													{v.icon && <Icon type={v.icon} style={{ fontSize: '14px' }}></Icon>}
 													<span>{v.name}</span>
 												</router-link>
 											</Menu.Item>
@@ -127,7 +127,7 @@ export default class AppMenu extends Vue {
 						return (
 							<Menu.Item key={k.id}>
 								<router-link to={k.router}>
-									<Icon type={k.icon} style={{ fontSize: '18px' }}></Icon>
+									<Icon type={k.icon} style={{ fontSize: '16px' }}></Icon>
 									<span>{k.name}</span>
 								</router-link>
 							</Menu.Item>
