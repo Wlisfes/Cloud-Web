@@ -97,7 +97,7 @@ export default class NodeMenu extends Vue {
 				title="title"
 				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
 				v-model={this.visible}
-				width={800}
+				width={680}
 				destroyOnClose
 				onCancel={this.onClose}
 			>

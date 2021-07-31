@@ -1,5 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Modal, Icon, Button, Upload } from 'ant-design-vue'
+import { Modal, Spin, Button, Upload } from 'ant-design-vue'
 import Cropper from 'cropperjs'
 import { nodeOssSts } from '@/api'
 import { HttpStatus } from '@/types'
@@ -23,19 +23,19 @@ export default class AppCropper extends Vue {
 		this.visible = true
 
 		if (cover) {
+			this.loading = true
 			this.cover = cover
 			this.name = cover.split('.').pop()?.toLowerCase() || ''
 			this.$nextTick(() => {
-				if (!this.cropper) {
-					this.cropper = new Cropper(this.$refs.cover, {
-						aspectRatio: this.ratio,
-						initialAspectRatio: 1,
-						viewMode: 1,
-						dragMode: 'move'
-					})
-				} else {
-					this.cropper.replace(cover)
-				}
+				this.cropper = new Cropper(this.$refs.cover, {
+					aspectRatio: this.ratio,
+					initialAspectRatio: 1,
+					viewMode: 1,
+					dragMode: 'move',
+					ready: () => {
+						this.loading = false
+					}
+				})
 			})
 		}
 	}
@@ -95,6 +95,7 @@ export default class AppCropper extends Vue {
 
 	private beforeUpload(file: File) {
 		const cover = URL.createObjectURL(file)
+		this.loading = true
 		this.name = file.name
 		this.cover = cover
 		this.$nextTick(() => {
@@ -103,10 +104,14 @@ export default class AppCropper extends Vue {
 					aspectRatio: this.ratio,
 					initialAspectRatio: 1,
 					viewMode: 1,
-					dragMode: 'move'
+					dragMode: 'move',
+					ready: () => {
+						this.loading = false
+					}
 				})
 			} else {
 				this.cropper.replace(cover)
+				this.loading = false
 			}
 		})
 		return false
@@ -121,19 +126,21 @@ export default class AppCropper extends Vue {
 				width={880}
 				destroyOnClose
 			>
-				<div class={style['app-cropper']}>
-					<div class={style['app-cropper-ratio']}>
-						<div class={style['app-cropper-ratio-absolute']}>
-							{this.cover ? (
-								<div class={`${style['app-cropper-conter']} cropper-bg`}>
-									<img class={style['root-cover']} ref="cover" src={this.cover} />
-								</div>
-							) : (
-								<div class={`${style['app-cropper-conter']} cropper-bg`}></div>
-							)}
+				<Spin size="large" spinning={this.loading}>
+					<div class={style['app-cropper']}>
+						<div class={style['app-cropper-ratio']}>
+							<div class={style['app-cropper-ratio-absolute']}>
+								{this.cover ? (
+									<div class={`${style['app-cropper-conter']} cropper-bg`}>
+										<img class={style['root-cover']} ref="cover" src={this.cover} />
+									</div>
+								) : (
+									<div class={`${style['app-cropper-conter']} cropper-bg`}></div>
+								)}
+							</div>
 						</div>
 					</div>
-				</div>
+				</Spin>
 				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
 					<Button onClick={this.onClose}>取消</Button>
 					<Upload
