@@ -28,8 +28,17 @@ export function nodeMenuRouter(params?: any) {
 	})
 }
 
+/**角色菜单**/
+export function nodeRoleMenu(params?: any) {
+	return request<Array<types.NodeMenuParameter>>({
+		url: `/api/menu/role`,
+		method: 'GET',
+		params
+	})
+}
+
 /**菜单列表**/
-export function nodeMenu(params?: any) {
+export function nodeMenus(params?: any) {
 	return request<Array<types.NodeMenuParameter>>({
 		url: `/api/menu/list`,
 		method: 'GET',

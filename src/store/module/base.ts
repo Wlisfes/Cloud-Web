@@ -1,7 +1,7 @@
 import { Module } from 'vuex'
 import type { Route } from 'vue-router'
 import { RootState } from '@/store'
-import { nodeMenu, nodeMenuRouter } from '@/api'
+import { nodeRoleMenu, nodeMenuRouter } from '@/api'
 import { HttpStatus } from '@/types'
 import { formatRoutes, formatMenus } from '@/utils/route'
 import { bfs } from '@/utils'
@@ -96,9 +96,9 @@ const base: Module<BaseState, RootState> = {
 			})
 		},
 		/**根据role获取菜单**/
-		nodeMenu: ({ commit }) => {
+		nodeRoleMenu: ({ commit }) => {
 			return new Promise((resolve, rejcet) => {
-				nodeMenu()
+				nodeRoleMenu()
 					.then(({ code, data }) => {
 						if (code == HttpStatus.OK) {
 							commit('SET_MENU', data)

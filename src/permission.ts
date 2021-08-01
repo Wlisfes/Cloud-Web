@@ -18,7 +18,7 @@ router.beforeEach(async (to, form, next) => {
 			} else {
 				try {
 					await store.dispatch('user/nodeUser')
-					await store.dispatch('base/nodeMenu')
+					await store.dispatch('base/nodeRoleMenu')
 					const route = await store.dispatch('base/useRouter')
 					router.addRoute(route)
 

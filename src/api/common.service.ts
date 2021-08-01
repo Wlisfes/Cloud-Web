@@ -9,12 +9,3 @@ export function nodeEmailCode(params: types.NodeEmailCodeParameter) {
 		data: params
 	})
 }
-
-/**获取菜单列表**/
-export function nodeMenu1(params?: any) {
-	return request({
-		url: `/api/menu/list`,
-		method: 'GET',
-		data: params
-	})
-}

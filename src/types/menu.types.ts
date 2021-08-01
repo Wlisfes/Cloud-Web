@@ -1,6 +1,6 @@
 import { NodeDate } from '@/types'
 
-export type NodeMenuParameter = {
+export type NodeMenuParameter = NodeDate & {
 	id: number
 	type: number
 	name: string
