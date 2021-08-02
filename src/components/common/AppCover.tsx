@@ -17,7 +17,7 @@ export default class AppCover extends Vue {
 				<AppCropper ref="appCropper" onSubmit={(props: any) => this.$emit('submit', props)}></AppCropper>
 				{this.cover ? (
 					<div class={style['app-cover-avatar']} onClick={() => this.$refs.appCropper.upload(this.cover)}>
-						<Avatar size={100} shape="square" src={this.cover}>
+						<Avatar size={100} shape="square" src={`${this.cover}?x-oss-process=style/resize`}>
 							妖雨纯
 						</Avatar>
 					</div>

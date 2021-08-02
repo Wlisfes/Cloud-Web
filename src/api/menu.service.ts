@@ -45,3 +45,12 @@ export function nodeMenus(params?: any) {
 		params
 	})
 }
+
+/**菜单信息**/
+export function nodeMenu(params?: any) {
+	return request<Array<types.NodeMenuParameter>>({
+		url: `/api/menu/info`,
+		method: 'GET',
+		params
+	})
+}

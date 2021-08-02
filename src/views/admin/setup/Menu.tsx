@@ -49,7 +49,7 @@ export default class Menu extends Vue {
 
 		return (
 			<div style={{ padding: '10px' }}>
-				<Button onClick={() => this.$refs.nodeMenu.init()}>Create</Button>
+				<Button onClick={() => this.$refs.nodeMenu.init('create')}>Create</Button>
 				<NodeMenu ref="nodeMenu" onReplay={() => console.log('onReplay')}></NodeMenu>
 
 				<Table
@@ -80,12 +80,23 @@ export default class Menu extends Vue {
 							action: (props: NodeMenuParameter) => {
 								return (
 									<Button.Group>
-										<Button type="link" style={{ color: '#52c41a' }}>
-											新增
-										</Button>
-										<Button type="link" style={{ color: '#1890ff' }}>
-											编辑
-										</Button>
+										{props.type === 1 ? (
+											<Button
+												type="link"
+												style={{ color: '#52c41a' }}
+												onClick={() => this.$refs.nodeMenu.init('create')}
+											>
+												新增
+											</Button>
+										) : (
+											<Button
+												type="link"
+												style={{ color: '#1890ff' }}
+												onClick={() => this.$refs.nodeMenu.init('update', props.id)}
+											>
+												编辑
+											</Button>
+										)}
 										<Button type="link" style={{ color: '#eb2f96' }}>
 											删除
 										</Button>

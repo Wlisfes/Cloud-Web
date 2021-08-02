@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button, Menu, Dropdown, Icon, Divider, notification } from 'ant-design-vue'
 import { NodeUser, NodeReset, NodeUserRole } from '@/views/admin/setup/common'
-import Avatar from 'vue-avatar'
+import { AppAvatar } from '@/components/common'
 import { nodeUsers, nodeUserCutover } from '@/api'
 import { HttpStatus, Source, NodeUserResponse } from '@/types'
 import style from '@/style/admin/admin.user.module.less'
@@ -116,13 +116,13 @@ export default class User extends Vue {
 					{...{
 						scopedSlots: {
 							avatar: (props: NodeUserResponse) => (
-								<Avatar
+								<AppAvatar
 									size={40}
 									src={`${props.avatar}?x-oss-process=style/resize`}
 									username={props.nickname}
 									rounded={false}
 									style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '4px' }}
-								></Avatar>
+								></AppAvatar>
 							),
 							role: (props: NodeUserResponse) => (
 								<Tag style={{ margin: 0 }} color="cyan">

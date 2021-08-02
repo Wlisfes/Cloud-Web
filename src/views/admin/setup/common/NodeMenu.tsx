@@ -72,7 +72,7 @@ export default class NodeMenu extends Vue {
 		}
 	}
 
-	public init() {
+	public init(active: 'create' | 'update', uid?: number) {
 		this.nodeMenuConter()
 		this.visible = true
 	}
