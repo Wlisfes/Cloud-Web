@@ -45,7 +45,7 @@ export type NodeUidUserParameter = Pick<NodeUserParameter, 'uid'>
 export type NodeUserResponse = Pick<
 	NodeUserParameter,
 	'id' | 'uid' | 'account' | 'nickname' | 'email' | 'password' | 'avatar' | 'mobile' | 'status' | 'comment'
-> & { role: NodeRoleResponse[] } & NodeDate
+> & { role: NodeRoleResponse } & NodeDate
 
 /**
  * 用户列表

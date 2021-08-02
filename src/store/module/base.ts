@@ -25,7 +25,7 @@ const base: Module<BaseState, RootState> = {
 		width: 0,
 		mobile: false,
 		collapsed: false,
-		theme: 'light',
+		theme: 'dark',
 		multiple: [],
 		menu: [],
 		list: [],

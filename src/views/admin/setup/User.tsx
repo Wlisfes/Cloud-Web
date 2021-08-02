@@ -126,7 +126,7 @@ export default class User extends Vue {
 							),
 							role: (props: NodeUserResponse) => (
 								<Tag style={{ margin: 0 }} color="cyan">
-									{props.role[0]?.name}
+									{props.role?.name}
 								</Tag>
 							),
 							status: (props: NodeUserResponse) => (
