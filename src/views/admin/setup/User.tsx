@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button, Menu, Dropdown, Icon, Divider, notification } from 'ant-design-vue'
 import { NodeUser, NodeReset, NodeUserRole } from '@/views/admin/setup/common'
-import { AppAvatar } from '@/components/common'
+import { AppAvatar, AppSatus } from '@/components/common'
 import { nodeUsers, nodeUserCutover } from '@/api'
 import { HttpStatus, Source, NodeUserResponse } from '@/types'
 import style from '@/style/admin/admin.user.module.less'
@@ -15,11 +15,11 @@ export default class User extends Vue {
 			{ title: '账号', dataIndex: 'account', align: 'center', width: '8%' },
 			{ title: '头像', align: 'center', width: '6%', scopedSlots: { customRender: 'avatar' } },
 			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '10%', ellipsis: true },
-			{ title: '邮箱', dataIndex: 'email', width: '13%', align: 'center' },
-			{ title: '手机号', dataIndex: 'mobile', width: '9%', align: 'center' },
-			{ title: '角色', align: 'center', width: '7.5%', scopedSlots: { customRender: 'role' } },
-			{ title: '备注', dataIndex: 'comment', align: 'center', ellipsis: true },
-			{ title: '注册时间', dataIndex: 'createTime', width: '12%', align: 'center' },
+			{ title: '邮箱', dataIndex: 'email', align: 'center' },
+			{ title: '手机号', dataIndex: 'mobile', width: '15%', align: 'center' },
+			{ title: '角色', align: 'center', width: '9%', scopedSlots: { customRender: 'role' } },
+			// { title: '备注', dataIndex: 'comment', align: 'center', ellipsis: true },
+			{ title: '注册时间', dataIndex: 'createTime', width: '15%', align: 'center' },
 			{ title: '状态', align: 'center', width: '6%', scopedSlots: { customRender: 'status' } },
 			{ title: '操作', align: 'center', width: '10%', scopedSlots: { customRender: 'action' } }
 		],
@@ -104,7 +104,7 @@ export default class User extends Vue {
 					loading={source.loading}
 					columns={source.column}
 					dataSource={source.dataSource}
-					scroll={{ x: 1280 }}
+					scroll={{ x: 1100 }}
 					pagination={{
 						pageSize: source.size,
 						current: source.page,
@@ -129,11 +129,7 @@ export default class User extends Vue {
 									{props.role?.name}
 								</Tag>
 							),
-							status: (props: NodeUserResponse) => (
-								<Tag style={{ margin: 0 }} color={!!props.status ? 'green' : 'pink'}>
-									{!!props.status ? '启用' : '禁用'}
-								</Tag>
-							),
+							status: (props: NodeUserResponse) => <AppSatus status={props.status}></AppSatus>,
 							action: (props: NodeUserResponse) => (
 								<Button.Group>
 									<Dropdown trigger={['click']}>

@@ -1,6 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Button, Table, Icon, Tag, Popconfirm, notification } from 'ant-design-vue'
 import { NodeMenu } from '@/views/admin/setup/common'
+import { AppSatus } from '@/components/common'
 import { nodeMenus, nodeDeleteMenu } from '@/api'
 import { HttpStatus, Source, NodeMenuParameter } from '@/types'
 
@@ -14,7 +15,8 @@ export default class Menu extends Vue {
 			{ title: '节点图标', align: 'center', width: '8%', scopedSlots: { customRender: 'icon' } },
 			{ title: '节点类型', align: 'center', width: '8%', scopedSlots: { customRender: 'type' } },
 			{ title: '节点路由', align: 'center', scopedSlots: { customRender: 'router' } },
-			{ title: '排序号', dataIndex: 'order', align: 'center', width: '8%' },
+			{ title: '排序号', dataIndex: 'order', align: 'center', width: '7%' },
+			{ title: '节点状态', align: 'center', width: '8%', scopedSlots: { customRender: 'status' } },
 			{ title: '创建时间', dataIndex: 'createTime', width: '14.5%', align: 'center' },
 			{ title: '操作', align: 'center', width: '15%', scopedSlots: { customRender: 'action' } }
 		],
@@ -108,6 +110,7 @@ export default class Menu extends Vue {
 									<Icon type={props.icon} style={{ fontSize: '20px', margin: '6px' }}></Icon>
 								) : null
 							},
+							status: (props: NodeMenuParameter) => <AppSatus status={props.status}></AppSatus>,
 							action: (props: NodeMenuParameter) => {
 								return (
 									<Button.Group>

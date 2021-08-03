@@ -1,6 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button, notification } from 'ant-design-vue'
 import { NodeRole } from '@/views/admin/setup/common'
+import { AppSatus } from '@/components/common'
 import { nodeRoles, nodeRoleCutover } from '@/api'
 import { HttpStatus, Source, NodeRoleResponse } from '@/types'
 
@@ -88,9 +89,7 @@ export default class Role extends Vue {
 					onChange={source.onChange}
 					{...{
 						scopedSlots: {
-							status: (props: NodeRoleResponse) => (
-								<Tag color={props.status ? 'green' : 'pink'}>{props.status ? '启用' : '禁用'}</Tag>
-							),
+							status: (props: NodeRoleResponse) => <AppSatus status={props.status}></AppSatus>,
 							action: (props: NodeRoleResponse) => (
 								<Button.Group>
 									<Button type="link" onClick={() => this.$refs.nodeRole.init(props.id)}>
