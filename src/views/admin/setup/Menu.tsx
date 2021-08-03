@@ -10,7 +10,7 @@ export default class Menu extends Vue {
 
 	private source: Source<Array<NodeMenuParameter>> = {
 		column: [
-			{ title: '节点名称', scopedSlots: { customRender: 'name' } },
+			{ title: '节点名称', dataIndex: 'name' },
 			{ title: '节点图标', align: 'center', width: '8%', scopedSlots: { customRender: 'icon' } },
 			{ title: '节点类型', align: 'center', width: '8%', scopedSlots: { customRender: 'type' } },
 			{ title: '节点路由', align: 'center', scopedSlots: { customRender: 'router' } },
@@ -75,9 +75,26 @@ export default class Menu extends Vue {
 					dataSource={source.dataSource}
 					scroll={{ x: 1000 }}
 					pagination={false}
+					expandIcon={(props: any) => {
+						if (props.record.children?.length > 0) {
+							return props.expanded ? (
+								<div
+									style={{ marginLeft: '8px' }}
+									class="ant-table-row-expand-icon ant-table-row-expanded"
+									onClick={props.onExpand}
+								></div>
+							) : (
+								<div
+									style={{ marginLeft: '8px' }}
+									class="ant-table-row-expand-icon ant-table-row-collapsed"
+									onClick={props.onExpand}
+								></div>
+							)
+						}
+						return <span style={{ paddingLeft: '20px' }}></span>
+					}}
 					{...{
 						scopedSlots: {
-							name: (props: NodeMenuParameter) => <a>{props.name}</a>,
 							type: (props: NodeMenuParameter) => {
 								return props.type === 1 ? <Tag color="cyan">目录</Tag> : <Tag color="blue">菜单</Tag>
 							},
