@@ -14,6 +14,7 @@ export interface BaseState {
 	multiple: Array<any>
 	menu: Array<any>
 	list: Array<any>
+	name: string
 	path: string
 	openKeys: string[]
 	selectedKeys: string[]
@@ -29,6 +30,7 @@ const base: Module<BaseState, RootState> = {
 		multiple: [],
 		menu: [],
 		list: [],
+		name: '',
 		path: '',
 		openKeys: [],
 		selectedKeys: []
@@ -41,6 +43,7 @@ const base: Module<BaseState, RootState> = {
 		multiple: state => state.multiple,
 		menu: state => state.menu,
 		list: state => state.list,
+		name: state => state.name,
 		path: state => state.path,
 		openKeys: state => state.openKeys,
 		selectedKeys: state => state.selectedKeys
@@ -69,6 +72,9 @@ const base: Module<BaseState, RootState> = {
 		},
 		SET_LIST: (state, list) => {
 			state.list = list
+		},
+		SET_NAME: (state, name) => {
+			state.name = name
 		},
 		SET_PATH: (state, path: string) => {
 			state.path = path
@@ -119,6 +125,7 @@ const base: Module<BaseState, RootState> = {
 				commit('SET_SELECTEDKEYS', [id])
 				commit('SET_MULTIPLE', route)
 				commit('SET_PATH', route.path)
+				commit('SET_NAME', props.title)
 
 				resolve(route)
 			})

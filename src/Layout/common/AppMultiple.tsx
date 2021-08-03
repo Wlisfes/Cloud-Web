@@ -16,7 +16,7 @@ export default class AppMultiple extends Vue {
 						type="editable-card"
 						size="small"
 						hideAdd
-						tabBarStyle={{ borderBottom: 'none', marginBottom: '10px' }}
+						tabBarStyle={{ borderBottom: 'none', margin: '8px 0' }}
 						onTabClick={(path: string) => this.$router.push(path)}
 					>
 						{this.multiple.map(k => (
@@ -60,7 +60,7 @@ export default class AppMultiple extends Vue {
 								<a>关闭全部</a>
 							</Menu.Item>
 						</Menu>
-						<Icon type="appstore" class="app-admin-container-tabs-trigger"></Icon>
+						<Icon type="appstore" class="app-admin-container-tabs-right-trigger"></Icon>
 					</Dropdown>
 				</div>
 			</div>

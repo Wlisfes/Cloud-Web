@@ -1,7 +1,7 @@
 import { Getter } from 'vuex-class'
 import { Vue, Component } from 'vue-property-decorator'
 import { Layout, Icon } from 'ant-design-vue'
-import { AppMultiple, AppMenu } from '@/Layout/common'
+import { AppMultiple, AppMenu, AppTitle } from '@/Layout/common'
 
 @Component
 export default class Index extends Vue {
@@ -61,15 +61,19 @@ export default class Index extends Vue {
 					<AppMenu></AppMenu>
 				</Layout.Sider>
 				<Layout style={{ backgroundColor: '#ededed' }}>
-					<Layout.Header style={{ backgroundColor: '#ffffff', padding: 0 }}>
-						<Icon
-							class="app-admin-container-trigger"
-							type={this.collapsed ? 'menu-unfold' : 'menu-fold'}
-							onClick={this.onTrigger}
-						></Icon>
+					<Layout.Header>
+						<div class="ant-layout-header-conter">
+							<Icon
+								class="app-admin-container-trigger"
+								type={this.collapsed ? 'menu-unfold' : 'menu-fold'}
+								onClick={this.onTrigger}
+							></Icon>
+							<AppTitle></AppTitle>
+						</div>
+						<AppMultiple></AppMultiple>
 					</Layout.Header>
-					<AppMultiple></AppMultiple>
-					<Layout.Content style={{ margin: '10px', backgroundColor: '#fff' }}>
+
+					<Layout.Content style={{ margin: '15px', backgroundColor: '#fff' }}>
 						<router-view></router-view>
 					</Layout.Content>
 				</Layout>

@@ -28,7 +28,8 @@ export function bfs(target: any[], id: number | string, key = 'children') {
 			quene.push(
 				...current[key].map((x: any) => ({
 					...x,
-					path: (current.path || current.id) + '-' + x.id
+					path: (current.path || current.id) + '-' + x.id,
+					title: (current.title || current.name) + '-' + x.name
 				}))
 			)
 		}
