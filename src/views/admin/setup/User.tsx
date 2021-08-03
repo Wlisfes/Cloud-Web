@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button, Menu, Dropdown, Icon, Divider, notification } from 'ant-design-vue'
+import { Table, Tag, Button, Menu, Icon, Divider, notification, Popover } from 'ant-design-vue'
 import { NodeUser, NodeReset, NodeUserRole } from '@/views/admin/setup/common'
 import { AppAvatar, AppSatus } from '@/components/common'
 import { nodeUsers, nodeUserCutover } from '@/api'
@@ -8,7 +8,7 @@ import style from '@/style/admin/admin.user.module.less'
 
 @Component
 export default class User extends Vue {
-	$refs!: { nodeUser: NodeUser; nodeReset: NodeReset; nodeUserRole: NodeUserRole }
+	$refs!: { nodeUser: NodeUser; nodeReset: NodeReset; nodeUserRole: NodeUserRole; conter: HTMLElement }
 
 	private source: Source<Array<NodeUserResponse>> = {
 		column: [
@@ -88,7 +88,7 @@ export default class User extends Vue {
 	protected render() {
 		const { source } = this
 		return (
-			<div class={style['app-conter']}>
+			<div class={style['app-conter']} ref="conter">
 				<NodeUser ref="nodeUser" onReplay={() => this.source.initSource()}></NodeUser>
 				<NodeReset ref="nodeReset" onReplay={() => this.source.initSource()}></NodeReset>
 				<NodeUserRole ref="nodeUserRole" onReplay={() => this.source.initSource()}></NodeUserRole>
@@ -132,10 +132,14 @@ export default class User extends Vue {
 							status: (props: NodeUserResponse) => <AppSatus status={props.status}></AppSatus>,
 							action: (props: NodeUserResponse) => (
 								<Button.Group>
-									<Dropdown trigger={['click']}>
-										<Button type="link">操作</Button>
+									<Popover
+										trigger="click"
+										placement="topRight"
+										overlayClassName="app-popover"
+										getPopupContainer={() => this.$refs.conter}
+									>
 										<Menu
-											slot="overlay"
+											slot="content"
 											onClick={({ key }: { key: string }) => this.onAction(key, props.uid)}
 										>
 											<Menu.Item key="update" style={{ color: '#1890ff' }}>
@@ -151,7 +155,8 @@ export default class User extends Vue {
 												<span>重置密码</span>
 											</Menu.Item>
 										</Menu>
-									</Dropdown>
+										<Button type="link">操作</Button>
+									</Popover>
 									<Divider type="vertical" style={{ margin: 'auto' }}></Divider>
 									<Button type="link" onClick={() => this.nodeUserCutover(props.uid)}>
 										{!!props.status ? (
