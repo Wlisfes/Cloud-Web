@@ -20,7 +20,10 @@ router.beforeEach(async (to, form, next) => {
 					await store.dispatch('user/nodeUser')
 					await store.dispatch('base/nodeRoleMenu')
 					const route = await store.dispatch('base/useRouter')
-					router.addRoute(route)
+					await new Promise(resolve => {
+						router.addRoute(route)
+						resolve(route)
+					})
 
 					next({ ...(to as any), replace: true })
 				} catch (e) {

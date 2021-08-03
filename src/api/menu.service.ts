@@ -11,46 +11,60 @@ export function nodeCreateMenu(params: types.NodeCreateMenuParameter) {
 }
 
 /**目录节点**/
-export function nodeMenuConter(params?: any) {
+export function nodeMenuConter() {
 	return request<Array<types.NodeMenuParameter>>({
 		url: `/api/menu/conter`,
-		method: 'GET',
-		params
+		method: 'GET'
 	})
 }
 
 /**动态路由节点**/
-export function nodeMenuRouter(params?: any) {
+export function nodeMenuRouter() {
 	return request<Array<types.NodeMenuParameter>>({
 		url: `/api/menu/router`,
-		method: 'GET',
-		params
+		method: 'GET'
 	})
 }
 
 /**角色菜单**/
-export function nodeRoleMenu(params?: any) {
+export function nodeRoleMenu() {
 	return request<Array<types.NodeMenuParameter>>({
 		url: `/api/menu/role`,
-		method: 'GET',
-		params
+		method: 'GET'
 	})
 }
 
 /**菜单列表**/
-export function nodeMenus(params?: any) {
+export function nodeMenus() {
 	return request<Array<types.NodeMenuParameter>>({
 		url: `/api/menu/list`,
+		method: 'GET'
+	})
+}
+
+/**菜单信息**/
+export function nodeMenu(params: types.NodeIDMenuParameter) {
+	return request<types.NodeMenuParameter>({
+		url: `/api/menu/info`,
 		method: 'GET',
 		params
 	})
 }
 
-/**菜单信息**/
-export function nodeMenu(params?: any) {
-	return request<Array<types.NodeMenuParameter>>({
-		url: `/api/menu/info`,
-		method: 'GET',
+/**修改菜单**/
+export function nodeUpdateMenu(params: types.NodeUpdateMenuParameter) {
+	return request<types.NodeUpdateMenuResponse>({
+		url: `/api/menu/update`,
+		method: 'PUT',
+		data: params
+	})
+}
+
+/**删除菜单**/
+export function nodeDeleteMenu(params: types.NodeDeleteMenuParameter) {
+	return request<types.NodeDeleteMenuResponse>({
+		url: `/api/menu/del`,
+		method: 'DELETE',
 		params
 	})
 }

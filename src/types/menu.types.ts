@@ -8,7 +8,6 @@ export type NodeMenuParameter = NodeDate & {
 	path: string
 	keepAlive: number
 	status: number
-	redirect: string | null
 	icon: string | null
 	order: number | null
 	parent: NodeMenuParameter | null
@@ -23,5 +22,26 @@ export type NodeCreateMenuParameter = Pick<
 	NodeMenuParameter,
 	'type' | 'name' | 'router' | 'path' | 'status' | 'keepAlive'
 > &
-	Partial<Pick<NodeMenuParameter, 'redirect' | 'icon' | 'order' | 'parent'>>
+	Partial<Pick<NodeMenuParameter, 'icon' | 'order' | 'parent'>>
 export type NodeCreateMenuResponse = Pick<NodeMenuParameter, 'message'>
+
+/**
+ * 菜单信息
+ */
+export type NodeIDMenuParameter = Pick<NodeMenuParameter, 'id'>
+
+/**
+ * 修改菜单
+ */
+export type NodeUpdateMenuParameter = Pick<
+	NodeMenuParameter,
+	'id' | 'name' | 'router' | 'path' | 'status' | 'keepAlive'
+> &
+	Partial<Pick<NodeMenuParameter, 'icon' | 'order' | 'parent'>>
+export type NodeUpdateMenuResponse = Pick<NodeMenuParameter, 'message'>
+
+/**
+ * 删除菜单
+ */
+export type NodeDeleteMenuParameter = Pick<NodeMenuParameter, 'id'>
+export type NodeDeleteMenuResponse = Pick<NodeMenuParameter, 'message'>

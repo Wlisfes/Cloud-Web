@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, InputNumber, Select } from 'ant-design-vue'
 import { Spin, Radio, Switch, TreeSelect, notification } from 'ant-design-vue'
-import { nodeCreateMenu, nodeMenuConter } from '@/api'
+import { nodeCreateMenu, nodeMenuConter, nodeMenu, nodeUpdateMenu } from '@/api'
 import { HttpStatus, NodeMenuParameter } from '@/types'
 import { ctxFile } from '@/utils/common'
 
@@ -13,14 +13,15 @@ export default class NodeMenu extends Vue {
 	private treeNode: NodeMenuParameter[] = []
 	private visible: boolean = false
 	private loading: boolean = false
+	private active: string = 'create'
 	private state = {
 		labelCol: { span: 4, style: { width: '100px' } },
 		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
 		form: {
+			id: 0,
 			type: 1,
 			name: '',
 			router: '',
-			redirect: '',
 			keepAlive: true,
 			status: true,
 			path: '',
@@ -42,7 +43,33 @@ export default class NodeMenu extends Vue {
 			if (code === HttpStatus.OK) {
 				this.treeNode = data
 			}
-		} catch (e) {}
+			return data
+		} catch (e) {
+			return e
+		}
+	}
+
+	/**菜单信息**/
+	private async nodeMenu(id: number) {
+		try {
+			const { code, data } = await nodeMenu({ id })
+			if (code === HttpStatus.OK) {
+				this.state.form = Object.assign(this.state.form, {
+					type: data.type,
+					name: data.name,
+					router: data.router,
+					keepAlive: data.keepAlive === 1,
+					status: data.status === 1,
+					path: data.path,
+					icon: data.icon,
+					order: data.order,
+					parent: data.parent?.id || null
+				})
+			}
+			return data
+		} catch (e) {
+			return e
+		}
 	}
 
 	/**创建菜单节点**/
@@ -57,7 +84,6 @@ export default class NodeMenu extends Vue {
 				path: form.path,
 				keepAlive: +form.keepAlive,
 				status: +form.status,
-				redirect: form.redirect,
 				icon: form.icon,
 				order: form.order,
 				parent: form.parent
@@ -72,20 +98,88 @@ export default class NodeMenu extends Vue {
 		}
 	}
 
-	public init(active: 'create' | 'update', uid?: number) {
-		this.nodeMenuConter()
-		this.visible = true
+	/**修改菜单**/
+	private async nodeUpdateMenu() {
+		try {
+			this.loading = true
+			const { form } = this.state
+			const { code, data } = await nodeUpdateMenu({
+				id: form.id,
+				name: form.name,
+				router: form.router,
+				path: form.path,
+				keepAlive: +form.keepAlive,
+				status: +form.status,
+				icon: form.icon,
+				order: form.order,
+				parent: form.parent
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$emit('replay')
+				this.onClose()
+			}
+		} catch (e) {
+			this.loading = false
+		}
 	}
 
+	/**组件调用**/
+	public async init(active: 'create' | 'update', id?: number) {
+		try {
+			this.loading = true
+			this.active = active
+			this.visible = true
+			if (id) {
+				if (active === 'update') {
+					this.state.form.id = id
+					await this.nodeMenu(id)
+				} else {
+					this.state.form = Object.assign(this.state.form, {
+						parent: id
+					})
+				}
+			}
+			await this.nodeMenuConter()
+			this.loading = false
+		} catch (e) {
+			this.loading = false
+		}
+	}
+
+	/**组件初始化**/
 	private onClose() {
-		this.loading = false
 		this.visible = false
+		setTimeout(() => {
+			this.loading = false
+			this.active = 'create'
+			this.state.form = Object.assign(this.state.form, {
+				id: 0,
+				type: 1,
+				name: '',
+				router: '',
+				keepAlive: true,
+				status: true,
+				path: '',
+				icon: '',
+				order: 1,
+				parent: null
+			})
+		}, 300)
 	}
 
+	/**组件提交事件**/
 	private onSubmit() {
 		this.$refs.form.validate(async valid => {
 			if (valid) {
-				this.nodeCreateMenu()
+				switch (this.active) {
+					case 'create':
+						this.nodeCreateMenu()
+						break
+					case 'update':
+						this.nodeUpdateMenu()
+						break
+				}
 			}
 		})
 	}
@@ -94,7 +188,7 @@ export default class NodeMenu extends Vue {
 		const { form, rules, labelCol, wrapperCol } = this.state
 		return (
 			<Modal
-				title="title"
+				title={this.active === 'create' ? '新增' : '编辑'}
 				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
 				v-model={this.visible}
 				width={680}
@@ -110,7 +204,7 @@ export default class NodeMenu extends Vue {
 						wrapperCol={wrapperCol}
 					>
 						<FormModel.Item prop="status" label="节点类型">
-							<Radio.Group v-model={form.type}>
+							<Radio.Group v-model={form.type} disabled={this.active === 'update'}>
 								<Radio value={1}>目录</Radio>
 								<Radio value={2}>菜单</Radio>
 							</Radio.Group>
