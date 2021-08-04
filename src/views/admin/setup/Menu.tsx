@@ -14,9 +14,9 @@ export default class Menu extends Vue {
 			{ title: '节点名称', dataIndex: 'name' },
 			{ title: '节点图标', align: 'center', width: '8%', scopedSlots: { customRender: 'icon' } },
 			{ title: '节点类型', align: 'center', width: '8%', scopedSlots: { customRender: 'type' } },
+			{ title: '节点状态', align: 'center', width: '8%', scopedSlots: { customRender: 'status' } },
 			{ title: '节点路由', align: 'center', scopedSlots: { customRender: 'router' } },
 			{ title: '排序号', dataIndex: 'order', align: 'center', width: '7%' },
-			{ title: '节点状态', align: 'center', width: '8%', scopedSlots: { customRender: 'status' } },
 			{ title: '创建时间', dataIndex: 'createTime', width: '14.5%', align: 'center' },
 			{ title: '操作', align: 'center', width: '15%', scopedSlots: { customRender: 'action' } }
 		],

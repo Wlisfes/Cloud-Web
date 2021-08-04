@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button, Menu, Icon, Divider, notification, Popover } from 'ant-design-vue'
+import { Table, Tag, Button, Menu, Icon, Divider, Dropdown, notification, Popover } from 'ant-design-vue'
 import { NodeUser, NodeReset, NodeUserRole } from '@/views/admin/setup/common'
 import { AppAvatar, AppSatus } from '@/components/common'
 import { nodeUsers, nodeUserCutover } from '@/api'
@@ -132,6 +132,26 @@ export default class User extends Vue {
 							status: (props: NodeUserResponse) => <AppSatus status={props.status}></AppSatus>,
 							action: (props: NodeUserResponse) => (
 								<Button.Group>
+									{/* <Dropdown placement="topRight" trigger={['click']}>
+										<Button type="link">操作</Button>
+										<Menu
+											slot="overlay"
+											onClick={({ key }: { key: string }) => this.onAction(key, props.uid)}
+										>
+											<Menu.Item key="update" style={{ color: '#1890ff' }}>
+												<Icon type="edit"></Icon>
+												<span>编辑</span>
+											</Menu.Item>
+											<Menu.Item key="role" style={{ color: '#fa8c16' }}>
+												<Icon type="safety"></Icon>
+												<span>权限</span>
+											</Menu.Item>
+											<Menu.Item key="reset" style={{ color: '#f5222d' }}>
+												<Icon type="reload"></Icon>
+												<span>重置密码</span>
+											</Menu.Item>
+										</Menu>
+									</Dropdown> */}
 									<Popover
 										trigger="click"
 										placement="topRight"
