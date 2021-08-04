@@ -13,7 +13,7 @@ new Vue({
 	router,
 	store,
 	created() {
-		notification.config({ duration: 1.5 })
+		notification.config({ duration: 2 })
 	},
 	render: h => h(App)
 }).$mount('#app')

@@ -166,9 +166,10 @@ export default class NodeSource extends Vue {
 						<FormModel.Item label="标签名称" prop="name">
 							<Input v-model={form.name}></Input>
 						</FormModel.Item>
-						<FormModel.Item label="标签颜色" prop="color">
+						<FormModel.Item class="app-form-color" label="标签颜色" prop="color">
 							<ColorPicker
 								v-model={form.color}
+								size="small"
 								style={{ width: '100%', maxWidth: '350px' }}
 								predefine={this.primaryColor}
 							></ColorPicker>
