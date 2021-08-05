@@ -98,7 +98,7 @@ export default class Menu extends Vue {
 					{...{
 						scopedSlots: {
 							type: (props: NodeMenuParameter) => {
-								return props.type === 1 ? <Tag color="cyan">目录</Tag> : <Tag color="blue">菜单</Tag>
+								return props.type === 1 ? <Tag color="cyan">目录</Tag> : <Tag color="red">菜单</Tag>
 							},
 							router: (props: NodeMenuParameter) => {
 								return !!props.router ? (

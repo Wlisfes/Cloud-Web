@@ -203,7 +203,7 @@ export default class NodeMenu extends Vue {
 						labelCol={labelCol}
 						wrapperCol={wrapperCol}
 					>
-						<FormModel.Item prop="status" label="节点类型">
+						<FormModel.Item label="节点类型">
 							<Radio.Group v-model={form.type} disabled={this.active === 'update'}>
 								<Radio value={1}>目录</Radio>
 								<Radio value={2}>菜单</Radio>

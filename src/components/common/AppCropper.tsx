@@ -12,6 +12,7 @@ export default class AppCropper extends Vue {
 	$refs!: { cover: HTMLImageElement }
 
 	@Prop({ type: Number, default: 1 }) ratio!: number
+	@Prop({ type: String, default: 'avatar' }) path!: 'avatar' | 'upload' | 'cover'
 
 	private cropper?: Cropper = undefined
 	private visible: boolean = false
@@ -72,7 +73,7 @@ export default class AppCropper extends Vue {
 
 						this.cropper?.getCroppedCanvas().toBlob(async blob => {
 							const buffer = await oss.Buffer(blob as Blob)
-							const key = oss.create(this.name, 'avatar')
+							const key = oss.create(this.name, this.path)
 							const response = await oss.client.put(key, buffer)
 							if (response.res.status === HttpStatus.OK) {
 								this.$emit('submit', {
