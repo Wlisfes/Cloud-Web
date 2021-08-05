@@ -151,12 +151,12 @@ export default class NodeSource extends Vue {
 			this.loading = true
 			this.active = active
 			this.visible = true
+			await this.nodeMultipleClouds()
+			await this.nodeCloudSources()
 			if (id) {
 				this.state.form.id = id
 				await this.nodeCloud(id)
 			}
-			await this.nodeMultipleClouds()
-			await this.nodeCloudSources()
 			this.loading = false
 		} catch (e) {
 			this.loading = false
@@ -235,7 +235,7 @@ export default class NodeSource extends Vue {
 						</FormModel.Item>
 						{form.type === 1 && (
 							<div>
-								<FormModel.Item label="媒体封面" prop="cover">
+								<FormModel.Item label="媒体文件" prop="cover">
 									<NodeUpload></NodeUpload>
 								</FormModel.Item>
 								<FormModel.Item label="父级媒体">
