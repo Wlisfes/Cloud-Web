@@ -2,12 +2,13 @@ import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, InputNumber, Modal, Radio, Select } from 'ant-design-vue'
 import { Button, Switch, Spin, notification } from 'ant-design-vue'
 import { AppCover } from '@/components/common'
+import { NodeUpload } from '@/views/admin/cloud/common'
 import { nodeCloud, nodeCreateCloud, nodeUpdateCloud, nodeMultipleClouds, nodeCloudSources } from '@/api'
 import { HttpStatus, NodeCloud, NodeCloudSource } from '@/types'
 
 @Component
 export default class NodeSource extends Vue {
-	$refs!: { form: FormModel }
+	$refs!: { form: FormModel; nodeUpload: NodeUpload }
 
 	private visible: boolean = false
 	private loading: boolean = false
@@ -205,7 +206,8 @@ export default class NodeSource extends Vue {
 				title={this.active === 'create' ? '新增' : '编辑'}
 				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
 				v-model={this.visible}
-				width={800}
+				width={880}
+				centered
 				destroyOnClose
 				onCancel={this.onClose}
 			>
@@ -233,6 +235,9 @@ export default class NodeSource extends Vue {
 						</FormModel.Item>
 						{form.type === 1 && (
 							<div>
+								<FormModel.Item label="媒体封面" prop="cover">
+									<NodeUpload></NodeUpload>
+								</FormModel.Item>
 								<FormModel.Item label="父级媒体">
 									<Select v-model={form.parent} allowClear show-search placeholder="父级媒体">
 										{this.multiple.map(k => {
@@ -257,22 +262,22 @@ export default class NodeSource extends Vue {
 								})}
 							</Select>
 						</FormModel.Item>
-						<FormModel.Item label="媒体标题" prop="title">
+						<FormModel.Item class="app-form-color" label="媒体标题" prop="title">
 							<Input.TextArea
 								v-model={form.title}
 								autoSize={{ minRows: 2, maxRows: 8 }}
 								style={{ marginBottom: 0 }}
-								placeholder="媒体标题"
 								allowClear
+								placeholder="媒体标题"
 							></Input.TextArea>
 						</FormModel.Item>
-						<FormModel.Item label="媒体描述">
+						<FormModel.Item class="app-form-color" label="媒体描述">
 							<Input.TextArea
 								v-model={form.description}
 								autoSize={{ minRows: 2, maxRows: 8 }}
 								style={{ marginBottom: 0 }}
-								placeholder="媒体描述"
 								allowClear
+								placeholder="媒体描述"
 							></Input.TextArea>
 						</FormModel.Item>
 						<FormModel.Item label="排序号">
