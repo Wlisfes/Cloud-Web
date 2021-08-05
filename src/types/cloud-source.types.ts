@@ -1,22 +1,19 @@
 import { NodeDate } from '@/types'
 
-export type NodeCloudSourceParameter = NodeDate & {
+export type NodeCloudSource = NodeDate & {
 	id: number
 	name: string
 	color: string
 	status: number
 	order: number
 	comment: string | null
+}
+export type NodeCloudSourceParameter = NodeCloudSource & {
 	message: string
 	page: number
 	size: number
 	total: number
 }
-
-export type NodeCloudSourceResponse = Pick<
-	NodeCloudSourceParameter,
-	'id' | 'name' | 'color' | 'status' | 'order' | 'createTime' | 'updateTime'
->
 
 /**
  * 创建分类标签
@@ -42,7 +39,7 @@ export type NodeCloudSourceCutoverResponse = Pick<NodeCloudSourceParameter, 'mes
  * 分类标签信息
  */
 export type NodeCloudSourceNodeParameter = Pick<NodeCloudSourceParameter, 'id'>
-export type NodeCloudSourceNodeResponse = Omit<NodeCloudSourceParameter, 'size' | 'page' | 'message' | 'total'>
+export type NodeCloudSourceNodeResponse = NodeCloudSource
 
 /**
  * 分类标签列表
@@ -50,7 +47,7 @@ export type NodeCloudSourceNodeResponse = Omit<NodeCloudSourceParameter, 'size' 
 export type NodeCloudSourceNodesParameter = Pick<NodeCloudSourceParameter, 'page' | 'size'> &
 	Partial<Pick<NodeCloudSourceParameter, 'status'>>
 export type NodeCloudSourceNodesResponse = Pick<NodeCloudSourceParameter, 'size' | 'page' | 'total'> & {
-	list: Array<Omit<NodeCloudSourceParameter, 'page' | 'size' | 'total' | 'message'>>
+	list: NodeCloudSource[]
 }
 
 /**

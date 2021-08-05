@@ -1,16 +1,16 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button, Menu, Icon, Divider, Dropdown, notification, Popover } from 'ant-design-vue'
+import { Table, Tag, Button, notification } from 'ant-design-vue'
 import { NodeSource } from '@/views/admin/cloud/common'
 import { AppCutover, AppSatus } from '@/components/common'
 import { nodeCloudSources, nodeCloudSourceCutover, nodeDeleteCloudSource } from '@/api'
-import { HttpStatus, Source as SourceState, NodeCloudSourceResponse } from '@/types'
+import { HttpStatus, Source as SourceState, NodeCloudSource } from '@/types'
 import style from '@/style/admin/admin.source.module.less'
 
 @Component
 export default class Source extends Vue {
 	$refs!: { nodeSource: NodeSource }
 
-	private source: SourceState<Array<NodeCloudSourceResponse>> = {
+	private source: SourceState<Array<NodeCloudSource>> = {
 		column: [
 			{ title: '分类名称', width: '20%', scopedSlots: { customRender: 'name' } },
 			{ title: '备注', dataIndex: 'comment', align: 'center' },
@@ -108,13 +108,13 @@ export default class Source extends Vue {
 					onChange={source.onChange}
 					{...{
 						scopedSlots: {
-							name: (props: NodeCloudSourceResponse) => (
+							name: (props: NodeCloudSource) => (
 								<Tag color={props.color} style={{ marginLeft: '6px' }}>
 									{props.name}
 								</Tag>
 							),
-							status: (props: NodeCloudSourceResponse) => <AppSatus status={props.status}></AppSatus>,
-							action: (props: NodeCloudSourceResponse) => (
+							status: (props: NodeCloudSource) => <AppSatus status={props.status}></AppSatus>,
+							action: (props: NodeCloudSource) => (
 								<Button.Group>
 									<Button type="link" onClick={() => this.$refs.nodeSource.init('update', props.id)}>
 										编辑
