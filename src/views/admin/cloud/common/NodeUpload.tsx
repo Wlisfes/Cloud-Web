@@ -1,5 +1,5 @@
-import { Vue, Component } from 'vue-property-decorator'
-import { Icon, Progress, Spin } from 'ant-design-vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Icon, Progress } from 'ant-design-vue'
 import { AppCloud } from '@/components/common'
 import { AliyunUploadModule } from '@/utils/aliyun-upload'
 import style from '@/style/common/node.upload.module.less'
@@ -7,6 +7,9 @@ import style from '@/style/common/node.upload.module.less'
 @Component
 export default class NodeUpload extends Vue {
 	$refs!: { appCloud: AppCloud }
+
+	@Prop({ type: String }) uid!: string
+	@Prop({ type: String }) name!: string
 
 	private uploader!: AliyunUploadModule
 	private loading: boolean = false
@@ -21,6 +24,7 @@ export default class NodeUpload extends Vue {
 			fileName: file.name,
 			transfer: transfer,
 			onUploadstarted: () => {
+				this.$emit('start')
 				this.percent = 0
 				this.status = 'loading'
 				this.loading = true
@@ -66,7 +70,8 @@ export default class NodeUpload extends Vue {
 							></Icon>
 						</div>
 					)}
-					{this.fileNmae && (
+
+					{(this.name || this.fileNmae) && (
 						<div class={style['node-upload-conter']}>
 							<div class={style['app-node']}>
 								<div class={style['app-node-label']}>文件状态：</div>
@@ -74,13 +79,15 @@ export default class NodeUpload extends Vue {
 									{this.status === 'fail' ? (
 										<Progress percent={this.percent} status="exception"></Progress>
 									) : (
-										<Progress percent={this.percent}></Progress>
+										<Progress percent={this.name ? 100 : this.percent}></Progress>
 									)}
 								</div>
 							</div>
 							<div class={style['app-node']}>
 								<div class={style['app-node-label']}>文件名称：</div>
-								<div class={`${style['app-node-content']} app-ellipsis`}>{this.fileNmae}</div>
+								<div class={`${style['app-node-content']} app-ellipsis`}>
+									{this.name || this.fileNmae}
+								</div>
 							</div>
 						</div>
 					)}

@@ -14,7 +14,7 @@ export default class AppCloud extends Vue {
 		labelCol: { span: 4, style: { width: '100px' } },
 		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
 		form: {
-			title: '时光背面的我',
+			title: '',
 			file: null,
 			transfer: undefined,
 			name: ''
@@ -65,9 +65,10 @@ export default class AppCloud extends Vue {
 		setTimeout(() => {
 			this.loading = false
 			this.state.form = Object.assign(this.state.form, {
-				title: ''
-				// file: null,
-				// name: ''
+				title: '',
+				file: null,
+				transfer: undefined,
+				name: ''
 			})
 		}, 300)
 	}

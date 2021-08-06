@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button, Menu, Icon, Divider, Dropdown, notification, Popover } from 'ant-design-vue'
+import { Table, Tag, Button, Menu, Icon, Divider, notification } from 'ant-design-vue'
 import { NodeUser, NodeReset, NodeUserRole } from '@/views/admin/setup/common'
-import { AppRootNode, AppAvatar, AppSatus } from '@/components/common'
+import { AppRootNode, AppAvatar, AppSatus, AppPopover } from '@/components/common'
 import { nodeUsers, nodeUserCutover } from '@/api'
 import { HttpStatus, Source, NodeUserResponse } from '@/types'
 import style from '@/style/admin/admin.user.module.less'
@@ -71,7 +71,7 @@ export default class User extends Vue {
 	}
 
 	/**操作**/
-	private onAction(key: string, uid: number) {
+	private onChange(key: string, uid: number) {
 		switch (key) {
 			case 'update':
 				this.$refs.nodeUser.init('update', uid)
@@ -133,51 +133,22 @@ export default class User extends Vue {
 								status: (props: NodeUserResponse) => <AppSatus status={props.status}></AppSatus>,
 								action: (props: NodeUserResponse) => (
 									<Button.Group>
-										{/* <Dropdown placement="topRight" trigger={['click']}>
-										<Button type="link">操作</Button>
-										<Menu
-										slot="overlay"
-										onClick={({ key }: { key: string }) => this.onAction(key, props.uid)}
+										<AppPopover
+											onChange={(option: { key: string }) => this.onChange(option.key, props.uid)}
 										>
-										<Menu.Item key="update" style={{ color: '#1890ff' }}>
-										<Icon type="edit"></Icon>
-										<span>编辑</span>
-										</Menu.Item>
-										<Menu.Item key="role" style={{ color: '#fa8c16' }}>
-										<Icon type="safety"></Icon>
-										<span>权限</span>
-										</Menu.Item>
-										<Menu.Item key="reset" style={{ color: '#f5222d' }}>
-										<Icon type="reload"></Icon>
-										<span>重置密码</span>
-										</Menu.Item>
-										</Menu>
-									</Dropdown> */}
-										<Popover
-											trigger="click"
-											placement="topRight"
-											overlayClassName="app-popover"
-											getPopupContainer={() => this.$refs.conter}
-										>
-											<Menu
-												slot="content"
-												onClick={({ key }: { key: string }) => this.onAction(key, props.uid)}
-											>
-												<Menu.Item key="update" style={{ color: '#1890ff' }}>
-													<Icon type="edit"></Icon>
-													<span>编辑</span>
-												</Menu.Item>
-												<Menu.Item key="role" style={{ color: '#fa8c16' }}>
-													<Icon type="safety"></Icon>
-													<span>权限</span>
-												</Menu.Item>
-												<Menu.Item key="reset" style={{ color: '#f5222d' }}>
-													<Icon type="reload"></Icon>
-													<span>重置密码</span>
-												</Menu.Item>
-											</Menu>
-											<Button type="link">操作</Button>
-										</Popover>
+											<Menu.Item key="update" style={{ color: '#1890ff' }}>
+												<Icon type="edit"></Icon>
+												<span>编辑</span>
+											</Menu.Item>
+											<Menu.Item key="role" style={{ color: '#fa8c16' }}>
+												<Icon type="safety"></Icon>
+												<span>权限</span>
+											</Menu.Item>
+											<Menu.Item key="reset" style={{ color: '#f5222d' }}>
+												<Icon type="reload"></Icon>
+												<span>重置密码</span>
+											</Menu.Item>
+										</AppPopover>
 										<Divider type="vertical" style={{ margin: 'auto' }}></Divider>
 										<Button type="link" onClick={() => this.nodeUserCutover(props.uid)}>
 											{!!props.status ? (

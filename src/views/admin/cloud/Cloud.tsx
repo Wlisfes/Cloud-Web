@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Button, Tooltip, Tag, notification } from 'ant-design-vue'
+import { Table, Button, Tooltip, Tag, Menu, Icon, notification } from 'ant-design-vue'
 import { Image } from 'element-ui'
 import { NodeCloud } from '@/views/admin/cloud/common'
-import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
+import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
 import { nodeClouds, nodeCloudCutover, nodeDeleteCloud } from '@/api'
 import { HttpStatus, Source, NodeCloud as NodeCloudState } from '@/types'
 import style from '@/style/admin/admin.cloud.module.less'
@@ -20,7 +20,7 @@ export default class Cloud extends Vue {
 			{ title: '排序号', dataIndex: 'order', align: 'center', width: '7.5%' },
 			{ title: '媒体状态', align: 'center', width: '7.5%', scopedSlots: { customRender: 'status' } },
 			{ title: '创建时间', dataIndex: 'createTime', align: 'center', width: '13.5%' },
-			{ title: '操作', align: 'center', width: '13.5%', scopedSlots: { customRender: 'action' } }
+			{ title: '操作', align: 'center', width: '10%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
 		size: 10,
@@ -58,7 +58,7 @@ export default class Cloud extends Vue {
 		this.source.initSource()
 	}
 
-	/**删除分类标签**/
+	/**删除媒体**/
 	private async nodeDeleteCloud(id: number) {
 		try {
 			this.source.loading = true
@@ -72,7 +72,7 @@ export default class Cloud extends Vue {
 		}
 	}
 
-	/**切换分类标签状态**/
+	/**切换媒体状态**/
 	private async nodeCloudCutover(id: number) {
 		try {
 			this.source.loading = true
@@ -83,6 +83,21 @@ export default class Cloud extends Vue {
 			this.source.initSource()
 		} catch (e) {
 			this.source.onClose()
+		}
+	}
+
+	/**操作**/
+	private onChange(key: string, id: number) {
+		switch (key) {
+			case 'update':
+				this.$refs.nodeCloud.init('update', id)
+				break
+			case 'delete':
+				this.nodeDeleteCloud(id)
+				break
+			case 'preview':
+				// this.$refs.nodeUserRole.init(uid)
+				break
 		}
 	}
 
@@ -142,21 +157,24 @@ export default class Cloud extends Vue {
 								status: (props: NodeCloudState) => <AppSatus status={props.status}></AppSatus>,
 								action: (props: NodeCloudState) => (
 									<Button.Group>
-										<Button
-											type="link"
-											onClick={() => this.$refs.nodeCloud.init('update', props.id)}
+										<AppPopover
+											onChange={(option: { key: string }) => this.onChange(option.key, props.id)}
 										>
-											编辑
-										</Button>
+											<Menu.Item key="preview" style={{ color: '#13c2c2' }}>
+												<Icon type="video-camera"></Icon>
+												<span>预览</span>
+											</Menu.Item>
+											<Menu.Item key="update" style={{ color: '#1890ff' }}>
+												<Icon type="edit"></Icon>
+												<span>编辑</span>
+											</Menu.Item>
+											<Menu.Item key="delete" style={{ color: '#ff4d4f' }}>
+												<Icon type="delete"></Icon>
+												<span>删除</span>
+											</Menu.Item>
+										</AppPopover>
 										<Button type="link" onClick={() => this.nodeCloudCutover(props.id)}>
 											<AppCutover status={props.status}></AppCutover>
-										</Button>
-										<Button
-											type="link"
-											style={{ color: '#ff4d4f' }}
-											onClick={() => this.nodeDeleteCloud(props.id)}
-										>
-											删除
 										</Button>
 									</Button.Group>
 								)

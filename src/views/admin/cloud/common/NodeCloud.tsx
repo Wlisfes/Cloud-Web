@@ -41,11 +41,12 @@ export default class NodeSource extends Vue {
 		}
 	}
 
-	/**媒体上传成功回调**/
-	private onSubmitUpload(props: { key: string; path: string; file: File }) {
-		this.state.form.key = props.key
-		this.state.form.name = props.file.name
-		this.state.form.path = props.path
+	/**媒体上传操作**/
+	private onSubmitUpload(props?: { key: string; path: string; file: File }) {
+		this.state.form.key = props?.key || ''
+		this.state.form.path = props?.path || ''
+		this.state.form.name = props?.file.name || ''
+		this.state.form.size = props?.file.size || 0
 	}
 
 	/**分类标签列表**/
@@ -86,7 +87,10 @@ export default class NodeSource extends Vue {
 					status: data.status === 1,
 					order: data.order,
 					source: data.source.map(k => k.id),
-					parent: data.parent || undefined
+					parent: data.parent || undefined,
+					key: data.key,
+					name: data.name,
+					path: data.path
 				})
 			}
 			return data
@@ -187,7 +191,11 @@ export default class NodeSource extends Vue {
 				status: true,
 				order: 0,
 				source: [],
-				parent: undefined
+				parent: undefined,
+				size: 0,
+				key: '',
+				name: '',
+				path: ''
 			})
 		}, 300)
 	}
@@ -245,7 +253,11 @@ export default class NodeSource extends Vue {
 						{form.type === 1 && (
 							<div>
 								<FormModel.Item label="媒体文件" prop="key">
-									<NodeUpload onSubmit={this.onSubmitUpload}></NodeUpload>
+									<NodeUpload
+										name={form.name}
+										onSubmit={this.onSubmitUpload}
+										onStart={() => this.onSubmitUpload()}
+									></NodeUpload>
 								</FormModel.Item>
 								<FormModel.Item label="父级媒体">
 									<Select v-model={form.parent} allowClear show-search placeholder="父级媒体">
