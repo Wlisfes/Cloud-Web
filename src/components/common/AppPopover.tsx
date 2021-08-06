@@ -12,7 +12,13 @@ export default class AppPopover extends Vue {
 
 	protected render() {
 		return (
-			<Popover v-model={this.visible} trigger="click" placement="topRight" overlayClassName="app-popover">
+			<Popover
+				v-model={this.visible}
+				destroyTooltipOnHide
+				trigger="click"
+				placement="topRight"
+				overlayClassName="app-popover"
+			>
 				<Menu slot="content" onClick={this.onChange}>
 					{this.$slots.default}
 				</Menu>

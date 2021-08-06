@@ -2,14 +2,14 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Table, Button, Tooltip, Tag, Menu, Icon, notification } from 'ant-design-vue'
 import { Image } from 'element-ui'
 import { NodeCloud } from '@/views/admin/cloud/common'
-import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
+import { AppRootNode, AppPopover, AppCutover, AppSatus, AppPlayer } from '@/components/common'
 import { nodeClouds, nodeCloudCutover, nodeDeleteCloud } from '@/api'
 import { HttpStatus, Source, NodeCloud as NodeCloudState } from '@/types'
 import style from '@/style/admin/admin.cloud.module.less'
 
 @Component
 export default class Cloud extends Vue {
-	$refs!: { nodeCloud: NodeCloud }
+	$refs!: { nodeCloud: NodeCloud; player: AppPlayer }
 
 	private source: Source<Array<NodeCloudState>> = {
 		column: [
@@ -96,7 +96,7 @@ export default class Cloud extends Vue {
 				this.nodeDeleteCloud(id)
 				break
 			case 'preview':
-				// this.$refs.nodeUserRole.init(uid)
+				this.$refs.player.init(id)
 				break
 		}
 	}
@@ -108,6 +108,7 @@ export default class Cloud extends Vue {
 				<div class={style['app-conter']}>
 					<Button onClick={() => this.$refs.nodeCloud.init('create')}>Create</Button>
 					<NodeCloud ref="nodeCloud" onReplay={() => this.source.initSource()}></NodeCloud>
+					<AppPlayer ref="player"></AppPlayer>
 
 					<Table
 						class="app-source is-title"

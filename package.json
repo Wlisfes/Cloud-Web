@@ -14,6 +14,7 @@
 		"core-js": "^3.6.5",
 		"cropperjs": "^1.5.12",
 		"element-ui": "^2.15.5",
+		"flv.js": "^1.6.1",
 		"js-cookie": "^2.2.1",
 		"nprogress": "^0.2.0",
 		"vue": "^2.6.11",
@@ -26,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@types/ali-oss": "^6.0.10",
+		"@types/dplayer": "^1.25.2",
 		"@types/js-cookie": "^2.2.6",
 		"@types/nprogress": "^0.2.0",
 		"@typescript-eslint/eslint-plugin": "^4.18.0",

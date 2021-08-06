@@ -12,6 +12,7 @@ export default class NodeSource extends Vue {
 
 	private visible: boolean = false
 	private loading: boolean = false
+	private upload: boolean = false
 	private active: string = 'create'
 	private sources: NodeCloudSource[] = []
 	private multiple: NodeCloud[] = []
@@ -47,6 +48,7 @@ export default class NodeSource extends Vue {
 		this.state.form.path = props?.path || ''
 		this.state.form.name = props?.file.name || ''
 		this.state.form.size = props?.file.size || 0
+		this.upload = props?.key ? false : true
 	}
 
 	/**分类标签列表**/
@@ -316,7 +318,12 @@ export default class NodeSource extends Vue {
 				</Spin>
 				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
 					<Button onClick={this.onClose}>取消</Button>
-					<Button type="primary" disabled={this.loading} loading={this.loading} onClick={this.onSubmit}>
+					<Button
+						type="primary"
+						disabled={this.upload || this.loading}
+						loading={this.loading}
+						onClick={this.onSubmit}
+					>
 						确定
 					</Button>
 				</div>
