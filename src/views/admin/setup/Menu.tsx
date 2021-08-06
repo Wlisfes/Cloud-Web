@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Button, Table, Icon, Tag, Popconfirm, notification } from 'ant-design-vue'
 import { NodeMenu } from '@/views/admin/setup/common'
-import { AppSatus } from '@/components/common'
+import { AppRootNode, AppSatus } from '@/components/common'
 import { nodeMenus, nodeDeleteMenu } from '@/api'
 import { HttpStatus, Source, NodeMenuParameter } from '@/types'
 
@@ -64,7 +64,7 @@ export default class Menu extends Vue {
 		const { source } = this
 
 		return (
-			<div style={{ padding: '10px' }}>
+			<AppRootNode>
 				<Button onClick={() => this.$refs.nodeMenu.init('create')}>Create</Button>
 				<NodeMenu ref="nodeMenu" onReplay={() => this.source.initSource()}></NodeMenu>
 
@@ -153,7 +153,7 @@ export default class Menu extends Vue {
 						}
 					}}
 				></Table>
-			</div>
+			</AppRootNode>
 		)
 	}
 }

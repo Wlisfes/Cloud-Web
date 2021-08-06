@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button, notification } from 'ant-design-vue'
+import { Table, Button, notification } from 'ant-design-vue'
 import { NodeRole } from '@/views/admin/setup/common'
-import { AppSatus } from '@/components/common'
+import { AppRootNode, AppSatus } from '@/components/common'
 import { nodeRoles, nodeRoleCutover } from '@/api'
 import { HttpStatus, Source, NodeRoleResponse } from '@/types'
 
@@ -68,7 +68,7 @@ export default class Role extends Vue {
 	protected render() {
 		const { source } = this
 		return (
-			<div style={{ padding: '10px' }}>
+			<AppRootNode>
 				<NodeRole ref="nodeRole" onReplay={() => this.source.initSource()}></NodeRole>
 
 				<Table
@@ -107,7 +107,7 @@ export default class Role extends Vue {
 						}
 					}}
 				></Table>
-			</div>
+			</AppRootNode>
 		)
 	}
 }

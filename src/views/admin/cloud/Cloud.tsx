@@ -2,7 +2,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Table, Button, Tooltip, Tag, notification } from 'ant-design-vue'
 import { Image } from 'element-ui'
 import { NodeCloud } from '@/views/admin/cloud/common'
-import { AppCutover, AppSatus } from '@/components/common'
+import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
 import { nodeClouds, nodeCloudCutover, nodeDeleteCloud } from '@/api'
 import { HttpStatus, Source, NodeCloud as NodeCloudState } from '@/types'
 import style from '@/style/admin/admin.cloud.module.less'
@@ -89,77 +89,82 @@ export default class Cloud extends Vue {
 	protected render() {
 		const { source } = this
 		return (
-			<div class={style['app-conter']}>
-				<Button onClick={() => this.$refs.nodeCloud.init('create')}>Create</Button>
-				<NodeCloud ref="nodeCloud" onReplay={() => this.source.initSource()}></NodeCloud>
+			<AppRootNode>
+				<div class={style['app-conter']}>
+					<Button onClick={() => this.$refs.nodeCloud.init('create')}>Create</Button>
+					<NodeCloud ref="nodeCloud" onReplay={() => this.source.initSource()}></NodeCloud>
 
-				<Table
-					class="app-source"
-					bordered
-					rowKey={(record: any) => record.id}
-					loading={source.loading}
-					columns={source.column}
-					dataSource={source.dataSource}
-					scroll={{ x: 1080 }}
-					pagination={{
-						pageSize: source.size,
-						current: source.page,
-						pageSizeOptions: source.sizeOption,
-						showSizeChanger: source.showSize,
-						total: source.total
-					}}
-					onChange={source.onChange}
-					{...{
-						scopedSlots: {
-							cover: (props: NodeCloudState) => (
-								<div class={style['app-conter-cover']}>
-									<Image
-										alt={props.title}
-										fit="cover"
-										src={`${props.cover}?x-oss-process=style/resize`}
-										style={{ width: '96px', height: '54px', cursor: 'pointer' }}
-									></Image>
-								</div>
-							),
-							title: (props: NodeCloudState) => (
-								<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
-									<Tooltip title={props.title}>{props.title}</Tooltip>
-								</div>
-							),
-							type: (props: NodeCloudState) => {
-								return props.type === 1 ? (
-									<Tag color="red">单集媒体</Tag>
-								) : (
-									<Tag color="cyan">多集媒体</Tag>
+					<Table
+						class="app-source is-title"
+						bordered
+						rowKey={(record: any) => record.id}
+						loading={source.loading}
+						columns={source.column}
+						dataSource={source.dataSource}
+						scroll={{ x: 1080 }}
+						pagination={{
+							pageSize: source.size,
+							current: source.page,
+							pageSizeOptions: source.sizeOption,
+							showSizeChanger: source.showSize,
+							total: source.total
+						}}
+						onChange={source.onChange}
+						{...{
+							scopedSlots: {
+								cover: (props: NodeCloudState) => (
+									<div class={style['app-conter-cover']}>
+										<Image
+											alt={props.title}
+											fit="cover"
+											src={`${props.cover}?x-oss-process=style/resize`}
+											style={{ width: '96px', height: '54px', cursor: 'pointer' }}
+										></Image>
+									</div>
+								),
+								title: (props: NodeCloudState) => (
+									<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
+										<Tooltip title={props.title}>{props.title}</Tooltip>
+									</div>
+								),
+								type: (props: NodeCloudState) => {
+									return props.type === 1 ? (
+										<Tag color="red">单集媒体</Tag>
+									) : (
+										<Tag color="cyan">多集媒体</Tag>
+									)
+								},
+								description: (props: NodeCloudState) => (
+									<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
+										<Tooltip title={props.description}>{props.description}</Tooltip>
+									</div>
+								),
+								status: (props: NodeCloudState) => <AppSatus status={props.status}></AppSatus>,
+								action: (props: NodeCloudState) => (
+									<Button.Group>
+										<Button
+											type="link"
+											onClick={() => this.$refs.nodeCloud.init('update', props.id)}
+										>
+											编辑
+										</Button>
+										<Button type="link" onClick={() => this.nodeCloudCutover(props.id)}>
+											<AppCutover status={props.status}></AppCutover>
+										</Button>
+										<Button
+											type="link"
+											style={{ color: '#ff4d4f' }}
+											onClick={() => this.nodeDeleteCloud(props.id)}
+										>
+											删除
+										</Button>
+									</Button.Group>
 								)
-							},
-							description: (props: NodeCloudState) => (
-								<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
-									<Tooltip title={props.description}>{props.description}</Tooltip>
-								</div>
-							),
-							status: (props: NodeCloudState) => <AppSatus status={props.status}></AppSatus>,
-							action: (props: NodeCloudState) => (
-								<Button.Group>
-									<Button type="link" onClick={() => this.$refs.nodeCloud.init('update', props.id)}>
-										编辑
-									</Button>
-									<Button type="link" onClick={() => this.nodeCloudCutover(props.id)}>
-										<AppCutover status={props.status}></AppCutover>
-									</Button>
-									<Button
-										type="link"
-										style={{ color: '#ff4d4f' }}
-										onClick={() => this.nodeDeleteCloud(props.id)}
-									>
-										删除
-									</Button>
-								</Button.Group>
-							)
-						}
-					}}
-				></Table>
-			</div>
+							}
+						}}
+					></Table>
+				</div>
+			</AppRootNode>
 		)
 	}
 }

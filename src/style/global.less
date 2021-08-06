@@ -4,9 +4,15 @@
 	flex-direction: column;
 	padding: 15px;
 	background-color: #ffffff;
+	position: relative;
 }
 
 .app-source {
+	&.is-title {
+		.ant-table-title {
+			display: none;
+		}
+	}
 	table {
 		border-radius: 0 !important;
 		thead {

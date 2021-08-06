@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button, notification } from 'ant-design-vue'
 import { NodeSource } from '@/views/admin/cloud/common'
-import { AppCutover, AppSatus } from '@/components/common'
+import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
 import { nodeCloudSources, nodeCloudSourceCutover, nodeDeleteCloudSource } from '@/api'
 import { HttpStatus, Source as SourceState, NodeCloudSource } from '@/types'
 import style from '@/style/admin/admin.source.module.less'
@@ -86,55 +86,60 @@ export default class Source extends Vue {
 	protected render() {
 		const { source } = this
 		return (
-			<div class={style['app-conter']}>
-				<Button onClick={() => this.$refs.nodeSource.init('create')}>Create</Button>
-				<NodeSource ref="nodeSource" onReplay={() => this.source.initSource()}></NodeSource>
+			<AppRootNode>
+				<div class={style['app-conter']}>
+					<Button onClick={() => this.$refs.nodeSource.init('create')}>Create</Button>
+					<NodeSource ref="nodeSource" onReplay={() => this.source.initSource()}></NodeSource>
 
-				<Table
-					class="app-source"
-					bordered
-					rowKey={(record: any) => record.id}
-					loading={source.loading}
-					columns={source.column}
-					dataSource={source.dataSource}
-					scroll={{ x: 800 }}
-					pagination={{
-						pageSize: source.size,
-						current: source.page,
-						pageSizeOptions: source.sizeOption,
-						showSizeChanger: source.showSize,
-						total: source.total
-					}}
-					onChange={source.onChange}
-					{...{
-						scopedSlots: {
-							name: (props: NodeCloudSource) => (
-								<Tag color={props.color} style={{ marginLeft: '6px' }}>
-									{props.name}
-								</Tag>
-							),
-							status: (props: NodeCloudSource) => <AppSatus status={props.status}></AppSatus>,
-							action: (props: NodeCloudSource) => (
-								<Button.Group>
-									<Button type="link" onClick={() => this.$refs.nodeSource.init('update', props.id)}>
-										编辑
-									</Button>
-									<Button type="link" onClick={() => this.nodeCloudSourceCutover(props.id)}>
-										<AppCutover status={props.status}></AppCutover>
-									</Button>
-									<Button
-										type="link"
-										style={{ color: '#ff4d4f' }}
-										onClick={() => this.nodeDeleteCloudSource(props.id)}
-									>
-										删除
-									</Button>
-								</Button.Group>
-							)
-						}
-					}}
-				></Table>
-			</div>
+					<Table
+						class="app-source"
+						bordered
+						rowKey={(record: any) => record.id}
+						loading={source.loading}
+						columns={source.column}
+						dataSource={source.dataSource}
+						scroll={{ x: 800 }}
+						pagination={{
+							pageSize: source.size,
+							current: source.page,
+							pageSizeOptions: source.sizeOption,
+							showSizeChanger: source.showSize,
+							total: source.total
+						}}
+						onChange={source.onChange}
+						{...{
+							scopedSlots: {
+								name: (props: NodeCloudSource) => (
+									<Tag color={props.color} style={{ marginLeft: '6px' }}>
+										{props.name}
+									</Tag>
+								),
+								status: (props: NodeCloudSource) => <AppSatus status={props.status}></AppSatus>,
+								action: (props: NodeCloudSource) => (
+									<Button.Group>
+										<Button
+											type="link"
+											onClick={() => this.$refs.nodeSource.init('update', props.id)}
+										>
+											编辑
+										</Button>
+										<Button type="link" onClick={() => this.nodeCloudSourceCutover(props.id)}>
+											<AppCutover status={props.status}></AppCutover>
+										</Button>
+										<Button
+											type="link"
+											style={{ color: '#ff4d4f' }}
+											onClick={() => this.nodeDeleteCloudSource(props.id)}
+										>
+											删除
+										</Button>
+									</Button.Group>
+								)
+							}
+						}}
+					></Table>
+				</div>
+			</AppRootNode>
 		)
 	}
 }
