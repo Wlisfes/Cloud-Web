@@ -41,6 +41,13 @@ export default class NodeSource extends Vue {
 		}
 	}
 
+	/**媒体上传成功回调**/
+	private onSubmitUpload(props: { key: string; path: string; file: File }) {
+		this.state.form.key = props.key
+		this.state.form.name = props.file.name
+		this.state.form.path = props.path
+	}
+
 	/**分类标签列表**/
 	private async nodeCloudSources() {
 		try {
@@ -238,7 +245,7 @@ export default class NodeSource extends Vue {
 						{form.type === 1 && (
 							<div>
 								<FormModel.Item label="媒体文件" prop="key">
-									<NodeUpload></NodeUpload>
+									<NodeUpload onSubmit={this.onSubmitUpload}></NodeUpload>
 								</FormModel.Item>
 								<FormModel.Item label="父级媒体">
 									<Select v-model={form.parent} allowClear show-search placeholder="父级媒体">

@@ -11,8 +11,6 @@ export default class AppCover extends Vue {
 	@Prop({ type: Number, default: 1 }) ratio!: number
 	@Prop({ type: String, default: 'avatar' }) path!: 'avatar' | 'upload' | 'cover'
 
-	private visible: boolean = false
-
 	protected render() {
 		return (
 			<div class={style['app-cover']}>

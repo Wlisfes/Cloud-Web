@@ -1,5 +1,8 @@
 .node-upload {
 	display: flex;
+	@media (max-width: 600px) {
+		flex-direction: column;
+	}
 	&-action {
 		width: 100px;
 		height: 100px;
@@ -19,12 +22,18 @@
 	}
 	&-conter {
 		flex: 1;
-
+		@media (max-width: 600px) {
+			margin-top: 8px;
+			line-height: 24px;
+		}
 		.app-node {
 			display: flex;
 			&-label {
-				width: 100px;
+				margin-left: 15px;
 				text-align: right;
+				@media (max-width: 600px) {
+					margin: 0;
+				}
 			}
 			&-content {
 				flex: 1;
