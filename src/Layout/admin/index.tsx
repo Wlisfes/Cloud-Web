@@ -9,6 +9,16 @@ export default class Index extends Vue {
 	@Getter('base/mobile') mobile!: boolean
 	@Getter('base/collapsed') collapsed!: boolean
 
+	private distance(): number {
+		if (this.mobile) {
+			return 0
+		} else if (this.collapsed) {
+			return 80
+		} else {
+			return 220
+		}
+	}
+
 	protected mounted() {
 		this.onLayout()
 		window.addEventListener('resize', this.onLayout)
@@ -61,7 +71,7 @@ export default class Index extends Vue {
 					<AppMenu></AppMenu>
 				</Layout.Sider>
 				<Layout style={{ backgroundColor: '#ededed' }}>
-					<Layout.Header>
+					<Layout.Header style={{ left: this.distance() + 'px' }}>
 						<div class="ant-layout-header-conter">
 							<Icon
 								class="app-admin-container-trigger"
@@ -73,7 +83,7 @@ export default class Index extends Vue {
 						<AppMultiple></AppMultiple>
 					</Layout.Header>
 
-					<Layout.Content style={{ margin: '15px', backgroundColor: '#fff' }}>
+					<Layout.Content style={{ marginTop: '101px', backgroundColor: '#ededed' }}>
 						<router-view></router-view>
 					</Layout.Content>
 				</Layout>
