@@ -70,7 +70,7 @@ export default class NodeUser extends Vue {
 		return (
 			<Modal
 				title="重置密码"
-				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
+				dialogStyle={{ maxWidth: '95%' }}
 				v-model={state.visible}
 				width={480}
 				destroyOnClose

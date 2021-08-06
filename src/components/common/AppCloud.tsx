@@ -62,7 +62,7 @@ export default class AppCloud extends Vue {
 		return (
 			<Modal
 				title="上传媒体"
-				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
+				dialogStyle={{ maxWidth: '95%' }}
 				v-model={this.visible}
 				width={680}
 				destroyOnClose

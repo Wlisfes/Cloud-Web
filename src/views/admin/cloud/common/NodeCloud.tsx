@@ -34,8 +34,10 @@ export default class NodeSource extends Vue {
 			path: ''
 		},
 		rules: {
-			name: [{ required: true, message: '请输入分类标签名称', trigger: 'blur' }],
-			color: [{ required: true, message: '请选择分类标签颜色', trigger: 'blur' }]
+			title: [{ required: true, message: '请输入媒体标题', trigger: 'blur' }],
+			cover: [{ required: true, message: '请上传媒体封面', trigger: 'blur' }],
+			status: [{ required: true, message: '请选择媒体状态', trigger: 'blur' }],
+			key: [{ required: true, message: '请上传媒体文件', trigger: 'blur' }]
 		}
 	}
 
@@ -204,7 +206,7 @@ export default class NodeSource extends Vue {
 		return (
 			<Modal
 				title={this.active === 'create' ? '新增' : '编辑'}
-				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
+				dialogStyle={{ maxWidth: '95%' }}
 				v-model={this.visible}
 				width={880}
 				centered
@@ -235,7 +237,7 @@ export default class NodeSource extends Vue {
 						</FormModel.Item>
 						{form.type === 1 && (
 							<div>
-								<FormModel.Item label="媒体文件" prop="cover">
+								<FormModel.Item label="媒体文件" prop="key">
 									<NodeUpload></NodeUpload>
 								</FormModel.Item>
 								<FormModel.Item label="父级媒体">
@@ -283,7 +285,7 @@ export default class NodeSource extends Vue {
 						<FormModel.Item label="排序号">
 							<InputNumber v-model={form.order} placeholder="排序号"></InputNumber>
 						</FormModel.Item>
-						<FormModel.Item label="媒体状态">
+						<FormModel.Item label="媒体状态" prop="status">
 							<Switch
 								v-model={form.status}
 								checked-children="开"

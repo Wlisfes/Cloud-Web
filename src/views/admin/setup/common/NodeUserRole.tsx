@@ -106,7 +106,7 @@ export default class NodeUserRole extends Vue {
 		return (
 			<Modal
 				title="权限"
-				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
+				dialogStyle={{ maxWidth: '95%' }}
 				v-model={this.visible}
 				width={880}
 				destroyOnClose

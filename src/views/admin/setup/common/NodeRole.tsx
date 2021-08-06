@@ -99,7 +99,7 @@ export default class NodeRole extends Vue {
 		return (
 			<Modal
 				title="title"
-				dialogStyle={{ maxWidth: 'calc(100vw - 16px)' }}
+				dialogStyle={{ maxWidth: '95%' }}
 				v-model={state.visible}
 				width={880}
 				destroyOnClose
