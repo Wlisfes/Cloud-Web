@@ -3,7 +3,7 @@ export type NodeAliyun = {
 	Title: string
 	FileName: string
 	TemplateGroupId: string
-
+	AuthTimeout: number
 	UploadAddress: string
 	RequestId: string
 	UploadAuth: string
@@ -19,6 +19,40 @@ export type NodeTransfer = {
 	TranscodeMode: string
 	ModifyTime: string
 	CreationTime: string
+}
+
+/**基础信息**/
+export type NodeBaseAliyun = {
+	VideoId: string
+	CoverURL: string
+	Duration: number
+	MediaType: string
+	OutputType: string
+	Status: string
+	Title: string
+	TranscodeMode: string
+	CreationTime: string
+}
+/**播放信息列表**/
+export type NodeAliyunPlay = {
+	Bitrate: string
+	CreationTime: string
+	Definition: string
+	Duration: string
+	Encrypt: number
+	Format: string
+	Fps: string
+	Height: number
+	JobId: string
+	ModificationTime: string
+	NarrowBandType: string
+	PlayURL: string
+	PreprocessStatus: string
+	Size: number
+	Specification: string
+	Status: string
+	StreamType: string
+	Width: number
 }
 
 /**
@@ -47,3 +81,12 @@ export type NodeRefreshAliyunUploadResponse = Pick<NodeAliyun, 'VideoId' | 'Requ
  * 转码模板
  */
 export type NodeAliyunTransferResponse = Pick<NodeAliyun, 'VideoId'> & { list: NodeTransfer[] }
+
+/**
+ * 获取播放信息
+ */
+export type NodeAliyunPlayParameter = Pick<NodeAliyun, 'VideoId' | 'AuthTimeout'>
+export type NodeAliyunPlayResponse = Pick<NodeAliyun, 'RequestId'> & {
+	base: NodeBaseAliyun
+	list: NodeAliyunPlay[]
+}

@@ -1,20 +1,41 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Modal, Spin } from 'ant-design-vue'
-import { DPlayer, Flv } from '@/components/common'
-import { nodeCloud } from '@/api'
-import { HttpStatus } from '@/types'
+import { DPlayer, AppSelectNode } from '@/components/common'
+import { nodeCloud, nodeAliyunPlay } from '@/api'
+import { HttpStatus, NodeCloud } from '@/types'
+import { initPlayer, initCutover } from '@/utils/aliyun-player'
 import style from '@/style/common/app.player.module.less'
+import { DPlayerEvents } from 'dplayer'
+
+type Current = {
+	path: string
+	cover: string
+	key: string
+}
+
+type State = {
+	title: string
+	type: number
+	dataSource: NodeCloud[]
+}
 
 @Component
 export default class AppPlayer extends Vue {
 	$refs!: { player: HTMLElement }
 
+	private player!: DPlayer | null
+	private node!: AppSelectNode | null
 	private visible: boolean = false
 	private loading: boolean = false
-	private state = {
+	private state: State = {
 		title: '',
+		type: 0,
+		dataSource: []
+	}
+	private current: Current = {
+		path: '',
 		cover: '',
-		path: ''
+		key: ''
 	}
 
 	/**音视频信息**/
@@ -22,11 +43,24 @@ export default class AppPlayer extends Vue {
 		try {
 			const { code, data } = await nodeCloud({ id })
 			if (code === HttpStatus.OK) {
-				console.log(data)
+				if (data.type === 1) {
+					this.current = Object.assign(this.current, {
+						cover: `${data.cover}?x-oss-process=style/resize`,
+						path: data.path,
+						key: data.key
+					})
+				} else if (data.children.length > 0) {
+					const props = data.children[0]
+					this.current = Object.assign(this.current, {
+						cover: `${props.cover}?x-oss-process=style/resize`,
+						path: props.path,
+						key: props.key
+					})
+				}
 				this.state = Object.assign(this.state, {
+					type: data.type,
 					title: data.title,
-					cover: `${data.cover}?x-oss-process=style/resize`,
-					path: data.path
+					dataSource: data.children
 				})
 			}
 			return data
@@ -36,27 +70,73 @@ export default class AppPlayer extends Vue {
 	}
 
 	/**初始化播放器**/
-	private initPlayer() {
-		const { state } = this
-		new DPlayer({
-			container: this.$refs.player,
-			theme: '#fb7299',
-			lang: 'zh-cn',
-			video: {
-				url: state.path,
-				pic: state.cover,
-				type: 'customFlv',
-				customType: {
-					customFlv: (video: HTMLVideoElement) => {
-						const player = Flv.createPlayer({
-							type: 'flv',
-							url: video.src
-						})
-						player.attachMediaElement(video)
-						player.load()
-					}
-				}
+	private createPlayer() {
+		return new Promise(resolve => {
+			const { current } = this
+			if (this.player) {
+				this.player = null
 			}
+
+			nodeAliyunPlay({ VideoId: current.key, AuthTimeout: 24 * 60 * 60 })
+				.then(({ code, data }) => {
+					if (code === HttpStatus.OK) {
+						const { list } = data
+						if (list.length > 0) {
+							const props = list[0]
+							this.current.path = props.PlayURL
+						}
+					}
+				})
+				.catch(e => {})
+				.finally(() => {
+					this.player = initPlayer({
+						container: this.$refs.player,
+						url: current.path,
+						cover: current.cover
+					})
+					resolve(this.player)
+				})
+		})
+	}
+
+	/**初始化选集组件**/
+	private createCutover() {
+		const { current, state } = this
+		if (this.node) {
+			this.node.$el.remove()
+			this.node = null
+		}
+		initCutover({
+			player: this.$refs.player,
+			dataSource: state.dataSource,
+			onSubmit: (props: NodeCloud) => {
+				this.current = Object.assign(this.current, {
+					path: props.path,
+					cover: props.cover,
+					key: props.key
+				})
+				this.$nextTick(() => this.createPlayer().then(() => this.createCutover()))
+			}
+		}).then(({ insert, node }) => {
+			insert()
+			node.change(current.key)
+			this.node = node
+
+			/**播放结束自动下一集**/
+			this.$nextTick(() => {
+				this.player?.on('ended' as DPlayerEvents, () => {
+					const index = state.dataSource.findIndex(k => k.key === current.key)
+					if (index < state.dataSource.length - 1) {
+						const props = state.dataSource[index + 1]
+						this.current = Object.assign(current, {
+							cover: `${props.cover}?x-oss-process=style/resize`,
+							path: props.path,
+							key: props.key
+						})
+						this.$nextTick(() => this.createPlayer().then(() => this.createCutover()))
+					}
+				})
+			})
 		})
 	}
 
@@ -65,10 +145,18 @@ export default class AppPlayer extends Vue {
 		try {
 			this.loading = true
 			this.visible = true
-			await this.nodeCloud(id)
-			this.$nextTick(() => {
-				this.initPlayer()
-				this.loading = false
+			await this.nodeCloud(id).finally(() => {
+				const { current, state } = this
+				this.$nextTick(() => {
+					if (current.key) {
+						this.createPlayer().then(() => {
+							if (state.type === 2) {
+								this.createCutover()
+							}
+						})
+					}
+					this.loading = false
+				})
 			})
 		} catch (e) {
 			this.loading = false
@@ -81,17 +169,24 @@ export default class AppPlayer extends Vue {
 		setTimeout(() => {
 			this.loading = false
 			this.state = Object.assign(this.state, {
-				title: ''
+				title: '',
+				type: 0,
+				dataSource: []
+			})
+			this.current = Object.assign(this.current, {
+				cover: '',
+				path: '',
+				key: ''
 			})
 		}, 300)
 	}
 
 	protected render() {
-		const { state } = this
 		return (
 			<Modal
-				title={state.title}
-				dialogStyle={{ maxWidth: '95%' }}
+				title={this.state.title}
+				dialogStyle={{ maxWidth: '95%', paddingBottom: 0 }}
+				bodyStyle={{ padding: 0 }}
 				v-model={this.visible}
 				width={1080}
 				centered

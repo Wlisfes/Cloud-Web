@@ -34,3 +34,12 @@ export function nodeAliyunTransfer() {
 		method: 'GET'
 	})
 }
+
+/**获取播放信息**/
+export function nodeAliyunPlay(params: types.NodeAliyunPlayParameter) {
+	return request<types.NodeAliyunPlayResponse>({
+		url: `/api/aliyun/play-info`,
+		method: 'GET',
+		params
+	})
+}
