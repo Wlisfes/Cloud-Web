@@ -31,8 +31,8 @@ export default class NodeUpload extends Vue {
 			},
 			onUploadSucceed: (props: any) => {
 				this.$emit('submit', {
-					key: `${process.env.VUE_APP_BASE_CLOUD || '/'}${props.videoId}`,
-					path: props.object,
+					key: props.videoId,
+					path: `${process.env.VUE_APP_BASE_CLOUD}${props.object}`,
 					file
 				})
 				this.status = 'success'

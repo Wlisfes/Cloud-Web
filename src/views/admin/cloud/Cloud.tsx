@@ -109,7 +109,8 @@ export default class Cloud extends Vue {
 					<NodeCloud ref="nodeCloud" onReplay={() => this.source.initSource()}></NodeCloud>
 					<AppPlayer ref="player"></AppPlayer>
 
-					<Button onClick={() => this.$refs.nodeCloud.init('create')}>Create</Button>
+					<Button onClick={() => this.$refs.nodeCloud.init('create')}>新增</Button>
+					<Button onClick={() => this.source.initSource()}>刷新</Button>
 
 					<Table
 						class="app-source is-title"
