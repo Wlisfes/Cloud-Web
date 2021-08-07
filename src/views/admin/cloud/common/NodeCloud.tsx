@@ -89,7 +89,7 @@ export default class NodeSource extends Vue {
 					status: data.status === 1,
 					order: data.order,
 					source: data.source.map(k => k.id),
-					parent: data.parent || undefined,
+					parent: data.parent?.id || undefined,
 					key: data.key,
 					name: data.name,
 					path: data.path
