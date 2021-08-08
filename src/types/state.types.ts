@@ -10,6 +10,8 @@ export type Source<T> = {
 	dataSource: T
 	initSource: () => void
 	onClose: () => void
+	onSearch?: () => void
+	onReset?: () => void
 	onChange?: (
 		pagination: {
 			current: number

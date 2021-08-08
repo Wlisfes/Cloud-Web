@@ -59,7 +59,7 @@ export type NodeCloudNodeResponse = NodeCloud
  * 音视频列表
  */
 export type NodeCloudsParameter = Pick<NodeCloudParameter, 'page' | 'size'> &
-	Partial<Pick<NodeCloudParameter, 'status' | 'type'>>
+	Partial<Pick<NodeCloudParameter, 'status' | 'type' | 'title'>>
 export type NodeCloudsResponse = Pick<NodeCloudParameter, 'page' | 'size' | 'total'> & {
 	list: NodeCloud[]
 }

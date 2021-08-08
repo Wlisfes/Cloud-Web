@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Button, Tooltip, Tag, Menu, Icon, notification } from 'ant-design-vue'
+import { Table, Button, Tooltip, Tag, Menu, Icon, FormModel, Input, Select, notification } from 'ant-design-vue'
 import { Image } from 'element-ui'
 import { NodeCloud } from '@/views/admin/cloud/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus, AppPlayer } from '@/components/common'
@@ -7,11 +7,19 @@ import { nodeClouds, nodeCloudCutover, nodeDeleteCloud } from '@/api'
 import { HttpStatus, Source, NodeCloud as NodeCloudState } from '@/types'
 import style from '@/style/admin/admin.cloud.module.less'
 
+type SourceOption = {
+	option: {
+		status: number | undefined
+		type: number | undefined
+		title: string | undefined
+	}
+}
+
 @Component
 export default class Cloud extends Vue {
 	$refs!: { nodeCloud: NodeCloud; player: AppPlayer }
 
-	private source: Source<Array<NodeCloudState>> = {
+	private source: Source<Array<NodeCloudState>> & SourceOption = {
 		column: [
 			{ title: '媒体封面', align: 'center', width: 125, scopedSlots: { customRender: 'cover' } },
 			{ title: '媒体标题', width: '18%', scopedSlots: { customRender: 'title' } },
@@ -29,12 +37,21 @@ export default class Cloud extends Vue {
 		showSize: true,
 		loading: true,
 		dataSource: [],
+		option: {
+			status: undefined,
+			type: undefined,
+			title: undefined
+		},
 		initSource: async () => {
 			try {
 				this.source.loading = true
+				const { source } = this
 				const { code, data } = await nodeClouds({
-					page: this.source.page,
-					size: this.source.size
+					page: source.page,
+					size: source.size,
+					status: source.option.status,
+					type: source.option.type,
+					title: source.option.title
 				})
 				if (code === HttpStatus.OK) {
 					this.source.total = data.total
@@ -49,8 +66,19 @@ export default class Cloud extends Vue {
 		onChange: pagination => {
 			this.source.page = pagination.current
 			this.source.size = pagination.pageSize
-			this.source.loading = true
-			this.$nextTick(() => this.source.initSource())
+			this.source.initSource()
+		},
+		onReset: () => {
+			this.source.option.title = undefined
+			this.source.option.status = undefined
+			this.source.option.type = undefined
+			this.source.onSearch?.()
+		},
+		onSearch: () => {
+			this.source.page = 1
+			this.source.size = 10
+			this.source.total = 0
+			this.source.initSource()
 		}
 	}
 
@@ -109,8 +137,54 @@ export default class Cloud extends Vue {
 					<NodeCloud ref="nodeCloud" onReplay={() => this.source.initSource()}></NodeCloud>
 					<AppPlayer ref="player"></AppPlayer>
 
-					<Button onClick={() => this.$refs.nodeCloud.init('create')}>新增</Button>
-					<Button onClick={() => this.source.initSource()}>刷新</Button>
+					<FormModel layout="inline" class={style['node-source']}>
+						<div class="node-source-item inline-50">
+							<FormModel.Item>
+								<Select
+									v-model={source.option.type}
+									allowClear
+									placeholder="媒体类型"
+									style={{ minWidth: '120px' }}
+								>
+									<Select.Option value={1}>单级媒体</Select.Option>
+									<Select.Option value={2}>多级媒体</Select.Option>
+								</Select>
+							</FormModel.Item>
+							<FormModel.Item>
+								<Select
+									v-model={source.option.status}
+									allowClear
+									placeholder="媒体状态"
+									style={{ minWidth: '120px' }}
+								>
+									<Select.Option value={0}>已禁用</Select.Option>
+									<Select.Option value={1}>已启用</Select.Option>
+									<Select.Option value={2}>已删除</Select.Option>
+								</Select>
+							</FormModel.Item>
+						</div>
+						<div class="node-source-item inline-100">
+							<FormModel.Item>
+								<Input v-model={source.option.title} allowClear placeholder="媒体标题"></Input>
+							</FormModel.Item>
+						</div>
+						<FormModel.Item>
+							<Button type="primary" onClick={this.source.onSearch}>
+								查找
+							</Button>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Button onClick={this.source.onReset}>重置</Button>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Button type="primary" onClick={() => this.$refs.nodeCloud.init('create')}>
+								新增
+							</Button>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Button onClick={() => this.source.initSource()}>刷新</Button>
+						</FormModel.Item>
+					</FormModel>
 
 					<Table
 						class="app-source is-title"
