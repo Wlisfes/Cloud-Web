@@ -4,6 +4,7 @@ import { NodeCloud } from '@/types'
 
 @Component
 export default class AppSelectNode extends Vue {
+	@Prop({ type: Number, default: 100 }) maxHeight!: number
 	@Prop({ type: Function }) submit!: (option?: any) => void
 	@Prop({ type: Array, default: () => [] }) dataSource!: NodeCloud[]
 
@@ -21,7 +22,7 @@ export default class AppSelectNode extends Vue {
 				placement="top"
 				mouseLeaveDelay={0.2}
 			>
-				<div class="app-select" slot="content">
+				<div class="app-select" style={{ maxHeight: this.maxHeight + 'px' }} slot="content">
 					<div class="app-select-conter">
 						{this.dataSource.map((k, index) => {
 							const active = this.current === k.key

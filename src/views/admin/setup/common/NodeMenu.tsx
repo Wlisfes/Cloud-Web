@@ -105,6 +105,7 @@ export default class NodeMenu extends Vue {
 			const { form } = this.state
 			const { code, data } = await nodeUpdateMenu({
 				id: form.id,
+				type: form.type,
 				name: form.name,
 				router: form.router,
 				path: form.path,

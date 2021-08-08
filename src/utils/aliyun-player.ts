@@ -46,9 +46,11 @@ export function initPlayer(option: OptionPlayer): DPlayer {
 /**创建选集组件**/
 export function initCutover(option: OptionCutover): Promise<{ node: AppSelectNode; insert: () => void }> {
 	return new Promise(resolve => {
+		console.log(option.player.clientHeight)
 		const Conter = Vue.extend(AppSelectNode)
 		const node = new Conter({
 			propsData: {
+				maxHeight: option.player.clientHeight * 0.65,
 				dataSource: option.dataSource,
 				submit: (props?: any) => {
 					option.onSubmit(props)

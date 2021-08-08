@@ -35,7 +35,7 @@ export type NodeIDMenuParameter = Pick<NodeMenuParameter, 'id'>
  */
 export type NodeUpdateMenuParameter = Pick<
 	NodeMenuParameter,
-	'id' | 'name' | 'router' | 'path' | 'status' | 'keepAlive'
+	'id' | 'type' | 'name' | 'router' | 'path' | 'status' | 'keepAlive'
 > &
 	Partial<Pick<NodeMenuParameter, 'icon' | 'order' | 'parent'>>
 export type NodeUpdateMenuResponse = Pick<NodeMenuParameter, 'message'>

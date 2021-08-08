@@ -48,7 +48,11 @@ export default class Index extends Vue {
 		return (
 			<Layout class={`app-admin-container ${this.mobile ? 'is-mobile' : ''}`}>
 				{!this.collapsed && this.mobile && (
-					<div class="app-admin-container-mask" onClick={this.onTrigger}></div>
+					<div
+						class="app-admin-container-mask"
+						onTouchmove={(e: Event) => e.preventDefault()}
+						onClick={this.onTrigger}
+					></div>
 				)}
 
 				<Layout.Sider

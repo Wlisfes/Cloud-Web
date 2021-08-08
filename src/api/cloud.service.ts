@@ -46,15 +46,6 @@ export function nodeClouds(params: types.NodeCloudsParameter) {
 	})
 }
 
-/**多集媒体目录列表**/
-export function nodeMultipleClouds(params: types.NodeMultipleCloudsParameter) {
-	return request<types.NodeMultipleCloudsResponse>({
-		url: `/api/cloud/list-multiple`,
-		method: 'GET',
-		params
-	})
-}
-
 /**删除音视频媒体**/
 export function nodeDeleteCloud(params: types.NodeDeleteCloudParameter) {
 	return request<types.NodeDeleteCloudResponse>({

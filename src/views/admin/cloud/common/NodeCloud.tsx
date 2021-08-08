@@ -3,7 +3,7 @@ import { FormModel, Input, InputNumber, Modal, Radio, Select } from 'ant-design-
 import { Button, Switch, Spin, notification } from 'ant-design-vue'
 import { AppCover } from '@/components/common'
 import { NodeUpload } from '@/views/admin/cloud/common'
-import { nodeCloud, nodeCreateCloud, nodeUpdateCloud, nodeMultipleClouds, nodeCloudSources } from '@/api'
+import { nodeCloud, nodeClouds, nodeCreateCloud, nodeUpdateCloud, nodeCloudSources } from '@/api'
 import { HttpStatus, NodeCloud, NodeCloudSource } from '@/types'
 
 @Component
@@ -64,10 +64,14 @@ export default class NodeSource extends Vue {
 		}
 	}
 
-	/**多集媒体目录列表**/
-	private async nodeMultipleClouds() {
+	/**多集媒体列表**/
+	private async nodeClouds() {
 		try {
-			const { code, data } = await nodeMultipleClouds({ page: 1, size: 200 })
+			const { code, data } = await nodeClouds({
+				page: 1,
+				size: 200,
+				type: 2
+			})
 			if (code === HttpStatus.OK) {
 				this.multiple = data.list
 			}
@@ -166,7 +170,7 @@ export default class NodeSource extends Vue {
 			this.loading = true
 			this.active = active
 			this.visible = true
-			await this.nodeMultipleClouds()
+			await this.nodeClouds()
 			await this.nodeCloudSources()
 			if (id) {
 				this.state.form.id = id
