@@ -50,7 +50,11 @@ export type NodeUserResponse = Pick<
 /**
  * 用户列表
  */
-export type NodeUsersParameter = Pick<NodeUserParameter, 'page' | 'size'>
+export type NodeUsersParameter = Pick<NodeUserParameter, 'page' | 'size'> & {
+	status?: number
+	primary?: string
+	keyword?: string
+}
 export type NodeUsersResponse = Pick<NodeUserParameter, 'page' | 'size' | 'total'> & { list: NodeUserResponse[] }
 
 /**

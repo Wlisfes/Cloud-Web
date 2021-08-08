@@ -147,7 +147,7 @@ export default class Source extends Vue {
 								<Input
 									v-model={source.option.name}
 									allowClear
-									placeholder="媒体标题"
+									placeholder="标签名称"
 									style={{ minWidth: '240px' }}
 								></Input>
 							</FormModel.Item>

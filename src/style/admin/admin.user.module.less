@@ -1,4 +1,67 @@
 .app-conter {
-	padding: 12px;
-	background-color: #ffffff;
+	position: relative;
+
+	.node-source {
+		position: relative;
+		padding-bottom: 10px;
+		:global {
+			.node-source-item {
+				display: inline-block;
+				@media (max-width: 690px) {
+					display: flex;
+				}
+
+				.ant-form-item {
+					transition: all 300ms;
+					.ant-form-item-children {
+						display: block;
+					}
+				}
+
+				&.inline-last {
+					@media (max-width: 690px) {
+						.ant-form-item {
+							&:last-child {
+								margin-right: 0;
+							}
+						}
+					}
+				}
+
+				&.inline-50 {
+					@media (max-width: 690px) {
+						.ant-form-item {
+							flex: 1;
+							&:last-child {
+								margin-right: 0;
+							}
+							.ant-form-item-control-wrapper {
+								display: block;
+							}
+							.ant-select {
+								width: 100% !important;
+							}
+						}
+					}
+				}
+
+				&.inline-100 {
+					@media (max-width: 690px) {
+						.ant-form-item {
+							flex: 1;
+							&:last-child {
+								margin-right: 0;
+							}
+							.ant-form-item-control-wrapper {
+								display: block;
+							}
+							.ant-select {
+								width: 100% !important;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

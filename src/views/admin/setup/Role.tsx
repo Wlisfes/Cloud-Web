@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Button, notification } from 'ant-design-vue'
+import { Table, Button, FormModel, notification } from 'ant-design-vue'
 import { NodeRole } from '@/views/admin/setup/common'
 import { AppRootNode, AppSatus } from '@/components/common'
 import { nodeRoles, nodeRoleCutover } from '@/api'
@@ -14,7 +14,7 @@ export default class Role extends Vue {
 			{ title: '角色名称', dataIndex: 'name', align: 'center', width: '15%' },
 			{ title: '角色唯一标识', dataIndex: 'primary', width: '15%', align: 'center' },
 			{ title: '备注', dataIndex: 'comment', align: 'center' },
-			{ title: '创建时间', dataIndex: 'createTime', width: '18.75%', align: 'center' },
+			{ title: '创建时间', dataIndex: 'createTime', width: '20%', align: 'center' },
 			{ title: '角色状态', align: 'center', width: '12.5%', scopedSlots: { customRender: 'status' } },
 			{ title: '操作', align: 'center', width: '12.5%', scopedSlots: { customRender: 'action' } }
 		],
@@ -70,7 +70,11 @@ export default class Role extends Vue {
 		return (
 			<AppRootNode>
 				<NodeRole ref="nodeRole" onReplay={() => this.source.initSource()}></NodeRole>
-
+				<FormModel layout="inline" style={{ paddingBottom: '10px' }}>
+					<FormModel.Item style={{ marginRight: 0 }}>
+						<Button onClick={() => this.source.initSource()}>刷新</Button>
+					</FormModel.Item>
+				</FormModel>
 				<Table
 					class="app-source"
 					bordered

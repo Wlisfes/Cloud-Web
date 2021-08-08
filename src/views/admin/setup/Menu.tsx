@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Button, Table, Icon, Tag, Popconfirm, notification } from 'ant-design-vue'
+import { FormModel, Button, Table, Icon, Tag, Popconfirm, notification } from 'ant-design-vue'
 import { NodeMenu } from '@/views/admin/setup/common'
 import { AppRootNode, AppSatus } from '@/components/common'
 import { nodeMenus, nodeDeleteMenu } from '@/api'
@@ -17,8 +17,8 @@ export default class Menu extends Vue {
 			{ title: '节点状态', align: 'center', width: '8%', scopedSlots: { customRender: 'status' } },
 			{ title: '节点路由', align: 'center', scopedSlots: { customRender: 'router' } },
 			{ title: '排序号', dataIndex: 'order', align: 'center', width: '7%' },
-			{ title: '创建时间', dataIndex: 'createTime', width: '14.5%', align: 'center' },
-			{ title: '操作', align: 'center', width: '15%', scopedSlots: { customRender: 'action' } }
+			{ title: '创建时间', dataIndex: 'createTime', width: '16%', align: 'center' },
+			{ title: '操作', align: 'center', width: '14%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
 		size: 10,
@@ -65,9 +65,17 @@ export default class Menu extends Vue {
 
 		return (
 			<AppRootNode>
-				<Button onClick={() => this.$refs.nodeMenu.init('create')}>Create</Button>
 				<NodeMenu ref="nodeMenu" onReplay={() => this.source.initSource()}></NodeMenu>
-
+				<FormModel layout="inline" style={{ paddingBottom: '10px' }}>
+					<FormModel.Item>
+						<Button type="primary" onClick={() => this.$refs.nodeMenu.init('create')}>
+							新增
+						</Button>
+					</FormModel.Item>
+					<FormModel.Item style={{ marginRight: 0 }}>
+						<Button onClick={() => this.source.initSource()}>刷新</Button>
+					</FormModel.Item>
+				</FormModel>
 				<Table
 					class="app-source"
 					bordered
