@@ -45,7 +45,7 @@ export type NodeCloudSourceNodeResponse = NodeCloudSource
  * 分类标签列表
  */
 export type NodeCloudSourceNodesParameter = Pick<NodeCloudSourceParameter, 'page' | 'size'> &
-	Partial<Pick<NodeCloudSourceParameter, 'status'>>
+	Partial<Pick<NodeCloudSourceParameter, 'status' | 'name'>>
 export type NodeCloudSourceNodesResponse = Pick<NodeCloudSourceParameter, 'size' | 'page' | 'total'> & {
 	list: NodeCloudSource[]
 }

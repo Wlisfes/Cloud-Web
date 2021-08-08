@@ -17,7 +17,7 @@
 		:global {
 			.node-source-item {
 				display: inline-block;
-				@media (max-width: 540px) {
+				@media (max-width: 580px) {
 					display: flex;
 				}
 
@@ -29,7 +29,7 @@
 				}
 
 				&.inline-last {
-					@media (max-width: 540px) {
+					@media (max-width: 580px) {
 						.ant-form-item {
 							&:last-child {
 								margin-right: 0;
@@ -39,11 +39,14 @@
 				}
 
 				&.inline-50 {
-					@media (max-width: 540px) {
+					@media (max-width: 580px) {
 						.ant-form-item {
 							flex: 1;
 							&:last-child {
 								margin-right: 0;
+							}
+							.ant-form-item-control-wrapper {
+								display: block;
 							}
 							.ant-select {
 								width: 100% !important;
@@ -53,11 +56,14 @@
 				}
 
 				&.inline-100 {
-					@media (max-width: 540px) {
+					@media (max-width: 580px) {
 						.ant-form-item {
 							flex: 1;
 							&:last-child {
 								margin-right: 0;
+							}
+							.ant-form-item-control-wrapper {
+								display: block;
 							}
 							.ant-select {
 								width: 100% !important;

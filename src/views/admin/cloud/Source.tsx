@@ -1,37 +1,51 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Tag, Button, notification } from 'ant-design-vue'
+import { Table, Tag, Button, FormModel, Select, Input, Menu, Icon, notification } from 'ant-design-vue'
 import { NodeSource } from '@/views/admin/cloud/common'
-import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
+import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
 import { nodeCloudSources, nodeCloudSourceCutover, nodeDeleteCloudSource } from '@/api'
 import { HttpStatus, Source as SourceState, NodeCloudSource } from '@/types'
 import style from '@/style/admin/admin.source.module.less'
+
+type SourceOption = {
+	option: {
+		status: number | undefined
+		name: string | undefined
+	}
+}
 
 @Component
 export default class Source extends Vue {
 	$refs!: { nodeSource: NodeSource }
 
-	private source: SourceState<Array<NodeCloudSource>> = {
+	private source: SourceState<Array<NodeCloudSource>> & SourceOption = {
 		column: [
 			{ title: '分类名称', width: '20%', scopedSlots: { customRender: 'name' } },
 			{ title: '备注', dataIndex: 'comment', align: 'center' },
 			{ title: '排序号', dataIndex: 'order', width: '10%', align: 'center' },
 			{ title: '分类状态', align: 'center', width: '10%', scopedSlots: { customRender: 'status' } },
-			{ title: '创建时间', dataIndex: 'createTime', align: 'center', width: '18.75%' },
+			{ title: '创建时间', dataIndex: 'createTime', align: 'center', width: '20%' },
 			{ title: '操作', align: 'center', width: '18.75%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
 		size: 10,
 		total: 0,
-		sizeOption: ['10', '20', '30', '40', '50'],
+		sizeOption: ['10', '15', '20', '30', '40', '50'],
 		showSize: true,
 		loading: true,
 		dataSource: [],
+		option: {
+			status: undefined,
+			name: undefined
+		},
 		initSource: async () => {
 			try {
 				this.source.loading = true
+				const { source } = this
 				const { code, data } = await nodeCloudSources({
-					page: this.source.page,
-					size: this.source.size
+					page: source.page,
+					size: source.size,
+					name: source.option.name,
+					status: source.option.status
 				})
 				if (code === HttpStatus.OK) {
 					this.source.total = data.total
@@ -47,7 +61,18 @@ export default class Source extends Vue {
 			this.source.page = pagination.current
 			this.source.size = pagination.pageSize
 			this.source.loading = true
-			this.$nextTick(() => this.source.initSource())
+			this.source.initSource()
+		},
+		onReset: () => {
+			this.source.option.name = undefined
+			this.source.option.status = undefined
+			this.source.onSearch?.()
+		},
+		onSearch: () => {
+			this.source.page = 1
+			this.source.size = 10
+			this.source.total = 0
+			this.source.initSource()
 		}
 	}
 
@@ -83,13 +108,67 @@ export default class Source extends Vue {
 		}
 	}
 
+	/**操作**/
+	private onChange(key: string, id: number) {
+		switch (key) {
+			case 'update':
+				this.$refs.nodeSource.init('update', id)
+				break
+			case 'delete':
+				this.nodeDeleteCloudSource(id)
+				break
+		}
+	}
+
 	protected render() {
 		const { source } = this
 		return (
 			<AppRootNode>
 				<div class={style['app-conter']}>
-					<Button onClick={() => this.$refs.nodeSource.init('create')}>Create</Button>
 					<NodeSource ref="nodeSource" onReplay={() => this.source.initSource()}></NodeSource>
+
+					<FormModel layout="inline" class={style['node-source']}>
+						<div class="node-source-item inline-100">
+							<FormModel.Item>
+								<Select
+									v-model={source.option.status}
+									allowClear
+									placeholder="标签状态"
+									style={{ minWidth: '150px' }}
+								>
+									<Select.Option value={0}>已禁用</Select.Option>
+									<Select.Option value={1}>已启用</Select.Option>
+									<Select.Option value={2}>已删除</Select.Option>
+								</Select>
+							</FormModel.Item>
+						</div>
+						<div class="node-source-item inline-100">
+							<FormModel.Item>
+								<Input
+									v-model={source.option.name}
+									allowClear
+									placeholder="媒体标题"
+									style={{ minWidth: '240px' }}
+								></Input>
+							</FormModel.Item>
+						</div>
+						<FormModel.Item>
+							<Button type="primary" onClick={this.source.onSearch}>
+								查找
+							</Button>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Button onClick={this.source.onReset}>重置</Button>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Button type="primary" onClick={() => this.$refs.nodeSource.init('create')}>
+								新增
+							</Button>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Button onClick={() => this.source.initSource()}>刷新</Button>
+						</FormModel.Item>
+					</FormModel>
 
 					<Table
 						class="app-source"
@@ -117,21 +196,20 @@ export default class Source extends Vue {
 								status: (props: NodeCloudSource) => <AppSatus status={props.status}></AppSatus>,
 								action: (props: NodeCloudSource) => (
 									<Button.Group>
-										<Button
-											type="link"
-											onClick={() => this.$refs.nodeSource.init('update', props.id)}
+										<AppPopover
+											onChange={(option: { key: string }) => this.onChange(option.key, props.id)}
 										>
-											编辑
-										</Button>
+											<Menu.Item key="update" style={{ color: '#1890ff' }}>
+												<Icon type="edit"></Icon>
+												<span>编辑</span>
+											</Menu.Item>
+											<Menu.Item key="delete" style={{ color: '#ff4d4f' }}>
+												<Icon type="delete"></Icon>
+												<span>删除</span>
+											</Menu.Item>
+										</AppPopover>
 										<Button type="link" onClick={() => this.nodeCloudSourceCutover(props.id)}>
 											<AppCutover status={props.status}></AppCutover>
-										</Button>
-										<Button
-											type="link"
-											style={{ color: '#ff4d4f' }}
-											onClick={() => this.nodeDeleteCloudSource(props.id)}
-										>
-											删除
 										</Button>
 									</Button.Group>
 								)
