@@ -33,7 +33,7 @@ export default class Cloud extends Vue {
 		page: 1,
 		size: 10,
 		total: 0,
-		sizeOption: ['10', '20', '30', '40', '50'],
+		sizeOption: ['5', '10', '15', '20', '30', '40', '50'],
 		showSize: true,
 		loading: true,
 		dataSource: [],

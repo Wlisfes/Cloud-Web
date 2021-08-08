@@ -65,6 +65,7 @@ export default class Index extends Vue {
 					trigger={null}
 					collapsible
 					onBreakpoint={(type: boolean) => this.$store.commit('base/SET_COLLAPSED', type)}
+					onTouchmove={(e: Event) => e.preventDefault()}
 				>
 					<div class="app-admin-container-logo">
 						<router-link class="app-admin-container-logo-conter" to="/admin">
