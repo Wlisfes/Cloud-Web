@@ -4,7 +4,8 @@ const asyncRoutes: { [key: string]: Function } = {
 	['/admin/setup/Role']: () => import('@/views/admin/setup/Role'),
 	['/admin/setup/Menu']: () => import('@/views/admin/setup/Menu'),
 	['/admin/cloud/Cloud']: () => import('@/views/admin/cloud/Cloud'),
-	['/admin/cloud/Source']: () => import('@/views/admin/cloud/Source')
+	['/admin/cloud/Source']: () => import('@/views/admin/cloud/Source'),
+	['/admin/article/Article']: () => import('@/views/admin/article/Article')
 }
 
 export default asyncRoutes
