@@ -89,12 +89,14 @@ export default class AppPlayer extends Vue {
 				})
 				.catch(e => {})
 				.finally(() => {
-					this.player = initPlayer({
+					initPlayer({
 						container: this.$refs.player,
 						url: current.path,
 						cover: current.cover
+					}).then(playre => {
+						this.player = playre
+						resolve(this.player)
 					})
-					resolve(this.player)
 				})
 		})
 	}
@@ -153,9 +155,11 @@ export default class AppPlayer extends Vue {
 							if (state.type === 2) {
 								this.createCutover()
 							}
+							this.loading = false
 						})
+					} else {
+						this.loading = false
 					}
-					this.loading = false
 				})
 			})
 		} catch (e) {

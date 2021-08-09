@@ -13,40 +13,42 @@ export type OptionCutover = {
 }
 
 /**创建播放器**/
-export function initPlayer(option: OptionPlayer): DPlayer {
-	const format = option.url.slice(option.url.lastIndexOf('.') + 1)
-	let video: any = { url: option.url, pic: option.cover }
-	switch (format.toLocaleUpperCase()) {
-		case 'FLV':
-			video = {
-				...video,
-				type: 'customFlv',
-				customType: {
-					customFlv: (video: HTMLVideoElement) => {
-						const player = Flv.createPlayer({
-							type: 'flv',
-							url: video.src
-						})
-						player.attachMediaElement(video)
-						player.load()
+export function initPlayer(option: OptionPlayer): Promise<DPlayer> {
+	return new Promise(resolve => {
+		const format = option.url.slice(option.url.lastIndexOf('.') + 1)
+		let video: any = { url: option.url, pic: option.cover }
+		switch (format.toLocaleUpperCase()) {
+			case 'FLV':
+				video = {
+					...video,
+					type: 'customFlv',
+					customType: {
+						customFlv: (video: HTMLVideoElement) => {
+							const player = Flv.createPlayer({
+								type: 'flv',
+								url: video.src
+							})
+							player.attachMediaElement(video)
+							player.load()
+						}
 					}
 				}
-			}
-			break
-	}
-	return new DPlayer({
-		container: option.container,
-		theme: '#fb7299',
-		lang: 'zh-cn',
-		autoplay: true,
-		video
+				break
+		}
+		const dplayer = new DPlayer({
+			container: option.container,
+			theme: '#fb7299',
+			lang: 'zh-cn',
+			autoplay: true,
+			video
+		})
+		resolve(dplayer)
 	})
 }
 
 /**创建选集组件**/
 export function initCutover(option: OptionCutover): Promise<{ node: AppSelectNode; insert: () => void }> {
 	return new Promise(resolve => {
-		console.log(option.player.clientHeight)
 		const Conter = Vue.extend(AppSelectNode)
 		const node = new Conter({
 			propsData: {
