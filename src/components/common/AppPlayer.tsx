@@ -195,7 +195,7 @@ export default class AppPlayer extends Vue {
 				maskClosable={false}
 				onCancel={this.onClose}
 			>
-				<Spin size="large" spinning={this.loading}>
+				<Spin size="large" wrapperClassName={style['app-player-wrapper']} spinning={this.loading}>
 					<div class={style['app-player']}>
 						<div class={style['app-player-conter']}>
 							<div ref="player" class={style.player}></div>
