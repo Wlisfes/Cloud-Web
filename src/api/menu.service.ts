@@ -37,7 +37,7 @@ export function nodeRoleMenu() {
 /**菜单列表**/
 export function nodeMenus() {
 	return request<Array<types.NodeMenuParameter>>({
-		url: `/api/menu/list`,
+		url: `/api/menu/list-node`,
 		method: 'GET'
 	})
 }

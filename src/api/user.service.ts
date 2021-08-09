@@ -49,7 +49,7 @@ export function nodeUser(params?: any) {
 /**用户列表**/
 export function nodeUsers(params: types.NodeUsersParameter) {
 	return request<types.NodeUsersResponse>({
-		url: `/api/user/list`,
+		url: `/api/user/list-node`,
 		method: 'GET',
 		params
 	})

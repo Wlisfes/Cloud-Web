@@ -1,4 +1,5 @@
 import OSS from 'ali-oss'
+import day from 'dayjs'
 
 export interface OssOption {
 	accessKeyId: string
@@ -36,6 +37,7 @@ export class AliyunOSSModule {
 
 	create(fileName: string, path: 'avatar' | 'upload' | 'cover'): string {
 		const name = fileName.split('.').pop()?.toLowerCase() || 'jpg'
-		return `cloud/${path}/${Date.now()}.${name}`
+		const date = day().format('YYYY-MM-DD')
+		return `cloud/${path}/${date}/${Date.now()}.${name}`
 	}
 }
