@@ -4,7 +4,7 @@ import { NodeSource } from '@/views/admin/cloud/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
 import { nodeCloudSources, nodeCloudSourceCutover, nodeDeleteCloudSource } from '@/api'
 import { HttpStatus, Source as SourceState, NodeCloudSource } from '@/types'
-import style from '@/style/admin/admin.cloud-source.module.less'
+import style from '@/style/admin/admin.source.module.less'
 
 type SourceOption = {
 	option: {

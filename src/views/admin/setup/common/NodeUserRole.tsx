@@ -69,6 +69,7 @@ export default class NodeUserRole extends Vue {
 	private onClose() {
 		this.visible = false
 		setTimeout(() => {
+			this.loading = true
 			this.common.form = Object.assign(this.common.form, {
 				primary: '',
 				status: 1,
