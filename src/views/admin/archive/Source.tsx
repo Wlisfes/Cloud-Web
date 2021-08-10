@@ -1,9 +1,9 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button, FormModel, Select, Input, Menu, Icon, notification } from 'ant-design-vue'
-import { NodeSource } from '@/views/admin/cloud/common'
+import { NodeSource } from '@/views/admin/archive/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
-import { nodeCloudSources, nodeCloudSourceCutover, nodeDeleteCloudSource } from '@/api'
-import { HttpStatus, Source as SourceState, NodeCloudSource } from '@/types'
+import { nodeSources, nodeSourceCutover, nodeDeleteSource } from '@/api'
+import { HttpStatus, Source as SourceState, NodeSource as NodeSourceState } from '@/types'
 import style from '@/style/admin/admin.source.module.less'
 
 type SourceOption = {
@@ -17,7 +17,7 @@ type SourceOption = {
 export default class Source extends Vue {
 	$refs!: { nodeSource: NodeSource }
 
-	private source: SourceState<Array<NodeCloudSource>> & SourceOption = {
+	private source: SourceState<Array<NodeSourceState>> & SourceOption = {
 		column: [
 			{ title: '分类名称', width: '20%', scopedSlots: { customRender: 'name' } },
 			{ title: '备注', dataIndex: 'comment', align: 'center' },
@@ -41,7 +41,7 @@ export default class Source extends Vue {
 			try {
 				this.source.loading = true
 				const { source } = this
-				const { code, data } = await nodeCloudSources({
+				const { code, data } = await nodeSources({
 					page: source.page,
 					size: source.size,
 					name: source.option.name,
@@ -80,11 +80,11 @@ export default class Source extends Vue {
 		this.source.initSource()
 	}
 
-	/**删除分类标签**/
-	private async nodeDeleteCloudSource(id: number) {
+	/**删除标签**/
+	private async nodeDeleteSource(id: number) {
 		try {
 			this.source.loading = true
-			const { code, data } = await nodeDeleteCloudSource({ id })
+			const { code, data } = await nodeDeleteSource({ id })
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
 				this.source.initSource()
@@ -94,11 +94,11 @@ export default class Source extends Vue {
 		}
 	}
 
-	/**切换分类标签状态**/
-	private async nodeCloudSourceCutover(id: number) {
+	/**切换标签状态**/
+	private async nodeSourceCutover(id: number) {
 		try {
 			this.source.loading = true
-			const { code, data } = await nodeCloudSourceCutover({ id })
+			const { code, data } = await nodeSourceCutover({ id })
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
 			}
@@ -115,7 +115,7 @@ export default class Source extends Vue {
 				this.$refs.nodeSource.init('update', id)
 				break
 			case 'delete':
-				this.nodeDeleteCloudSource(id)
+				this.nodeDeleteSource(id)
 				break
 		}
 	}
@@ -188,13 +188,13 @@ export default class Source extends Vue {
 						onChange={source.onChange}
 						{...{
 							scopedSlots: {
-								name: (props: NodeCloudSource) => (
+								name: (props: NodeSourceState) => (
 									<Tag color={props.color} style={{ marginLeft: '6px' }}>
 										{props.name}
 									</Tag>
 								),
-								status: (props: NodeCloudSource) => <AppSatus status={props.status}></AppSatus>,
-								action: (props: NodeCloudSource) => (
+								status: (props: NodeSourceState) => <AppSatus status={props.status}></AppSatus>,
+								action: (props: NodeSourceState) => (
 									<Button.Group>
 										<AppPopover
 											onChange={(option: { key: string }) => this.onChange(option.key, props.id)}
@@ -208,7 +208,7 @@ export default class Source extends Vue {
 												<span>删除</span>
 											</Menu.Item>
 										</AppPopover>
-										<Button type="link" onClick={() => this.nodeCloudSourceCutover(props.id)}>
+										<Button type="link" onClick={() => this.nodeSourceCutover(props.id)}>
 											<AppCutover status={props.status}></AppCutover>
 										</Button>
 									</Button.Group>
