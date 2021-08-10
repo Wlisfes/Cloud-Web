@@ -17,13 +17,3 @@ declare module 'vue-avatar' {
 	import Vue from 'vue'
 	export default class VueAvatar extends Vue {}
 }
-
-declare module '@bytemd/vue' {
-	import Vue from 'vue'
-	export class Editor extends Vue {}
-	export class Viewer extends Vue {}
-}
-declare module 'bytemd/lib/locales/zh_Hans.json' {
-	const zh_Hans: any = {}
-	export default zh_Hans
-}

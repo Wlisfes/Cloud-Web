@@ -1,32 +1,38 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppRootNode } from '@/components/common'
-import { Editor } from '@bytemd/vue'
-import gfm from '@bytemd/plugin-gfm'
-import highlight from '@bytemd/plugin-highlight'
-import zh_Hans from 'bytemd/lib/locales/zh_Hans.json'
 import style from '@/style/admin/admin.article.module.less'
+import marked from 'marked'
+import hljs from 'highlight.js'
+Vue.directive('highlight', function (el) {
+	let blocks = el.querySelectorAll('pre code')
+	blocks.forEach((block: any) => {
+		hljs.highlightBlock(block)
+	})
+})
 
-const plugins = [gfm(), highlight()]
 @Component
 export default class Article extends Vue {
 	private value: string = ''
-	private plugins = plugins
-	private locale = zh_Hans
+	private html: string = ''
+
+	protected mounted() {}
 
 	private onChange(value: string) {
 		this.value = value
+		this.html = marked(value)
 	}
 
 	protected render() {
 		return (
-			<AppRootNode>
-				<Editor
-					class="app-editor"
+			<AppRootNode class={style['app-conter']}>
+				<div v-highlight domPropsInnerHTML={this.html}></div>
+				<mavon-editor
+					ishljs={true}
+					codeStyle="atom-one-dark"
+					tab-size={2}
 					value={this.value}
-					plugins={this.plugins}
-					locale={this.locale}
 					onChange={this.onChange}
-				></Editor>
+				></mavon-editor>
 			</AppRootNode>
 		)
 	}
