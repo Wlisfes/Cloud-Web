@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppRootNode } from '@/components/common'
-import style from '@/style/admin/admin.article.create.module.less'
+import style from '@/style/admin/admin.article.common.module.less'
 
 @Component
 export default class Create extends Vue {

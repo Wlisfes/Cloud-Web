@@ -1,9 +1,13 @@
 .app-conter {
-	flex: 1;
 	position: relative;
-	:global {
-		.v-note-wrapper {
-			flex: 1;
-		}
+	&-cover {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	&-pointer {
+		margin: 0 5px;
+		line-height: 22px;
+		cursor: pointer;
 	}
 }
