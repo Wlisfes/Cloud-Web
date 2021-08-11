@@ -1,18 +1,22 @@
 .app-conter {
 	flex: 1;
 	position: relative;
-	:global {
-		.v-note-wrapper {
-			flex: 1;
-		}
-	}
 
 	.node-source {
 		position: relative;
 		:global {
-			.v-note-wrapper {
-				min-height: 800px;
+			.node-source-editor {
+				.v-note-wrapper {
+					min-height: 800px;
+					z-index: 98;
+				}
+				@media (max-width: 790px) {
+					.ant-form-item-control-wrapper {
+						width: 100% !important;
+					}
+				}
 			}
+
 			.node-source-item {
 				transition: all 300ms;
 				display: flex;

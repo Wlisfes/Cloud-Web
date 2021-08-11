@@ -1,9 +1,10 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Input, Select, InputNumber, Modal, Button, Switch, Spin, notification } from 'ant-design-vue'
+import { FormModel, Input, Select, InputNumber, Button, Switch, Spin, notification } from 'ant-design-vue'
 import { AppRootNode, AppCover } from '@/components/common'
-import { nodeArticle, nodeSources, nodeArticleCutover, nodeDeleteArticle } from '@/api'
-import { HttpStatus, Source, NodeArticle, NodeSource } from '@/types'
+import { nodeArticle, nodeSources, nodeUpdateArticle, nodeCreateArticle } from '@/api'
+import { HttpStatus, NodeSource } from '@/types'
 import style from '@/style/admin/admin.article.common.module.less'
+import marked from 'marked'
 
 @Component
 export default class Create extends Vue {
@@ -25,12 +26,11 @@ export default class Create extends Vue {
 			source: []
 		},
 		rules: {
-			name: [{ required: true, message: '请输入分类标签名称', trigger: 'blur' }],
-			color: [{ required: true, message: '请选择分类标签颜色', trigger: 'blur' }]
+			title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
+			cover: [{ required: true, message: '请上传文章封面', trigger: 'blur' }],
+			content: [{ required: true, message: '请输入文章内容', trigger: 'blur' }]
 		}
 	}
-
-	private value: string = ''
 
 	protected created() {
 		this.init()
@@ -88,8 +88,65 @@ export default class Create extends Vue {
 		}
 	}
 
-	private onChange(value: string) {
-		this.value = value
+	/**修改文章**/
+	private async nodeUpdateArticle() {
+		try {
+			this.loading = true
+			const { form } = this.state
+			const { code, data } = await nodeUpdateArticle({
+				id: form.id,
+				title: form.title,
+				cover: form.cover,
+				content: form.content,
+				url: form.url,
+				status: +form.status,
+				order: form.order,
+				source: form.source
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$router.push('/admin/article')
+			}
+		} catch (e) {
+			this.loading = false
+		}
+	}
+
+	private async nodeCreateArticle() {
+		try {
+			this.loading = true
+			const { form } = this.state
+			const { code, data } = await nodeCreateArticle({
+				title: form.title,
+				cover: form.cover,
+				content: form.content,
+				url: form.url,
+				status: +form.status,
+				order: form.order,
+				source: form.source
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$router.push('/admin/article')
+			}
+		} catch (e) {
+			this.loading = false
+		}
+	}
+
+	/**组件提交事件**/
+	private onSubmit() {
+		this.$refs.form.validate(async valid => {
+			if (valid) {
+				this.nodeUpdateArticle()
+				// this.nodeCreateArticle()
+			}
+		})
+	}
+
+	private onChange(value: string, v: string) {
+		console.log(v)
+		this.state.form.content = v
 	}
 
 	protected render() {
@@ -163,21 +220,23 @@ export default class Create extends Vue {
 									style={{ marginLeft: '10px' }}
 									disabled={this.loading}
 									loading={this.loading}
+									onClick={this.onSubmit}
 								>
 									确定
 								</Button>
 							</FormModel.Item>
 						</div>
-
-						<FormModel.Item label="跳转链接">
-							<mavon-editor
-								ishljs={true}
-								codeStyle="atom-one-dark"
-								tab-size={2}
-								value={this.value}
-								onChange={this.onChange}
-							></mavon-editor>
-						</FormModel.Item>
+						<div class="node-source-editor">
+							<FormModel.Item label="文章内容">
+								<mavon-editor
+									ishljs={true}
+									codeStyle="atom-one-dark"
+									tab-size={2}
+									v-model={form.content}
+									onChange={this.onChange}
+								></mavon-editor>
+							</FormModel.Item>
+						</div>
 					</FormModel>
 				</Spin>
 			</AppRootNode>
