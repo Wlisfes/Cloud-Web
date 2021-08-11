@@ -144,7 +144,7 @@ export default class User extends Vue {
 									v-model={source.option.primary}
 									allowClear
 									placeholder="用户角色"
-									style={{ minWidth: '150px' }}
+									style={{ width: '150px' }}
 								>
 									{this.roles.map(k => (
 										<Select.Option key={k.id} value={k.primary}>
@@ -158,7 +158,7 @@ export default class User extends Vue {
 									v-model={source.option.status}
 									allowClear
 									placeholder="用户状态"
-									style={{ minWidth: '150px' }}
+									style={{ width: '150px' }}
 								>
 									<Select.Option value={0}>已禁用</Select.Option>
 									<Select.Option value={1}>已启用</Select.Option>
@@ -172,7 +172,7 @@ export default class User extends Vue {
 									v-model={source.option.keyword}
 									allowClear
 									placeholder="关键字"
-									style={{ minWidth: '280px' }}
+									style={{ width: '300px' }}
 								></Input>
 							</FormModel.Item>
 						</div>

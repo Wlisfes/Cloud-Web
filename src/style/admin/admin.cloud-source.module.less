@@ -6,7 +6,8 @@
 		:global {
 			.node-source-item {
 				display: inline-block;
-				@media (max-width: 540px) {
+				transition: all 300ms;
+				@media (max-width: 520px) {
 					display: flex;
 				}
 
@@ -18,13 +19,18 @@
 				}
 
 				&.inline-100 {
-					@media (max-width: 540px) {
+					@media (max-width: 520px) {
 						.ant-form-item {
 							flex: 1;
 							&:last-child {
 								margin-right: 0;
 							}
 							.ant-select {
+								transition: all 300ms;
+								width: 100% !important;
+							}
+							.ant-input-affix-wrapper {
+								transition: all 300ms;
 								width: 100% !important;
 							}
 						}

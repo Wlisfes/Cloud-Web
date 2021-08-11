@@ -144,7 +144,7 @@ export default class Cloud extends Vue {
 									v-model={source.option.type}
 									allowClear
 									placeholder="媒体类型"
-									style={{ minWidth: '150px' }}
+									style={{ width: '150px' }}
 								>
 									<Select.Option value={1}>单级媒体</Select.Option>
 									<Select.Option value={2}>多级媒体</Select.Option>
@@ -155,7 +155,7 @@ export default class Cloud extends Vue {
 									v-model={source.option.status}
 									allowClear
 									placeholder="媒体状态"
-									style={{ minWidth: '150px' }}
+									style={{ width: '150px' }}
 								>
 									<Select.Option value={0}>已禁用</Select.Option>
 									<Select.Option value={1}>已启用</Select.Option>
@@ -169,7 +169,7 @@ export default class Cloud extends Vue {
 									v-model={source.option.title}
 									allowClear
 									placeholder="媒体标题"
-									style={{ minWidth: '210px' }}
+									style={{ width: '300px' }}
 								></Input>
 							</FormModel.Item>
 						</div>

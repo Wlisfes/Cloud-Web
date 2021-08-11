@@ -134,7 +134,7 @@ export default class Source extends Vue {
 									v-model={source.option.status}
 									allowClear
 									placeholder="标签状态"
-									style={{ minWidth: '150px' }}
+									style={{ width: '150px' }}
 								>
 									<Select.Option value={0}>已禁用</Select.Option>
 									<Select.Option value={1}>已启用</Select.Option>
@@ -148,7 +148,7 @@ export default class Source extends Vue {
 									v-model={source.option.name}
 									allowClear
 									placeholder="标签名称"
-									style={{ minWidth: '240px' }}
+									style={{ width: '300px' }}
 								></Input>
 							</FormModel.Item>
 						</div>
