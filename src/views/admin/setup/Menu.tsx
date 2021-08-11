@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Button, Table, Icon, Tag, Popconfirm, notification } from 'ant-design-vue'
+import { FormModel, Button, Table, Icon, Tag, Menu as BaseMenu, notification } from 'ant-design-vue'
 import { NodeMenu } from '@/views/admin/setup/common'
-import { AppRootNode, AppSatus } from '@/components/common'
-import { nodeMenus, nodeDeleteMenu } from '@/api'
+import { AppRootNode, AppSatus, AppPopover, AppCutover } from '@/components/common'
+import { nodeMenus, nodeDeleteMenu, nodeMenuCutover } from '@/api'
 import { HttpStatus, Source, NodeMenuParameter } from '@/types'
 
 @Component
@@ -11,7 +11,7 @@ export default class Menu extends Vue {
 
 	private source: Source<Array<NodeMenuParameter>> = {
 		column: [
-			{ title: '节点名称', dataIndex: 'name' },
+			{ title: '节点名称', scopedSlots: { customRender: 'name' } },
 			{ title: '节点图标', align: 'center', width: '8%', scopedSlots: { customRender: 'icon' } },
 			{ title: '节点类型', align: 'center', width: '8%', scopedSlots: { customRender: 'type' } },
 			{ title: '节点状态', align: 'center', width: '8%', scopedSlots: { customRender: 'status' } },
@@ -42,8 +42,12 @@ export default class Menu extends Vue {
 		}
 	}
 
+	protected created() {
+		this.source.initSource()
+	}
+
 	/**删除菜单**/
-	private async onDelete(id: number) {
+	private async nodeDeleteMenu(id: number) {
 		try {
 			this.source.loading = true
 			const { code, data } = await nodeDeleteMenu({ id })
@@ -56,13 +60,37 @@ export default class Menu extends Vue {
 		}
 	}
 
-	protected created() {
-		this.source.initSource()
+	/**切换菜单状态**/
+	private async nodeMenuCutover(id: number) {
+		try {
+			this.source.loading = true
+			const { code, data } = await nodeMenuCutover({ id })
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.source.initSource()
+			}
+		} catch (e) {
+			this.source.loading = false
+		}
+	}
+
+	/**操作**/
+	private onChange(key: string, id: number) {
+		switch (key) {
+			case 'create':
+				this.$refs.nodeMenu.init('create', id)
+				break
+			case 'update':
+				this.$refs.nodeMenu.init('update', id)
+				break
+			case 'delete':
+				this.nodeDeleteMenu(id)
+				break
+		}
 	}
 
 	protected render() {
 		const { source } = this
-
 		return (
 			<AppRootNode>
 				<NodeMenu ref="nodeMenu" onReplay={() => this.source.initSource()}></NodeMenu>
@@ -105,6 +133,18 @@ export default class Menu extends Vue {
 					}}
 					{...{
 						scopedSlots: {
+							name: (props: NodeMenuParameter) => {
+								return (
+									<span>
+										<span>{props.name}</span>
+										{props.visible === 0 && (
+											<Tag color="pink" style={{ marginLeft: '5px' }}>
+												隐藏
+											</Tag>
+										)}
+									</span>
+								)
+							},
 							type: (props: NodeMenuParameter) => {
 								return props.type === 1 ? <Tag color="cyan">目录</Tag> : <Tag color="red">菜单</Tag>
 							},
@@ -122,39 +162,27 @@ export default class Menu extends Vue {
 							action: (props: NodeMenuParameter) => {
 								return (
 									<Button.Group>
-										{props.type === 1 && (
-											<Button
-												type="link"
-												style={{ color: '#52c41a' }}
-												onClick={() => this.$refs.nodeMenu.init('create', props.id)}
-											>
-												新增
-											</Button>
-										)}
-										<Button
-											type="link"
-											style={{ color: '#1890ff' }}
-											onClick={() => this.$refs.nodeMenu.init('update', props.id)}
+										<AppPopover
+											onChange={(option: { key: string }) => this.onChange(option.key, props.id)}
 										>
-											编辑
+											{props.type === 1 && (
+												<BaseMenu.Item key="create" style={{ color: '#52c41a' }}>
+													<Icon type="folder-add"></Icon>
+													<span>新增</span>
+												</BaseMenu.Item>
+											)}
+											<BaseMenu.Item key="update" style={{ color: '#1890ff' }}>
+												<Icon type="edit"></Icon>
+												<span>编辑</span>
+											</BaseMenu.Item>
+											<BaseMenu.Item key="delete" style={{ color: '#eb2f96' }}>
+												<Icon type="delete"></Icon>
+												<span>删除</span>
+											</BaseMenu.Item>
+										</AppPopover>
+										<Button type="link" onClick={() => this.nodeMenuCutover(props.id)}>
+											<AppCutover status={props.status}></AppCutover>
 										</Button>
-										<Popconfirm
-											title={
-												<span>
-													<span>确定要删除</span>
-													<a style={{ color: '#eb2f96', margin: '0 5px' }}>{props.name}</a>
-													<span>吗？</span>
-												</span>
-											}
-											placement="topRight"
-											ok-text="确定"
-											cancel-text="取消"
-											onConfirm={() => this.onDelete(props.id)}
-										>
-											<Button type="link" style={{ color: '#eb2f96' }}>
-												删除
-											</Button>
-										</Popconfirm>
 									</Button.Group>
 								)
 							}

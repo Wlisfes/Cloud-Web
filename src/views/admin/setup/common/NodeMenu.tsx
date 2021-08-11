@@ -23,7 +23,7 @@ export default class NodeMenu extends Vue {
 			name: '',
 			router: '',
 			keepAlive: true,
-			status: true,
+			visible: true,
 			path: '',
 			icon: '',
 			order: 1,
@@ -59,7 +59,7 @@ export default class NodeMenu extends Vue {
 					name: data.name,
 					router: data.router,
 					keepAlive: data.keepAlive === 1,
-					status: data.status === 1,
+					visible: data.visible === 1,
 					path: data.path,
 					icon: data.icon,
 					order: data.order,
@@ -83,7 +83,7 @@ export default class NodeMenu extends Vue {
 				router: form.router,
 				path: form.path,
 				keepAlive: +form.keepAlive,
-				status: +form.status,
+				visible: +form.visible,
 				icon: form.icon,
 				order: form.order,
 				parent: form.parent
@@ -110,7 +110,7 @@ export default class NodeMenu extends Vue {
 				router: form.router,
 				path: form.path,
 				keepAlive: +form.keepAlive,
-				status: +form.status,
+				visible: +form.visible,
 				icon: form.icon,
 				order: form.order,
 				parent: form.parent
@@ -232,11 +232,11 @@ export default class NodeMenu extends Vue {
 								<FormModel.Item label="排序号">
 									<InputNumber v-model={form.order}></InputNumber>
 								</FormModel.Item>
-								<FormModel.Item label="节点状态">
+								<FormModel.Item label="是否可见">
 									<Switch
-										v-model={form.status}
-										checked-children="开"
-										un-checked-children="关"
+										v-model={form.visible}
+										checked-children="显示"
+										un-checked-children="隐藏"
 										default-checked
 									></Switch>
 								</FormModel.Item>
@@ -278,11 +278,11 @@ export default class NodeMenu extends Vue {
 								<FormModel.Item label="排序号">
 									<InputNumber v-model={form.order}></InputNumber>
 								</FormModel.Item>
-								<FormModel.Item label="节点状态">
+								<FormModel.Item label="是否可见">
 									<Switch
-										v-model={form.status}
-										checked-children="开"
-										un-checked-children="关"
+										v-model={form.visible}
+										checked-children="显示"
+										un-checked-children="隐藏"
 										default-checked
 									></Switch>
 								</FormModel.Item>

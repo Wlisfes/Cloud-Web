@@ -49,6 +49,9 @@ export default class AppMenu extends Vue {
 			>
 				{/* <AppMenuSource dataSource={this.dataSource}></AppMenuSource> */}
 				{this.dataSource.map(k => {
+					if (k.visible === 0) {
+						return null
+					}
 					if (k.type === 1) {
 						return (
 							<Menu.SubMenu
@@ -61,6 +64,9 @@ export default class AppMenu extends Vue {
 								}
 							>
 								{k.children.map((v: any) => {
+									if (v.visible === 0) {
+										return null
+									}
 									if (v.type === 1) {
 										return (
 											<Menu.SubMenu
@@ -75,6 +81,9 @@ export default class AppMenu extends Vue {
 												}
 											>
 												{v.children.map((x: any) => {
+													if (x.visible === 0) {
+														return null
+													}
 													if (x.type === 1) {
 														return (
 															<Menu.SubMenu

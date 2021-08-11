@@ -60,6 +60,15 @@ export function nodeUpdateMenu(params: types.NodeUpdateMenuParameter) {
 	})
 }
 
+/**切换菜单状态**/
+export function nodeMenuCutover(params: types.NodeMenuCutoverParameter) {
+	return request<types.NodeMenuCutoverResponse>({
+		url: `/api/menu/cutover`,
+		method: 'PUT',
+		data: params
+	})
+}
+
 /**删除菜单**/
 export function nodeDeleteMenu(params: types.NodeDeleteMenuParameter) {
 	return request<types.NodeDeleteMenuResponse>({
