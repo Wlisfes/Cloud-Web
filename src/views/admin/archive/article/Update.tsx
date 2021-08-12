@@ -1,10 +1,9 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Select, InputNumber, Button, Switch, Spin, notification } from 'ant-design-vue'
 import { AppRootNode, AppCover } from '@/components/common'
-import { nodeArticle, nodeSources, nodeUpdateArticle, nodeCreateArticle } from '@/api'
+import { nodeArticle, nodeSources, nodeUpdateArticle } from '@/api'
 import { HttpStatus, NodeSource } from '@/types'
 import style from '@/style/admin/admin.article.common.module.less'
-import marked from 'marked'
 
 @Component
 export default class Create extends Vue {
@@ -112,34 +111,11 @@ export default class Create extends Vue {
 		}
 	}
 
-	private async nodeCreateArticle() {
-		try {
-			this.loading = true
-			const { form } = this.state
-			const { code, data } = await nodeCreateArticle({
-				title: form.title,
-				cover: form.cover,
-				content: form.content,
-				url: form.url,
-				status: +form.status,
-				order: form.order,
-				source: form.source
-			})
-			if (code === HttpStatus.OK) {
-				notification.success({ message: data.message, description: '' })
-				this.$router.push('/admin/article')
-			}
-		} catch (e) {
-			this.loading = false
-		}
-	}
-
 	/**组件提交事件**/
 	private onSubmit() {
 		this.$refs.form.validate(async valid => {
 			if (valid) {
 				this.nodeUpdateArticle()
-				// this.nodeCreateArticle()
 			}
 		})
 	}
@@ -163,7 +139,7 @@ export default class Create extends Vue {
 						wrapperCol={wrapperCol}
 					>
 						<div class="node-source-item inline-920">
-							<FormModel.Item label="文章标题" prop="name">
+							<FormModel.Item label="文章标题" prop="title">
 								<Input v-model={form.title} placeholder="文章标题"></Input>
 							</FormModel.Item>
 							<FormModel.Item label="标签">
@@ -227,11 +203,11 @@ export default class Create extends Vue {
 							</FormModel.Item>
 						</div>
 						<div class="node-source-editor">
-							<FormModel.Item label="文章内容">
+							<FormModel.Item label="文章内容" prop="content">
 								<mavon-editor
-									ishljs={true}
+									autofocus={false}
 									codeStyle="atom-one-dark"
-									tab-size={2}
+									tabSize={null}
 									v-model={form.content}
 									onChange={this.onChange}
 								></mavon-editor>
