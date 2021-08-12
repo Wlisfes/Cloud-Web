@@ -1,26 +1,31 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Table, Button, Tooltip, Tag, Menu, Icon, FormModel, Input, Select, notification } from 'ant-design-vue'
+import { Table, Button, Tooltip, Menu, Tag, Icon, FormModel, Input, Select, notification } from 'ant-design-vue'
 import { Image } from 'element-ui'
 import { AppRootNode, AppSatus, AppPopover, AppCutover } from '@/components/common'
-import { nodeArticles, nodeArticleCutover, nodeDeleteArticle } from '@/api'
-import { HttpStatus, Source, NodeArticle } from '@/types'
+import { nodeArticles, nodeSources, nodeArticleCutover, nodeDeleteArticle } from '@/api'
+import { HttpStatus, Source, NodeArticle, NodeSource } from '@/types'
 import style from '@/style/admin/admin.article.module.less'
 
 type SourceOption = {
 	option: {
 		status: number | undefined
 		title: string | undefined
+		source: number | undefined
 	}
 }
 
 @Component
 export default class Article extends Vue {
+	$refs!: { rootNode: AppRootNode }
+
+	private sources: NodeSource[] = []
 	private source: Source<Array<NodeArticle>> & SourceOption = {
 		column: [
 			{ title: '文章封面', align: 'center', width: 125, scopedSlots: { customRender: 'cover' } },
 			{ title: '文章标题', scopedSlots: { customRender: 'title' } },
-			{ title: '浏览量', dataIndex: 'browse', align: 'center', width: '8.5%' },
-			{ title: '排序号', dataIndex: 'order', align: 'center', width: '8.5%' },
+			{ title: '标签', align: 'center', width: '8%', scopedSlots: { customRender: 'source' } },
+			{ title: '浏览量', dataIndex: 'browse', align: 'center', width: '8%' },
+			{ title: '排序号', dataIndex: 'order', align: 'center', width: '8%' },
 			{ title: '文章状态', align: 'center', width: '8.5%', scopedSlots: { customRender: 'status' } },
 			{ title: '创建时间', dataIndex: 'createTime', align: 'center', width: '15%' },
 			{ title: '操作', align: 'center', width: '15%', scopedSlots: { customRender: 'action' } }
@@ -34,7 +39,8 @@ export default class Article extends Vue {
 		dataSource: [],
 		option: {
 			status: undefined,
-			title: undefined
+			title: undefined,
+			source: undefined
 		},
 		initSource: async () => {
 			try {
@@ -44,7 +50,8 @@ export default class Article extends Vue {
 					page: source.page,
 					size: source.size,
 					status: source.option.status,
-					title: source.option.title
+					title: source.option.title,
+					source: source.option.source
 				})
 				if (code === HttpStatus.OK) {
 					this.source.total = data.total
@@ -64,6 +71,7 @@ export default class Article extends Vue {
 		onReset: () => {
 			this.source.option.title = undefined
 			this.source.option.status = undefined
+			this.source.option.source = undefined
 			this.source.onSearch?.()
 		},
 		onSearch: () => {
@@ -74,8 +82,23 @@ export default class Article extends Vue {
 		}
 	}
 
-	protected created() {
+	protected async created() {
+		await this.nodeSources()
 		this.source.initSource()
+	}
+
+	/**标签列表**/
+	private nodeSources() {
+		return new Promise(resolve => {
+			nodeSources({ page: 1, size: 200 })
+				.then(({ code, data }) => {
+					if (code === HttpStatus.OK) {
+						this.sources = data.list
+					}
+				})
+				.catch(e => e)
+				.finally(() => resolve(true))
+		})
 	}
 
 	/**删除文章**/
@@ -124,7 +147,63 @@ export default class Article extends Vue {
 	protected render() {
 		const { source } = this
 		return (
-			<AppRootNode class={style['app-conter']}>
+			<AppRootNode ref="rootNode" class={style['app-conter']}>
+				<FormModel layout="inline" class={style['node-source']}>
+					<div class="node-source-item inline-50">
+						<FormModel.Item>
+							<Select
+								v-model={source.option.source}
+								allowClear
+								placeholder="文章标签"
+								style={{ width: '150px' }}
+							>
+								{this.sources.map(k => (
+									<Select.Option key={k.id} value={k.id}>
+										{k.name}
+									</Select.Option>
+								))}
+							</Select>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Select
+								v-model={source.option.status}
+								allowClear
+								placeholder="文章状态"
+								style={{ width: '150px' }}
+							>
+								<Select.Option value={0}>已禁用</Select.Option>
+								<Select.Option value={1}>已启用</Select.Option>
+								<Select.Option value={2}>已删除</Select.Option>
+							</Select>
+						</FormModel.Item>
+					</div>
+					<div class="node-source-item inline-100">
+						<FormModel.Item>
+							<Input
+								v-model={source.option.title}
+								allowClear
+								placeholder="文章标题"
+								style={{ width: '300px' }}
+							></Input>
+						</FormModel.Item>
+					</div>
+					<FormModel.Item>
+						<Button type="primary" onClick={this.source.onSearch}>
+							查找
+						</Button>
+					</FormModel.Item>
+					<FormModel.Item>
+						<Button onClick={this.source.onReset}>重置</Button>
+					</FormModel.Item>
+					<FormModel.Item>
+						<Button type="primary" onClick={() => this.$router.push(`/admin/article/create`)}>
+							新增
+						</Button>
+					</FormModel.Item>
+					<FormModel.Item style={{ marginRight: 0 }}>
+						<Button onClick={() => this.source.initSource()}>刷新</Button>
+					</FormModel.Item>
+				</FormModel>
 				<Table
 					class="app-source is-title"
 					bordered
@@ -158,6 +237,25 @@ export default class Article extends Vue {
 									<Tooltip title={props.title}>{props.title}</Tooltip>
 								</div>
 							),
+							source: (props: NodeArticle) => {
+								if (props.source?.length > 0) {
+									return (
+										<Tooltip
+											getPopupContainer={() => this.$refs.rootNode.$el}
+											title={
+												<div class={style['app-conter-source-preview']}>
+													{props.source?.map(k => (
+														<Tag color={k.color}>{k.name}</Tag>
+													))}
+												</div>
+											}
+										>
+											<Tag color="cyan">查看</Tag>
+										</Tooltip>
+									)
+								}
+								return null
+							},
 							status: (props: NodeArticle) => <AppSatus status={props.status}></AppSatus>,
 							action: (props: NodeArticle) => (
 								<Button.Group>
