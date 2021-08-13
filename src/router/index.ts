@@ -7,8 +7,29 @@ Vue.use(VueRouter)
 export const routes: RouteConfig[] = [
 	/**web**************************************************************************/
 	{
-		path: '/web/home',
+		path: '/',
+		name: 'WEB-Home',
 		component: () => import('@/views/web/home/Home')
+	},
+	{
+		path: '/multiple',
+		name: 'WEB-Multiple',
+		component: () => import('@/views/web/multiple/Multiple')
+	},
+	{
+		path: '/intense',
+		name: 'WEB-Intense',
+		component: () => import('@/views/web/intense/Intense')
+	},
+	{
+		path: '/minute',
+		name: 'WEB-Minute',
+		component: () => import('@/views/web/minute/Minute')
+	},
+	{
+		path: '/partner',
+		name: 'WEB-Partner',
+		component: () => import('@/views/web/partner/Partner')
 	},
 	/**admin**************************************************************************/
 	// {
@@ -42,8 +63,7 @@ export const routes: RouteConfig[] = [
 			}
 		]
 	},
-	{ path: '/404', component: () => import('@/views/common/result/404') },
-	{ path: '/', redirect: '/web/home' }
+	{ path: '/404', component: () => import('@/views/common/result/404') }
 ]
 
 const router = new VueRouter({
