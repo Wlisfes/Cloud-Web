@@ -1,7 +1,7 @@
 import { Getter } from 'vuex-class'
 import { Vue, Component } from 'vue-property-decorator'
 import { Layout, Icon } from 'ant-design-vue'
-import { AppMultiple, AppMenu, AppTitle } from '@/Layout/common'
+import { AppMultiple, AppMenu, AppTitle, AppUser } from '@/Layout/common'
 
 @Component
 export default class Index extends Vue {
@@ -75,20 +75,31 @@ export default class Index extends Vue {
 					</div>
 					<AppMenu></AppMenu>
 				</Layout.Sider>
-				<Layout style={{ backgroundColor: '#ededed' }}>
+				<Layout>
 					<Layout.Header style={{ left: this.distance() + 'px' }}>
 						<div class="ant-layout-header-conter">
-							<Icon
-								class="app-admin-container-trigger"
-								type={this.collapsed ? 'menu-unfold' : 'menu-fold'}
-								onClick={this.onTrigger}
-							></Icon>
+							<div class="app-admin-container-trigger">
+								<Icon
+									type={this.collapsed ? 'menu-unfold' : 'menu-fold'}
+									onClick={this.onTrigger}
+								></Icon>
+							</div>
 							<AppTitle></AppTitle>
+							<div
+								style={{
+									flex: 1,
+									display: 'flex',
+									justifyContent: 'flex-end',
+									margin: '0 30px 0 15px'
+								}}
+							>
+								<AppUser></AppUser>
+							</div>
 						</div>
 						<AppMultiple></AppMultiple>
 					</Layout.Header>
 
-					<Layout.Content style={{ marginTop: '101px', backgroundColor: '#ededed' }}>
+					<Layout.Content style={{ marginTop: '87px', backgroundColor: '#ededed' }}>
 						<router-view></router-view>
 					</Layout.Content>
 				</Layout>

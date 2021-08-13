@@ -8,15 +8,7 @@ export default class AppTitle extends Vue {
 
 	protected render() {
 		return (
-			<Breadcrumb
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					fontSize: '15px',
-					cursor: 'pointer',
-					marginLeft: '10px'
-				}}
-			>
+			<Breadcrumb class="app-title">
 				{this.name.split('-').map(name => (
 					<Breadcrumb.Item>{name}</Breadcrumb.Item>
 				))}

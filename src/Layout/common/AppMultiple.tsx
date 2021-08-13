@@ -16,7 +16,7 @@ export default class AppMultiple extends Vue {
 						type="editable-card"
 						size="small"
 						hideAdd
-						tabBarStyle={{ borderBottom: 'none', margin: '8px 0' }}
+						tabBarStyle={{ borderBottom: 'none', margin: '4px 0' }}
 						onTabClick={(path: string) => this.$router.push(path)}
 					>
 						{this.multiple.map(k => (

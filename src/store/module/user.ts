@@ -1,7 +1,7 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store'
 import { login, register, nodeUser } from '@/api'
-import { setToken } from '@/utils/auth'
+import { setToken, delToken } from '@/utils/auth'
 import { notification } from 'ant-design-vue'
 import * as types from '@/types'
 
@@ -16,18 +16,20 @@ export interface UserState {
 	token: string | null | undefined
 }
 
+const useState = (): UserState => ({
+	uid: null,
+	account: null,
+	nickname: null,
+	email: null,
+	avatar: null,
+	mobile: null,
+	role: [],
+	token: null
+})
+
 const user: Module<UserState, RootState> = {
 	namespaced: true,
-	state: (): UserState => ({
-		uid: null,
-		account: null,
-		nickname: null,
-		email: null,
-		avatar: null,
-		mobile: null,
-		role: [],
-		token: null
-	}),
+	state: () => useState(),
 	getters: {
 		uid: state => state.uid,
 		account: state => state.account,
@@ -39,6 +41,9 @@ const user: Module<UserState, RootState> = {
 		token: state => state.token
 	},
 	mutations: {
+		SET_USE_STATE: state => {
+			state = Object.assign(state, { ...useState() })
+		},
 		SET_USER: (state, user: UserState) => {
 			state.uid = user.uid
 			state.account = user.account
@@ -72,6 +77,14 @@ const user: Module<UserState, RootState> = {
 					.catch(e => reject(e))
 			})
 		},
+		/**登出**/
+		logout: ({ commit, dispatch }) => {
+			return new Promise(async resolve => {
+				delToken()
+				await dispatch('reset')
+				resolve(true)
+			})
+		},
 		/**注册**/
 		register: ({ commit }, prors: types.RegisterParameter) => {
 			return new Promise((resolve: Function, reject: Function) => {
@@ -100,6 +113,12 @@ const user: Module<UserState, RootState> = {
 						resolve(response)
 					})
 					.catch(e => reject(e))
+			})
+		},
+		reset: ({ commit }) => {
+			return new Promise(resolve => {
+				commit('SET_USE_STATE')
+				resolve(true)
 			})
 		}
 	}
