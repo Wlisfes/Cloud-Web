@@ -19,7 +19,11 @@ export default class NodeRoot extends Vue {
 
 	protected render() {
 		return (
-			<section style={{ ...this.useCover() }} class={style['node-root']}>
+			<section
+				style={{ ...this.useCover() }}
+				class={style['node-root']}
+				onTouchmove={(e: Event) => this.$emit('touchmove', e)}
+			>
 				{this.mask && <NodeMask></NodeMask>}
 				{this.$slots.header}
 				{this.$slots.content}
