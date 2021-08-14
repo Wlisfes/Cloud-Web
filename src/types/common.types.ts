@@ -15,3 +15,14 @@ export interface NodeEmailCodeResponse {
 	message: string
 	code: number
 }
+
+/**
+ * 轮播壁纸
+ */
+export type NodeBanner = {
+	start: string
+	end: string
+	cover: string
+	name: string
+	search: string
+}

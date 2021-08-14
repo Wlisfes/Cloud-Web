@@ -13,8 +13,9 @@ Vue.config.productionTip = false
 new Vue({
 	router,
 	store,
-	created() {
+	async created() {
 		notification.config({ duration: 2 })
+		store.dispatch('banner/initBanner')
 	},
 	render: h => h(App)
 }).$mount('#app')

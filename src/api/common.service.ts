@@ -9,3 +9,11 @@ export function nodeEmailCode(params: types.NodeEmailCodeParameter) {
 		data: params
 	})
 }
+
+/**轮播壁纸**/
+export function nodeBanner() {
+	return request<Array<types.NodeBanner>>({
+		url: `/api/banner`,
+		method: 'GET'
+	})
+}
