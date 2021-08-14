@@ -64,6 +64,7 @@ export const routes: RouteConfig[] = [
 		]
 	},
 	{ path: '/404', component: () => import('@/views/common/result/404') }
+	// { path: '*', redirect: '/home' }
 ]
 
 const router = new VueRouter({
