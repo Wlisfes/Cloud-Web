@@ -19,6 +19,11 @@ export default class Home extends Vue {
 					<div style={{ flex: 1 }}></div>
 					<div class={style['root-banner']}>
 						<Space size={15}>
+							<a href={this.current?.search} target="_blank" rel="noopener noreferrer">
+								<div class={style['root-banner-item']}>
+									<i class="el-icon-location-outline"></i>
+								</div>
+							</a>
 							<div class={style['root-banner-item']} onClick={() => this.$store.dispatch('banner/prev')}>
 								<Icon type="left" />
 							</div>
