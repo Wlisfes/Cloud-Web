@@ -19,29 +19,9 @@ export default class Index extends Vue {
 		}
 	}
 
-	protected mounted() {
-		this.onLayout()
-		window.addEventListener('resize', this.onLayout)
-	}
-
-	protected beforeUnmount() {
-		window.removeEventListener('resize', this.onLayout)
-	}
-
 	//切换菜单收缩
 	private onTrigger() {
 		this.$store.commit('base/SET_COLLAPSED', !this.collapsed)
-	}
-
-	//计算屏幕宽度显示mobile界面
-	private onLayout() {
-		const width = document.body.getBoundingClientRect().width
-		const isMobile = width < 992
-		if (isMobile) {
-			this.$store.commit('base/SET_COLLAPSED', true)
-		}
-		this.$store.commit('base/SET_WIDTH', width)
-		this.$store.commit('base/SET_MOBILE', isMobile)
 	}
 
 	protected render() {

@@ -43,7 +43,7 @@ const banner: Module<BannerState, RootState> = {
 		/**轮播壁纸**/
 		initBanner: ({ commit }) => {
 			return new Promise((resolve, reject) => {
-				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
+				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.5)' })
 				nodeBanner()
 					.then(async ({ code, data }) => {
 						if (code === HttpStatus.OK) {
@@ -56,6 +56,7 @@ const banner: Module<BannerState, RootState> = {
 					.finally(() => loading.close())
 			})
 		},
+		/**上一张**/
 		prev: async ({ commit, state }) => {
 			const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
 			let current = 0
@@ -69,6 +70,7 @@ const banner: Module<BannerState, RootState> = {
 			commit('SET_CURRENT', current)
 			loading.close()
 		},
+		/**下一张**/
 		next: async ({ commit, state }) => {
 			const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
 			let current = 0

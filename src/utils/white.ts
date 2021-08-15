@@ -1,4 +1,4 @@
-const whiteList: string[] = ['/', '/main/login', '/main/register', '/404']
+const whiteList: string[] = ['/main/login', '/main/register', '/404']
 
 /**路由白名单验证**/
 export function isWhite(path: string): boolean {

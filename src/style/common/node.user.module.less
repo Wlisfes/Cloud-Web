@@ -1,0 +1,47 @@
+.node-user {
+	position: relative;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 0 5px;
+	&-github {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px;
+		cursor: pointer;
+	}
+	&-source {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px;
+		cursor: pointer;
+		position: relative;
+		i {
+			font-size: 20px;
+			color: #ffffff;
+		}
+		.bell-bot {
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			position: absolute;
+			top: 10px;
+			right: 5px;
+			background-color: #ff4d4f;
+		}
+	}
+	&-popover {
+		display: flex;
+		align-items: center;
+		margin: 0 30px 0 10px;
+		cursor: pointer;
+		.node-user-nickname {
+			font-size: 14px;
+			color: #ffffff;
+			padding-left: 10px;
+		}
+	}
+}
