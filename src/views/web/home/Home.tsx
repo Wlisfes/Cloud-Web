@@ -1,5 +1,5 @@
-import { Getter } from 'vuex-class'
 import { Vue, Component } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
 import { NodeRoot, NodeHeader, NodeFooter } from '@/components/web'
 import { Icon, Space } from 'ant-design-vue'
 import { NodeBanner } from '@/types'

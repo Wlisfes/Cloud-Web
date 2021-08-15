@@ -7,23 +7,16 @@ export default class NodeRoot extends Vue {
 	@Prop({ type: String, default: '' }) cover!: string
 	@Prop({ type: Boolean, default: false }) mask!: boolean
 
-	/**背景图加载**/
-	private useCover() {
-		if (this.cover) {
-			return {
-				backgroundImage: `url(${this.cover})`
-			}
-		}
-		return {}
-	}
-
 	protected render() {
 		return (
-			<section
-				style={{ ...this.useCover() }}
-				class={style['node-root']}
-				onTouchmove={(e: Event) => this.$emit('touchmove', e)}
-			>
+			<section class={style['node-root']} onTouchmove={(e: Event) => this.$emit('touchmove', e)}>
+				{this.cover && (
+					<div
+						class={style['node-root-cover']}
+						style={{ backgroundImage: `url(${this.cover})` }}
+						onTouchmove={(e: Event) => this.$emit('touchmove', e)}
+					></div>
+				)}
 				{this.mask && <NodeMask></NodeMask>}
 				{this.$slots.header}
 				{this.$slots.content}

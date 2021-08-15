@@ -1,11 +1,15 @@
 import { Vue, Component } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
 import { NodeRoot, NodeHeader } from '@/components/web'
+import { NodeBanner } from '@/types'
 
 @Component
 export default class Intense extends Vue {
+	@Getter('banner/current') current!: NodeBanner
+
 	protected render() {
 		return (
-			<NodeRoot mask cover="https://oss.lisfes.cn/cloud/cover/2021-08/1628153942854.png">
+			<NodeRoot mask cover={this.current?.cover}>
 				<NodeHeader slot="header"></NodeHeader>
 			</NodeRoot>
 		)

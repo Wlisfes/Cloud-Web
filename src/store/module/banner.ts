@@ -47,6 +47,7 @@ const banner: Module<BannerState, RootState> = {
 				nodeBanner()
 					.then(async ({ code, data }) => {
 						if (code === HttpStatus.OK) {
+							await useCover(data[0].cover)
 							commit('SET_LIST', data)
 							resolve(data)
 						}
