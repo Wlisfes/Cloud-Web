@@ -18,24 +18,12 @@ export default class Home extends Vue {
 				<div slot="content" class={style['app-conter']}>
 					<div style={{ flex: 1 }}></div>
 					<div class={style['root-banner']}>
-						<Space size={10}>
-							<div class={style['root-banner-item']}>
-								<Icon
-									type="left"
-									style={{ color: '#ffffff', fontSize: '20px' }}
-									onClick={() => {
-										this.$store.dispatch('banner/prev')
-									}}
-								/>
+						<Space size={15}>
+							<div class={style['root-banner-item']} onClick={() => this.$store.dispatch('banner/prev')}>
+								<Icon type="left" />
 							</div>
-							<div class={style['root-banner-item']}>
-								<Icon
-									type="right"
-									style={{ color: '#ffffff', fontSize: '20px' }}
-									onClick={() => {
-										this.$store.dispatch('banner/next')
-									}}
-								/>
+							<div class={style['root-banner-item']} onClick={() => this.$store.dispatch('banner/next')}>
+								<Icon type="right" />
 							</div>
 						</Space>
 					</div>

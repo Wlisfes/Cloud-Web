@@ -41,7 +41,7 @@ const banner: Module<BannerState, RootState> = {
 	},
 	actions: {
 		/**轮播壁纸**/
-		initBanner: ({ commit, state }) => {
+		initBanner: ({ commit }) => {
 			return new Promise((resolve, reject) => {
 				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
 				nodeBanner()
