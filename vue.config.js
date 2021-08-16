@@ -1,25 +1,5 @@
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const TIME = new Date().getTime()
 const resolve = dir => path.join(__dirname, dir)
-
-function configureWebpack() {
-	if (process.env.NODE_ENV === 'production') {
-		return {
-			output: {
-				filename: `static/js/[name].${process.env.VUE_APP_BASE_VERSION}.${TIME}.js`,
-				chunkFilename: `static/js/[name].${process.env.VUE_APP_BASE_VERSION}.${TIME}.js`
-			},
-			plugins: [
-				new MiniCssExtractPlugin({
-					filename: `static/css/[name].${process.env.VUE_APP_BASE_VERSION}.${TIME}.css`,
-					chunkFilename: `static/css/[name].${process.env.VUE_APP_BASE_VERSION}.${TIME}.css`
-				})
-			]
-		}
-	}
-	return {}
-}
 
 module.exports = {
 	publicPath: process.env.VUE_APP_BASE_PATH,
@@ -34,18 +14,48 @@ module.exports = {
 				'@': resolve('src')
 			}
 		}
-		// ...configureWebpack()
 	},
 	chainWebpack: config => {
-		if (process.env.NODE_ENV === 'production') {
-			config.plugins.delete('preload') //删除预加载
-			config.plugins.delete('prefetch') //移除 preload 插件
-			config.optimization.minimize(true) //压缩代码
+		config.plugin('preload').tap(() => [
+			{
+				rel: 'preload',
+				fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
+				include: 'initial'
+			}
+		])
+		config.plugins.delete('prefetch')
+
+		config.when(process.env.NODE_ENV !== 'development', config => {
+			config
+				.plugin('ScriptExtHtmlWebpackPlugin')
+				.after('html')
+				.use('script-ext-html-webpack-plugin', [{ inline: /runtime\..*\.js$/ }])
+				.end()
 			config.optimization.splitChunks({
-				//分割代码
-				chunks: 'all'
+				chunks: 'all',
+				cacheGroups: {
+					libs: {
+						name: 'chunk-libs',
+						test: /[\\/]node_modules[\\/]/,
+						priority: 10,
+						chunks: 'initial'
+					},
+					elementUI: {
+						name: 'chunk-elementUI',
+						priority: 20,
+						test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+					},
+					commons: {
+						name: 'chunk-commons',
+						test: resolve('src/components'),
+						minChunks: 3,
+						priority: 5,
+						reuseExistingChunk: true
+					}
+				}
 			})
-		}
+			config.optimization.runtimeChunk('single')
+		})
 	},
 	css: {
 		loaderOptions: {
@@ -74,14 +84,6 @@ module.exports = {
 				changeOrigin: true,
 				pathRewrite: {
 					[`^${[process.env.VUE_APP_BASE_API]}`]: ''
-				}
-			},
-			[process.env.VUE_APP_BASE_BING]: {
-				target: 'https://cn.bing.com',
-				ws: false,
-				changeOrigin: true,
-				pathRewrite: {
-					[`^${[process.env.VUE_APP_BASE_BING]}`]: ''
 				}
 			}
 		}

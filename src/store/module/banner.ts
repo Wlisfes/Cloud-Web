@@ -57,30 +57,36 @@ const banner: Module<BannerState, RootState> = {
 			})
 		},
 		/**上一张**/
-		prev: async ({ commit, state }) => {
-			const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
-			let current = 0
-			if (state.current > 0) {
-				current = state.current - 1
-			} else {
-				current = state.list.length - 1
-			}
-			const { cover } = state.list[current]
-			await useCover(cover)
-			commit('SET_CURRENT', current)
-			loading.close()
+		prev: ({ commit, state }) => {
+			return new Promise(async resolve => {
+				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
+				let current = 0
+				if (state.current > 0) {
+					current = state.current - 1
+				} else {
+					current = state.list.length - 1
+				}
+				const { cover } = state.list[current]
+				await useCover(cover)
+				commit('SET_CURRENT', current)
+				loading.close()
+				resolve(true)
+			})
 		},
 		/**下一张**/
-		next: async ({ commit, state }) => {
-			const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
-			let current = 0
-			if (state.current < state.list.length - 1) {
-				current = state.current + 1
-			}
-			const { cover } = state.list[current]
-			await useCover(cover)
-			commit('SET_CURRENT', current)
-			loading.close()
+		next: ({ commit, state }) => {
+			return new Promise(async resolve => {
+				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
+				let current = 0
+				if (state.current < state.list.length - 1) {
+					current = state.current + 1
+				}
+				const { cover } = state.list[current]
+				await useCover(cover)
+				commit('SET_CURRENT', current)
+				loading.close()
+				resolve(true)
+			})
 		}
 	}
 }
