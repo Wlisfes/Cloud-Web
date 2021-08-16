@@ -1,4 +1,5 @@
 const path = require('path')
+const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
 const resolve = dir => path.join(__dirname, dir)
 
 module.exports = {
@@ -13,7 +14,8 @@ module.exports = {
 			alias: {
 				'@': resolve('src')
 			}
-		}
+		},
+		plugins: [new AntdDayjsWebpackPlugin()]
 	},
 	chainWebpack: config => {
 		config.plugin('preload').tap(() => [
@@ -60,6 +62,38 @@ module.exports = {
 					antDesignVue: {
 						name: 'chunk-ant-design-vue',
 						test: /[\\/]node_modules[\\/]ant-design-vue[\\/]/,
+						chunks: 'initial',
+						priority: 3,
+						reuseExistingChunk: true,
+						enforce: true
+					},
+					dplayer: {
+						name: 'chunk-dplayer',
+						test: /[\\/]node_modules[\\/]dplayer[\\/]/,
+						chunks: 'initial',
+						priority: 3,
+						reuseExistingChunk: true,
+						enforce: true
+					},
+					flvJs: {
+						name: 'chunk-flv-js',
+						test: /[\\/]node_modules[\\/]flv.js[\\/]/,
+						chunks: 'initial',
+						priority: 3,
+						reuseExistingChunk: true,
+						enforce: true
+					},
+					mavonEditor: {
+						name: 'chunk-mavon-editor',
+						test: /[\\/]node_modules[\\/]mavon-editor[\\/]/,
+						chunks: 'initial',
+						priority: 3,
+						reuseExistingChunk: true,
+						enforce: true
+					},
+					aliOss: {
+						name: 'chunk-ali-oss',
+						test: /[\\/]node_modules[\\/]ali-oss[\\/]/,
 						chunks: 'initial',
 						priority: 3,
 						reuseExistingChunk: true,

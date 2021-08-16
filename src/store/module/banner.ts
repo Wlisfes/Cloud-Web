@@ -57,7 +57,7 @@ const banner: Module<BannerState, RootState> = {
 			})
 		},
 		/**上一张**/
-		prev: ({ commit, state }) => {
+		prev: ({ commit, state }, delay = 300) => {
 			return new Promise(async resolve => {
 				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
 				let current = 0
@@ -68,13 +68,15 @@ const banner: Module<BannerState, RootState> = {
 				}
 				const { cover } = state.list[current]
 				await useCover(cover)
-				commit('SET_CURRENT', current)
-				loading.close()
-				resolve(true)
+				setTimeout(() => {
+					commit('SET_CURRENT', current)
+					loading.close()
+					resolve(true)
+				}, delay)
 			})
 		},
 		/**下一张**/
-		next: ({ commit, state }) => {
+		next: ({ commit, state }, delay = 300) => {
 			return new Promise(async resolve => {
 				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
 				let current = 0
@@ -83,9 +85,11 @@ const banner: Module<BannerState, RootState> = {
 				}
 				const { cover } = state.list[current]
 				await useCover(cover)
-				commit('SET_CURRENT', current)
-				loading.close()
-				resolve(true)
+				setTimeout(() => {
+					commit('SET_CURRENT', current)
+					loading.close()
+					resolve(true)
+				}, delay)
 			})
 		}
 	}
