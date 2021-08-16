@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Antd, { notification } from 'ant-design-vue'
+import { notification, Modal } from 'ant-design-vue'
 import mavonEditor from 'mavon-editor'
 import App from '@/App'
 import router from '@/router'
@@ -7,7 +7,8 @@ import store from '@/store'
 import '@/style/index.less'
 import '@/permission'
 
-Vue.use(Antd).use(mavonEditor)
+Vue.use(Modal)
+Vue.use(mavonEditor)
 Vue.config.productionTip = false
 
 new Vue({

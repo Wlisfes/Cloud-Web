@@ -34,23 +34,36 @@ module.exports = {
 			config.optimization.splitChunks({
 				chunks: 'all',
 				cacheGroups: {
-					libs: {
-						name: 'chunk-libs',
+					vendors: {
+						name: 'chunk-vendors',
 						test: /[\\/]node_modules[\\/]/,
-						priority: 10,
-						chunks: 'initial'
+						chunks: 'initial',
+						priority: 2,
+						reuseExistingChunk: true,
+						enforce: true
 					},
 					elementUI: {
-						name: 'chunk-elementUI',
+						name: 'chunk-element-ui',
+						test: /[\\/]node_modules[\\/]_?element-ui(.*)/,
+						chunks: 'initial',
 						priority: 20,
-						test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+						reuseExistingChunk: true,
+						enforce: true
 					},
 					commons: {
-						name: 'chunk-commons',
+						name: 'chunk-commons', // 打包后的文件名
 						test: resolve('src/components'),
 						minChunks: 3,
 						priority: 5,
 						reuseExistingChunk: true
+					},
+					antDesignVue: {
+						name: 'chunk-ant-design-vue',
+						test: /[\\/]node_modules[\\/]ant-design-vue[\\/]/,
+						chunks: 'initial',
+						priority: 3,
+						reuseExistingChunk: true,
+						enforce: true
 					}
 				}
 			})
