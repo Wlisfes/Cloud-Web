@@ -12,7 +12,15 @@ export default class NodeUser extends Vue {
 
 	private popover: boolean = false
 
-	private onChange() {
+	private onChange({ key }: { key: string }) {
+		switch (key) {
+			case 'user':
+				this.$router.push('/admin')
+				break
+			case 'logout':
+				this.$store.dispatch('user/logout')
+				break
+		}
 		this.popover = false
 	}
 
@@ -37,9 +45,11 @@ export default class NodeUser extends Vue {
 						overlayClassName="app-popover"
 					>
 						<Menu slot="content" onClick={this.onChange}>
-							<Menu.Item key="user" style={{ color: '#1890ff' }}>
-								<Icon type="user"></Icon>
-								<span>控制台</span>
+							<Menu.Item key="user">
+								<a href="/admin" target="_blank" rel="noopener noreferrer" style={{ color: '#1890ff' }}>
+									<Icon type="user"></Icon>
+									<span>控制台</span>
+								</a>
 							</Menu.Item>
 							<Menu.Item key="github">
 								<a
