@@ -110,6 +110,7 @@ class RootModal extends Vue {
 			}
 
 			try {
+				this.loading = true
 				const { type, form } = this
 				if (type) {
 					/**登录**/
@@ -143,10 +144,12 @@ class RootModal extends Vue {
 				v-model={this.visible}
 				centered
 				closable={false}
+				maskClosable={false}
 				width={480}
 				destroyOnClose
 				bodyStyle={{ padding: '15px' }}
 				dialogStyle={{ maxWidth: '95%' }}
+				footer={null}
 				onClose={this.onClose}
 			>
 				<div class={style['app-logo']}>
@@ -260,13 +263,17 @@ class RootModal extends Vue {
 							</FormModel.Item>
 						</div>
 					)}
+					<FormModel.Item style={{ margin: '10px 0 0' }}>
+						<div style={{ display: 'flex', justifyContent: 'center' }}>
+							<Button style={{ marginRight: '10px' }} onClick={this.onClose}>
+								取消
+							</Button>
+							<Button type="primary" loading={this.loading} htmlType="submit">
+								{this.type ? '登录' : '注册'}
+							</Button>
+						</div>
+					</FormModel.Item>
 				</FormModel>
-				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
-					<Button onClick={this.onClose}>取消</Button>
-					<Button type="primary" disabled={this.loading} loading={this.loading} onClick={this.onSubmit}>
-						{this.type ? '登录' : '注册'}
-					</Button>
-				</div>
 			</Modal>
 		)
 	}
