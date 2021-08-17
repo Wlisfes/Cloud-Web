@@ -42,6 +42,7 @@ const user: Module<UserState, RootState> = {
 	},
 	mutations: {
 		SET_USE_STATE: state => {
+			delToken()
 			state = Object.assign(state, { ...useState() })
 		},
 		SET_USER: (state, user: UserState) => {
@@ -81,17 +82,18 @@ const user: Module<UserState, RootState> = {
 		/**登出**/
 		logout: ({ commit, dispatch }) => {
 			return new Promise(async resolve => {
-				delToken()
 				await dispatch('reset')
 				resolve(true)
 			})
 		},
 		/**注册**/
-		register: ({ commit }, prors: types.RegisterParameter) => {
+		register: ({ commit, dispatch }, prors: types.RegisterParameter) => {
 			return new Promise((resolve: Function, reject: Function) => {
 				register({ ...prors })
-					.then(response => {
+					.then(async response => {
 						if (response.code === types.HttpStatus.OK) {
+							commit('SET_TOKEN', response.data.token)
+							await dispatch('nodeUser')
 							notification.success({
 								message: response.data.message,
 								description: '',

@@ -122,7 +122,7 @@ export default class Login extends Vue {
 							<Checkbox v-model={this.state.keep}>
 								<a style={{ color: '#1890ff' }}>记住密码</a>
 							</Checkbox>
-							<a onClick={() => this.$router.replace('/main/register')}>注册账号</a>
+							<a onClick={() => this.$router.replace('/')}>注册账号</a>
 						</div>
 					</FormModel.Item>
 				</FormModel>

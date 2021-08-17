@@ -19,7 +19,7 @@ export default class AppMenu extends Vue {
 			this.keys = this.openKeys
 			this.$store.commit('base/SET_OPENKEYS', [])
 		} else {
-			if (this.keys.length) {
+			if (this.keys?.length) {
 				this.$store.commit('base/SET_OPENKEYS', this.keys)
 			}
 		}

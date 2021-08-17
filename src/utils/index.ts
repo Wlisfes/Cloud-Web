@@ -4,11 +4,11 @@ export function listToTree(list: any[]) {
 		node,
 		tree = [],
 		i
-	for (i = 0; i < list.length; i++) {
+	for (i = 0; i < list?.length; i++) {
 		map[list[i].id] = list[i]
 		list[i].children = []
 	}
-	for (i = 0; i < list.length; i += 1) {
+	for (i = 0; i < list?.length; i += 1) {
 		node = list[i]
 		if (node.parent) {
 			if (map[node.parent].children) map[node.parent].children.push(node)
@@ -38,6 +38,6 @@ export function bfs(target: any[], id: number | string, key = 'children') {
 				...current
 			}
 		}
-	} while (quene.length)
+	} while (quene?.length)
 	return undefined
 }

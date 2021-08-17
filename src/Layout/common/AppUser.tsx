@@ -6,6 +6,7 @@ import { init } from '@/components/instance/init-logout'
 
 @Component
 export default class AppUser extends Vue {
+	@Getter('user/uid') uid!: number
 	@Getter('user/avatar') avatar!: string
 	@Getter('user/nickname') nickname!: string
 
@@ -80,16 +81,18 @@ export default class AppUser extends Vue {
 							<span>退出登陆</span>
 						</Menu.Item>
 					</Menu>
-					<div style={{ display: 'flex', alignItems: 'center', padding: '0 10px' }}>
-						<AppAvatar
-							size={32}
-							src={`${this.avatar}?x-oss-process=style/resize`}
-							username={this.nickname}
-							rounded={false}
-							style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '50%' }}
-						></AppAvatar>
-						<div class="app-user-nickname app-ellipsis">{this.nickname}</div>
-					</div>
+					{this.uid && (
+						<div style={{ display: 'flex', alignItems: 'center', padding: '0 10px' }}>
+							<AppAvatar
+								size={32}
+								src={`${this.avatar}?x-oss-process=style/resize`}
+								username={this.nickname}
+								rounded={false}
+								style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '50%' }}
+							></AppAvatar>
+							<div class="app-user-nickname app-ellipsis">{this.nickname}</div>
+						</div>
+					)}
 				</Popover>
 				<div class="app-user-node" style={{ padding: '0 10px' }}>
 					<Icon type="setting" />

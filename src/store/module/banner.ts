@@ -80,7 +80,7 @@ const banner: Module<BannerState, RootState> = {
 			return new Promise(async resolve => {
 				const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.7)' })
 				let current = 0
-				if (state.current < state.list.length - 1) {
+				if (state.current < state.list?.length - 1) {
 					current = state.current + 1
 				}
 				const { cover } = state.list[current]

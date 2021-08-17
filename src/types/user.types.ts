@@ -29,7 +29,7 @@ export type LoginResponse = Pick<NodeUserParameter, 'token'>
  * 注册
  */
 export type RegisterParameter = Pick<NodeUserParameter, 'nickname' | 'password' | 'email' | 'code'>
-export type RegisterResponse = Pick<NodeUserParameter, 'message'>
+export type RegisterResponse = Pick<NodeUserParameter, 'token' | 'message'>
 
 /**
  * 创建用户

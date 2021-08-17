@@ -9,8 +9,8 @@ router.beforeEach(async (to, form, next) => {
 	NProgress.start()
 	const token = getToken()
 	if (token) {
-		const roles = store.getters['user/role']
-		if (roles.length > 0) {
+		const list = store.getters['base/list'] || []
+		if (list?.length > 0) {
 			next()
 		} else {
 			try {

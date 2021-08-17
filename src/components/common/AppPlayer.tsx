@@ -49,7 +49,7 @@ export default class AppPlayer extends Vue {
 						path: data.path,
 						key: data.key
 					})
-				} else if (data.children.length > 0) {
+				} else if (data.children?.length > 0) {
 					const props = data.children[0]
 					this.current = Object.assign(this.current, {
 						cover: `${props.cover}?x-oss-process=style/resize`,
@@ -81,7 +81,7 @@ export default class AppPlayer extends Vue {
 				.then(({ code, data }) => {
 					if (code === HttpStatus.OK) {
 						const { list } = data
-						if (list.length > 0) {
+						if (list?.length > 0) {
 							const props = list[0]
 							this.current.path = props.PlayURL
 						}
@@ -128,7 +128,7 @@ export default class AppPlayer extends Vue {
 			this.$nextTick(() => {
 				this.player?.on('ended' as DPlayerEvents, () => {
 					const index = state.dataSource.findIndex(k => k.key === current.key)
-					if (index < state.dataSource.length - 1) {
+					if (index < state.dataSource?.length - 1) {
 						const props = state.dataSource[index + 1]
 						this.current = Object.assign(current, {
 							cover: `${props.cover}?x-oss-process=style/resize`,

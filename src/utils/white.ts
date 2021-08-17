@@ -4,8 +4,6 @@ const whiteList: string[] = [
 	'/intense', //视频
 	'/minute', //笔记
 	'/partner', //友链
-	'/main/login', //登录
-	'/main/register', //注册
 	'/404' //404
 ]
 

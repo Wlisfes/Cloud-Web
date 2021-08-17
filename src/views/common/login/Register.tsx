@@ -68,7 +68,7 @@ export default class Register extends Vue {
 			}
 			try {
 				await this.$store.dispatch('user/register', { ...this.state.form })
-				this.$router.replace('/main/login')
+				this.$router.replace('/')
 			} catch (e) {}
 			this.state.loading = false
 		})
@@ -133,7 +133,7 @@ export default class Register extends Vue {
 					</FormModel.Item>
 					<FormModel.Item>
 						<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-							<a onClick={() => this.$router.replace('/main/login')}>登录账号</a>
+							<a onClick={() => this.$router.replace('/')}>登录账号</a>
 						</div>
 					</FormModel.Item>
 				</FormModel>
