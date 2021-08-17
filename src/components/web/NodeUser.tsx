@@ -83,7 +83,7 @@ export default class NodeUser extends Vue {
 						<div class={style['node-user-popover']}>
 							<AppAvatar
 								size={32}
-								src={`${this.avatar}?x-oss-process=style/resize`}
+								src={`${this.avatar}?x-oss-process=style/resize-1-1`}
 								username={this.nickname}
 								rounded={false}
 								style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '50%' }}

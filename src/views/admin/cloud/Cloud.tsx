@@ -214,7 +214,7 @@ export default class Cloud extends Vue {
 										<Image
 											alt={props.title}
 											fit="cover"
-											src={`${props.cover}?x-oss-process=style/resize`}
+											src={`${props.cover}?x-oss-process=style/resize-16-9`}
 											style={{ width: '96px', height: '54px', cursor: 'pointer' }}
 										></Image>
 									</div>

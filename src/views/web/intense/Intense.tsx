@@ -38,7 +38,7 @@ export default class Intense extends Vue {
 										<Image
 											alt={k.title}
 											fit="cover"
-											src={`${k.cover}?x-oss-process=style/resize`}
+											src={`${k.cover}?x-oss-process=style/resize-16-9`}
 										></Image>
 									</div>
 									<div class={style['app-footer']}>{k.title}</div>

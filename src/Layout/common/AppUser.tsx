@@ -85,7 +85,7 @@ export default class AppUser extends Vue {
 						<div style={{ display: 'flex', alignItems: 'center', padding: '0 10px' }}>
 							<AppAvatar
 								size={32}
-								src={`${this.avatar}?x-oss-process=style/resize`}
+								src={`${this.avatar}?x-oss-process=style/resize-1-1`}
 								username={this.nickname}
 								rounded={false}
 								style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '50%' }}

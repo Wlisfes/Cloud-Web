@@ -8,6 +8,7 @@ export default class AppCover extends Vue {
 	$refs!: { appCropper: AppCropper }
 
 	@Prop({ type: String }) cover!: string
+	@Prop({ type: String, default: '?x-oss-process=style/resize-16-9' }) resize!: string
 	@Prop({ type: Number, default: 1 }) ratio!: number
 	@Prop({ type: String, default: 'avatar' }) path!: 'avatar' | 'upload' | 'cover'
 
@@ -22,9 +23,7 @@ export default class AppCover extends Vue {
 				></AppCropper>
 				{this.cover ? (
 					<div class={style['app-cover-avatar']} onClick={() => this.$refs.appCropper.upload(this.cover)}>
-						<Avatar size={100} shape="square" src={`${this.cover}?x-oss-process=style/resize`}>
-							妖雨纯
-						</Avatar>
+						<Avatar size={100} shape="square" src={`${this.cover}${this.resize}`}></Avatar>
 					</div>
 				) : (
 					<div class={style['app-cover-conter']} onClick={() => this.$refs.appCropper.upload()}>
