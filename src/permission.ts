@@ -9,34 +9,30 @@ router.beforeEach(async (to, form, next) => {
 	NProgress.start()
 	const token = getToken()
 	if (token) {
-		if (to.path.indexOf('/main') !== -1) {
-			next({ path: '/', replace: true })
+		const roles = store.getters['user/role']
+		if (roles.length > 0) {
+			next()
 		} else {
-			const roles = store.getters['user/role']
-			if (roles.length > 0) {
-				next()
-			} else {
-				try {
-					await store.dispatch('user/nodeUser')
-					await store.dispatch('base/nodeRoleMenu')
-					const route = await store.dispatch('base/useRouter')
-					await new Promise(resolve => {
-						router.addRoute(route)
-						resolve(route)
-					})
+			try {
+				await store.dispatch('user/nodeUser')
+				await store.dispatch('base/nodeRoleMenu')
+				const route = await store.dispatch('base/useRouter')
+				await new Promise(resolve => {
+					router.addRoute(route)
+					resolve(route)
+				})
 
-					next({ ...(to as any), replace: true })
-				} catch (e) {
-					delToken()
-					next({ path: '/main/login' })
-				}
+				next({ ...(to as any), replace: true })
+			} catch (e) {
+				delToken()
+				next({ path: '/' })
 			}
 		}
 	} else {
 		if (isWhite(to.path)) {
 			next()
 		} else {
-			next({ path: '/main/login' })
+			next({ path: '/' })
 			NProgress.done()
 		}
 	}

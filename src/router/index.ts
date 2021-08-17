@@ -31,40 +31,11 @@ export const routes: RouteConfig[] = [
 		name: 'WEB-Partner',
 		component: () => import('@/views/web/partner/Partner')
 	},
-	/**admin**************************************************************************/
-	// {
-	// 	path: '/admin',
-	// 	redirect: '/admin/home',
-	// 	component: () => import('@/Layout/admin'),
-	// 	children: [
-	// 		{
-	// 			path: '/admin/home',
-	// 			name: 'Home',
-	// 			meta: { title: '首页' },
-	// 			component: () => import('@/views/admin/setup/Menu')
-	// 		}
-	// 	]
-	// },
-	/**common**************************************************************************/
 	{
-		path: '/main',
-		redirect: '/main/login',
-		component: AppMain,
-		children: [
-			{
-				path: '/main/login',
-				name: 'Login',
-				component: () => import('@/views/common/login/Login')
-			},
-			{
-				path: '/main/register',
-				name: 'Register',
-				component: () => import('@/views/common/login/Register')
-			}
-		]
-	},
-	{ path: '/404', component: () => import('@/views/common/result/404') }
-	// { path: '*', redirect: '/home' }
+		path: '/404',
+		name: 'WEB-404',
+		component: () => import('@/views/common/result/404')
+	}
 ]
 
 const router = new VueRouter({

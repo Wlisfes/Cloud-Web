@@ -58,7 +58,7 @@ export default class Home extends Vue {
 						<div class={style['app-conter-clock']}>
 							<div class={style['clock-date']}>{this.state.date}</div>
 							<div class={style['clock-time']}>{this.state.time}</div>
-							<div class={`${style['clock-current']} ${style['clock-date']}`}>{this.current.name}</div>
+							<div class={`${style['clock-current']} ${style['clock-date']}`}>{this.current?.name}</div>
 						</div>
 					</div>
 					<div class={style['root-banner']}>

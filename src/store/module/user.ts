@@ -95,7 +95,7 @@ const user: Module<UserState, RootState> = {
 							notification.success({
 								message: response.data.message,
 								description: '',
-								duration: 4.5
+								duration: 3
 							})
 						}
 						resolve(response)
