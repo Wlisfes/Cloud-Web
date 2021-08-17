@@ -1,4 +1,4 @@
-import { NodeDate, NodeCloudSource } from '@/types'
+import { NodeDate, NodeCloudSource, NodeUserResponse } from '@/types'
 
 export type NodeCloud = NodeDate & {
 	id: number
@@ -15,6 +15,7 @@ export type NodeCloud = NodeDate & {
 	parent: NodeCloud | null
 	children: NodeCloud[]
 	source: NodeCloudSource[]
+	user: NodeUserResponse
 }
 export type NodeCloudParameter = NodeCloud & {
 	total: number
@@ -69,6 +70,13 @@ export type NodeCloudsResponse = Pick<NodeCloudParameter, 'page' | 'size' | 'tot
  */
 export type NodeMultipleCloudsParameter = Pick<NodeCloudParameter, 'page' | 'size'>
 export type NodeMultipleCloudsResponse = Pick<NodeCloudParameter, 'page' | 'size' | 'total'> & {
+	list: NodeCloud[]
+}
+
+/**
+ * 每日推荐
+ */
+export type NodeRcmdCloudResponse = Pick<NodeCloudParameter, 'page' | 'size' | 'total'> & {
 	list: NodeCloud[]
 }
 

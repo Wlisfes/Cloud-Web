@@ -214,7 +214,7 @@ export default class User extends Vue {
 								avatar: (props: NodeUserResponse) => (
 									<AppAvatar
 										size={40}
-										src={`${props.avatar}?x-oss-process=style/resize`}
+										src={`${props.avatar}?x-oss-process=style/resize-1-1`}
 										username={props.nickname}
 										rounded={false}
 										style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '4px' }}

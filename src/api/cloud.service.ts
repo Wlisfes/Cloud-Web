@@ -46,6 +46,14 @@ export function nodeClouds(params: types.NodeCloudsParameter) {
 	})
 }
 
+/**每日推荐**/
+export function nodeRcmdCloud() {
+	return request<types.NodeCloudsResponse>({
+		url: `/api/cloud/list-rcmd-node`,
+		method: 'GET'
+	})
+}
+
 /**删除音视频媒体**/
 export function nodeDeleteCloud(params: types.NodeDeleteCloudParameter) {
 	return request<types.NodeDeleteCloudResponse>({
