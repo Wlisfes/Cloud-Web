@@ -8,13 +8,13 @@ Vue.directive('login', {
 		el.addEventListener('click', (e: Event) => {
 			e.preventDefault()
 			if (getToken()) {
-				value && value()
+				value && typeof value === 'function' && value()
 			} else {
 				init().then(({ node, vm }) => {
 					node.init()
 					vm.$once('main-submit', () => {
 						node.onClose()
-						value && value()
+						value && typeof value === 'function' && value()
 					})
 					vm.$once('main-close', () => {
 						vm.$off('main-submit')

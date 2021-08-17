@@ -40,13 +40,15 @@ export default class NodeUser extends Vue {
 	protected render() {
 		return (
 			<div class={style['node-user']}>
-				<div class={style['node-user-source']}>
-					<Icon type="fullscreen" />
-				</div>
 				{this.uid && (
-					<div class={style['node-user-source']}>
-						<Icon type="bell" />
-						<sup class={style['bell-bot']}></sup>
+					<div style={{ display: 'flex' }}>
+						<div class={style['node-user-source']}>
+							<Icon type="fullscreen" />
+						</div>
+						<div class={style['node-user-source']}>
+							<Icon type="bell" />
+							<sup class={style['bell-bot']}></sup>
+						</div>
 					</div>
 				)}
 				{this.uid ? (
@@ -91,7 +93,7 @@ export default class NodeUser extends Vue {
 					</Popover>
 				) : (
 					<div class={style['node-user-popover']}>
-						<Avatar size={32} icon="user" v-login={() => console.log(111)}></Avatar>
+						<Avatar size={32} icon="user" v-login></Avatar>
 					</div>
 				)}
 			</div>
