@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
-import { Icon, Space, Popover, Menu, Avatar } from 'ant-design-vue'
+import { Icon, Popover, Menu, Avatar } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
 import style from '@/style/common/node.user.module.less'
 
@@ -80,7 +80,7 @@ export default class NodeUser extends Vue {
 					</Popover>
 				) : (
 					<div class={style['node-user-popover']}>
-						<Avatar size={32} icon="user"></Avatar>
+						<Avatar size={32} icon="user" v-login={() => console.log(111)}></Avatar>
 					</div>
 				)}
 			</div>

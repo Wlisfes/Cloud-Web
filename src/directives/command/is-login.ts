@@ -10,7 +10,17 @@ Vue.directive('login', {
 			if (getToken()) {
 				value && value()
 			} else {
-				initMain().then(() => {})
+				initMain().then(({ node, vm }) => {
+					node.init()
+					vm.$once('main-submit', () => {
+						node.onClose()
+						value && value()
+					})
+					vm.$once('main-close', () => {
+						vm.$off('main-submit')
+						vm.$off('main-close')
+					})
+				})
 			}
 		})
 	}

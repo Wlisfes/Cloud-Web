@@ -60,16 +60,17 @@ const user: Module<UserState, RootState> = {
 	},
 	actions: {
 		/**登录**/
-		login: ({ commit }, props: types.LoginParameter) => {
+		login: ({ commit, dispatch }, props: types.LoginParameter) => {
 			return new Promise((resolve: Function, reject: Function) => {
 				login({ ...props })
-					.then(response => {
+					.then(async response => {
 						if (response.code === types.HttpStatus.OK) {
 							commit('SET_TOKEN', response.data.token)
+							await dispatch('nodeUser')
 							notification.success({
 								message: '登录成功',
 								description: '',
-								duration: 4.5
+								duration: 3
 							})
 						}
 						resolve(response)
