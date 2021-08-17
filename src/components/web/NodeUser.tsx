@@ -2,6 +2,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 import { Icon, Popover, Menu, Avatar } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
+import { init } from '@/components/instance/init-logout'
 import style from '@/style/common/node.user.module.less'
 
 @Component
@@ -14,11 +15,23 @@ export default class NodeUser extends Vue {
 
 	private onChange({ key }: { key: string }) {
 		switch (key) {
-			case 'user':
+			case 'admin':
 				this.$router.push('/admin')
 				break
 			case 'logout':
-				this.$store.dispatch('user/logout')
+				init().then(({ node, vm }) => {
+					node.init()
+					vm.$once('logout-submit', () => {
+						setTimeout(async () => {
+							await this.$store.dispatch('user/logout')
+							node.onClose()
+						}, 500)
+					})
+					vm.$once('logout-close', () => {
+						vm.$off('logout-submit')
+						vm.$off('logout-close')
+					})
+				})
 				break
 		}
 		this.popover = false
@@ -45,11 +58,9 @@ export default class NodeUser extends Vue {
 						overlayClassName="app-popover"
 					>
 						<Menu slot="content" onClick={this.onChange}>
-							<Menu.Item key="user">
-								<a href="/admin" target="_blank" rel="noopener noreferrer" style={{ color: '#1890ff' }}>
-									<Icon type="user"></Icon>
-									<span>控制台</span>
-								</a>
+							<Menu.Item key="admin" style={{ color: '#1890ff' }}>
+								<Icon type="dashboard"></Icon>
+								<span>控制台</span>
 							</Menu.Item>
 							<Menu.Item key="github">
 								<a

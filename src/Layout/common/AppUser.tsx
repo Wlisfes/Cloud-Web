@@ -2,6 +2,7 @@ import { Getter } from 'vuex-class'
 import { Vue, Component } from 'vue-property-decorator'
 import { Icon, Menu, Popover, Modal } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
+import { init } from '@/components/instance/init-logout'
 
 @Component
 export default class AppUser extends Vue {
@@ -16,15 +17,29 @@ export default class AppUser extends Vue {
 	private async onChange(option: { key: string }) {
 		this.state.popover = false
 		switch (option.key) {
-			case 'user':
+			case 'home':
 				this.$router.push('/')
+			case 'user':
+				// this.$router.push('/')
 				break
 			case 'github':
 				window.open('https:play.lisfes.cn')
 				break
 			default:
-				await this.$store.dispatch('user/logout')
-				this.$router.push('/main/login')
+				init().then(({ node, vm }) => {
+					node.init()
+					vm.$once('logout-submit', () => {
+						setTimeout(async () => {
+							await this.$store.dispatch('user/logout')
+							node.onClose()
+							this.$router.push('/')
+						}, 500)
+					})
+					vm.$once('logout-close', () => {
+						vm.$off('logout-submit')
+						vm.$off('logout-close')
+					})
+				})
 				break
 		}
 	}
@@ -48,6 +63,10 @@ export default class AppUser extends Vue {
 					overlayClassName="app-popover"
 				>
 					<Menu slot="content" onClick={this.onChange}>
+						<Menu.Item key="home" style={{ color: '#13c2c2' }}>
+							<Icon type="bank"></Icon>
+							<span>返回首页</span>
+						</Menu.Item>
 						<Menu.Item key="user" style={{ color: '#1890ff' }}>
 							<Icon type="user"></Icon>
 							<span>个人中心</span>

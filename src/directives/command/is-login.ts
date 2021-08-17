@@ -1,6 +1,6 @@
 import { Vue } from 'vue-property-decorator'
 import { getToken } from '@/utils/auth'
-import { initMain } from '@/components/instance/init-main'
+import { init } from '@/components/instance/init-main'
 
 Vue.directive('login', {
 	bind(el, bind, vnode) {
@@ -10,7 +10,7 @@ Vue.directive('login', {
 			if (getToken()) {
 				value && value()
 			} else {
-				initMain().then(({ node, vm }) => {
+				init().then(({ node, vm }) => {
 					node.init()
 					vm.$once('main-submit', () => {
 						node.onClose()

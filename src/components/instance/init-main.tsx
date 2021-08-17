@@ -272,9 +272,9 @@ class RootModal extends Vue {
 	}
 }
 
-//
+/**单例模式调用**/
 let node: any = null
-export function initMain(): Promise<{ node: RootModal; vm: typeof vm }> {
+export function init(): Promise<{ node: RootModal; vm: typeof vm }> {
 	return new Promise(resolve => {
 		if (!node) {
 			const Conter = Vue.extend(RootModal)
