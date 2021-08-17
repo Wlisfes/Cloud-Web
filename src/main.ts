@@ -4,8 +4,9 @@ import mavonEditor from 'mavon-editor'
 import App from '@/App'
 import router from '@/router'
 import store from '@/store'
-import '@/style/index.less'
+import '@/directives'
 import '@/permission'
+import '@/style/index.less'
 
 Vue.use(Modal)
 Vue.use(mavonEditor)
