@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import AppMain from '@/views/common/login/AppMain'
 
 Vue.use(VueRouter)
 
@@ -9,7 +8,7 @@ export const routes: RouteConfig[] = [
 	{
 		path: '/',
 		name: 'WEB-Home',
-		component: () => import('@/views/web/home/Home')
+		component: () => import('@/components/web/NodeRoot')
 	},
 	{
 		path: '/multiple',

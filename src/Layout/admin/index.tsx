@@ -1,7 +1,7 @@
 import { Getter } from 'vuex-class'
 import { Vue, Component } from 'vue-property-decorator'
 import { Layout, Icon } from 'ant-design-vue'
-import { AppMultiple, AppMenu, AppTitle, AppUser } from '@/Layout/common'
+import { AppMultiple, AppMenu, AppTitle, AppUser } from '@/Layout/admin/common'
 
 @Component
 export default class Index extends Vue {

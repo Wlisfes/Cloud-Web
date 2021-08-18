@@ -1,4 +1,4 @@
-import Layout from '@/Layout'
+import Layout from '@/Layout/admin'
 import asyncRoutes from '@/router/router.env'
 
 /**菜单数组转树结果**/

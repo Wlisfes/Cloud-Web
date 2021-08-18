@@ -1,20 +1,27 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Icon } from 'ant-design-vue'
+import { Drawer } from 'ant-design-vue'
 import style from '@/style/common/node.link.module.less'
 
 @Component
-export default class NodeLink extends Vue {
-	private onTrigger() {
-		this.$emit('trigger')
+export default class NodeSider extends Vue {
+	private visible: boolean = false
+
+	public onTrigger() {
+		this.visible = !this.visible
 	}
 
 	protected render() {
 		return (
-			<div>
-				<div class={style['node-link-menu']} onClick={this.onTrigger}>
-					<Icon type="menu" style={{ fontSize: '20px', color: '#ffffff' }} />
-				</div>
-				<ul class={`${style['node-link']} ${style.horizontal}`}>
+			<Drawer
+				placement="left"
+				zIndex={3000}
+				width={200}
+				visible={this.visible}
+				closable={false}
+				bodyStyle={{ padding: 0 }}
+				onClose={this.onTrigger}
+			>
+				<ul class={`${style['node-link']} ${style.vertical}`}>
 					<li class={style['node-link-item']}>
 						<router-link to="/">🍎 首页</router-link>
 					</li>
@@ -31,7 +38,7 @@ export default class NodeLink extends Vue {
 						<router-link to="/partner">🍄 友链</router-link>
 					</li>
 				</ul>
-			</div>
+			</Drawer>
 		)
 	}
 }

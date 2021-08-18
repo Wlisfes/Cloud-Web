@@ -6,12 +6,10 @@ import style from '@/style/common/node.root.module.less'
 export default class NodeHeader extends Vue {
 	protected render() {
 		return (
-			<header class={style['node-root-header']}>
-				<div class={style['node-root-header-conter']}>
-					<NodeLink></NodeLink>
-					<NodeUser></NodeUser>
-				</div>
-			</header>
+			<div class={style['node-root-header-conter']}>
+				<NodeLink></NodeLink>
+				<NodeUser></NodeUser>
+			</div>
 		)
 	}
 }
