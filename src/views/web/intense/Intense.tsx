@@ -1,7 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Image } from 'element-ui'
 import { AppAvatar } from '@/components/common'
-import { nodeRcmdCloud } from '@/api'
+import { NodeScroll } from '@/components/node'
+import { nodeRcmdCloud, nodeClouds } from '@/api'
 import { HttpStatus, NodeCloud } from '@/types'
 import style from '@/style/web/web.intense.module.less'
 
@@ -26,12 +27,12 @@ export default class Intense extends Vue {
 	protected render() {
 		return (
 			<div class={style['app-conter']}>
-				{this.rcmd.length > 0 && (
-					<ul class={style['app-ul']}>
-						{this.rcmd.map(k => (
-							<li key={k.id} class={style['app-ul-li']}>
-								<div class={style['app-ul-conter']}>
-									<div class={style['app-cover']}>
+				<ul class={style['app-ul']}>
+					{this.rcmd.map(k => (
+						<li key={k.id} class={style['app-ul-li']}>
+							<div class={style['app-ul-conter']}>
+								<div class={style['app-cover']}>
+									<router-link to={`/player/${k.id}`}>
 										<div class={style['app-cover-conter']}>
 											<Image
 												class="app-image"
@@ -40,8 +41,10 @@ export default class Intense extends Vue {
 												src={`${k.cover}?x-oss-process=style/resize-16-9`}
 											></Image>
 										</div>
-									</div>
-									<div class={style['app-user']}>
+									</router-link>
+								</div>
+								<div class={style['app-user']}>
+									{false && (
 										<AppAvatar
 											class={style['app-user-avatar']}
 											src={`${k.user.avatar}?x-oss-process=style/resize-1-1`}
@@ -49,17 +52,17 @@ export default class Intense extends Vue {
 											rounded={false}
 											style={{ cursor: 'pointer', borderRadius: '50%' }}
 										></AppAvatar>
-										<div class={style['app-user-title']}>
-											<div class="app-ellipsis-2">
-												<a style={{ color: '#444444' }}>{k.title}</a>
-											</div>
+									)}
+									<div class={style['app-user-title']}>
+										<div class="app-ellipsis-2">
+											<a style={{ color: '#444444' }}>{k.title}</a>
 										</div>
 									</div>
 								</div>
-							</li>
-						))}
-					</ul>
-				)}
+							</div>
+						</li>
+					))}
+				</ul>
 			</div>
 		)
 	}

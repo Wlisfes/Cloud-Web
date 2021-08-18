@@ -1,0 +1,34 @@
+.app-conter {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	z-index: 10;
+	position: relative;
+}
+
+.app-player {
+	position: relative;
+	width: 100%;
+	max-width: 1280px;
+	margin: 20px auto;
+	background: #000000;
+	:global {
+		.el-loading-mask {
+			background: #000000;
+		}
+	}
+	&-scale {
+		width: 100%;
+		height: 0;
+		padding-bottom: 56.25%;
+		position: relative;
+	}
+	&-conter {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+	}
+}

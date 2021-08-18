@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { notification, Modal } from 'ant-design-vue'
+import { Loading } from 'element-ui'
 import mavonEditor from 'mavon-editor'
 import App from '@/App'
 import router from '@/router'
@@ -9,6 +10,7 @@ import '@/permission'
 import '@/style/index.less'
 
 Vue.use(Modal)
+Vue.use(Loading)
 Vue.use(mavonEditor)
 Vue.config.productionTip = false
 

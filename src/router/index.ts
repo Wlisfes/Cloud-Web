@@ -35,6 +35,11 @@ export const routes: RouteConfig[] = [
 				path: '/partner',
 				name: 'WEB-Partner',
 				component: () => import('@/views/web/partner/Partner')
+			},
+			{
+				path: '/player/:id',
+				name: 'WEB-Player',
+				component: () => import('@/views/web/intense/Player')
 			}
 		]
 	},
