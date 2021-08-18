@@ -17,7 +17,7 @@ export default class Intense extends Vue {
 	/**每日推荐**/
 	private async nodeRcmdCloud() {
 		try {
-			const { code, data } = await nodeClouds({ page: 1, size: 28 })
+			const { code, data } = await nodeRcmdCloud()
 			if (code === HttpStatus.OK) {
 				this.rcmd = data.list
 			}
