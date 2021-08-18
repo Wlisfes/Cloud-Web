@@ -23,19 +23,29 @@ export default class NodeSider extends Vue {
 			>
 				<ul class={`${style['node-link']} ${style.vertical}`}>
 					<li class={style['node-link-item']}>
-						<router-link to="/">🍎 首页</router-link>
+						<router-link to="/" nativeOn-click={this.onTrigger}>
+							🍎 首页
+						</router-link>
 					</li>
 					<li class={style['node-link-item']}>
-						<router-link to="/multiple">🍀 归档</router-link>
+						<router-link to="/multiple" nativeOn-click={this.onTrigger}>
+							🍀 归档
+						</router-link>
 					</li>
 					<li class={style['node-link-item']}>
-						<router-link to="/intense">🍓 视频</router-link>
+						<router-link to="/intense" nativeOn-click={this.onTrigger}>
+							🍓 视频
+						</router-link>
 					</li>
 					<li class={style['node-link-item']}>
-						<router-link to="/minute">🍒 笔记</router-link>
+						<router-link to="/minute" nativeOn-click={this.onTrigger}>
+							🍒 笔记
+						</router-link>
 					</li>
 					<li class={style['node-link-item']}>
-						<router-link to="/partner">🍄 友链</router-link>
+						<router-link to="/partner" nativeOn-click={this.onTrigger}>
+							🍄 友链
+						</router-link>
 					</li>
 				</ul>
 			</Drawer>

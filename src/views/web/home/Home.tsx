@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
-import { NodeRoot, NodeHeader, NodeFooter } from '@/components/web'
+import { NodeFooter } from '@/Layout/web/common'
 import { Icon, Space } from 'ant-design-vue'
 import { NodeBanner } from '@/types'
 import style from '@/style/web/web.home.module.less'
@@ -16,7 +16,6 @@ const zeroPadding = (num: number, digit: number) => {
 
 @Component
 export default class Home extends Vue {
-	$refs!: { root: HTMLElement & NodeRoot }
 	@Getter('banner/current') current!: NodeBanner
 	private state = {
 		date: '',
@@ -51,34 +50,31 @@ export default class Home extends Vue {
 
 	protected render() {
 		return (
-			<NodeRoot mask cover={this.current?.cover} onTouchmove={(e: Event) => e.preventDefault()}>
-				<NodeHeader slot="header"></NodeHeader>
-				<div slot="content" class={style['app-conter']}>
-					<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-						<div class={style['app-conter-clock']}>
-							<div class={style['clock-date']}>{this.state.date}</div>
-							<div class={style['clock-time']}>{this.state.time}</div>
-							<div class={`${style['clock-current']} ${style['clock-date']}`}>{this.current?.name}</div>
-						</div>
+			<div class={style['app-conter']}>
+				<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+					<div class={style['app-conter-clock']}>
+						<div class={style['clock-date']}>{this.state.date}</div>
+						<div class={style['clock-time']}>{this.state.time}</div>
+						<div class={`${style['clock-current']} ${style['clock-date']}`}>{this.current?.name}</div>
 					</div>
-					<div class={style['root-banner']}>
-						<Space size={15}>
-							<a href={this.current?.search} target="_blank" rel="noopener noreferrer">
-								<div class={style['root-banner-item']}>
-									<i class="el-icon-location-outline"></i>
-								</div>
-							</a>
-							<div class={style['root-banner-item']} onClick={() => this.$store.dispatch('banner/prev')}>
-								<Icon type="left" />
-							</div>
-							<div class={style['root-banner-item']} onClick={() => this.$store.dispatch('banner/next')}>
-								<Icon type="right" />
-							</div>
-						</Space>
-					</div>
-					<NodeFooter></NodeFooter>
 				</div>
-			</NodeRoot>
+				<div class={style['root-banner']}>
+					<Space size={15}>
+						<a href={this.current?.search} target="_blank" rel="noopener noreferrer">
+							<div class={style['root-banner-item']}>
+								<i class="el-icon-location-outline"></i>
+							</div>
+						</a>
+						<div class={style['root-banner-item']} onClick={() => this.$store.dispatch('banner/prev')}>
+							<Icon type="left" />
+						</div>
+						<div class={style['root-banner-item']} onClick={() => this.$store.dispatch('banner/next')}>
+							<Icon type="right" />
+						</div>
+					</Space>
+				</div>
+				<NodeFooter></NodeFooter>
+			</div>
 		)
 	}
 }

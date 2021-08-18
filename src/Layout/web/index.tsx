@@ -1,34 +1,34 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
 import { Layout } from 'ant-design-vue'
-import { NodeMask, NodeLink, NodeUser, NodeSider } from '@/components/web'
-import style from '@/style/common/node.root.module.less'
+import { NodeLink, NodeUser, NodeSider } from '@/Layout/web/common'
+import { NodeBanner } from '@/types'
 
 @Component
-export default class NodeRoot extends Vue {
+export default class Container extends Vue {
 	$refs!: { nodeSider: NodeSider }
 
-	@Prop({ type: String, default: '' }) cover!: string
-	@Prop({ type: Boolean, default: false }) mask!: boolean
+	@Getter('banner/current') current!: NodeBanner
 
 	protected render() {
 		return (
-			<Layout class={style['node-root']}>
-				<Layout.Header class={style['node-root-header']}>
-					<div class={style['node-root-header-conter']}>
+			<Layout class="app-web-container">
+				<Layout.Header class="app-web-container-header">
+					<div class="app-web-container-header-conter">
 						<NodeLink onTrigger={() => this.$refs.nodeSider.onTrigger()}></NodeLink>
 						<NodeUser></NodeUser>
 					</div>
 				</Layout.Header>
 				<NodeSider ref="nodeSider"></NodeSider>
-				{this.cover && (
+				{this.current?.cover && (
 					<div
-						class={style['node-root-cover']}
-						style={{ backgroundImage: `url(${this.cover})` }}
+						class="app-web-container-cover"
+						style={{ backgroundImage: `url(${this.current?.cover})` }}
 						onTouchmove={(e: Event) => this.$emit('touchmove', e)}
 					></div>
 				)}
-				{this.mask && <NodeMask></NodeMask>}
-				<Layout.Content style={{ marginTop: '50px', zIndex: 9 }}>
+				{this.current?.cover && <div class="app-web-container-mask"></div>}
+				<Layout.Content class="app-web-container-content">
 					<router-view></router-view>
 				</Layout.Content>
 			</Layout>
