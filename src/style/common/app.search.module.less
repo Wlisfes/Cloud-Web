@@ -1,0 +1,26 @@
+.app-search {
+	width: 100%;
+	max-width: 840px;
+	margin: 100px auto;
+	position: relative;
+	:global {
+		.ant-input {
+			height: 52px;
+			padding: 10px 45px 12px 20px !important;
+			font-size: 18px;
+			line-height: 1;
+			border: none;
+			outline: none;
+			border-radius: 6px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+			position: relative;
+			z-index: 20;
+			&:focus {
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+			}
+		}
+		.ant-input-search-icon {
+			font-size: 24px;
+		}
+	}
+}

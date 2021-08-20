@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Image } from 'element-ui'
-import { AppAvatar } from '@/components/common'
+import { AppAvatar, AppSearch } from '@/components/common'
 import { NodeScroll } from '@/components/node'
 import { nodeRcmdCloud, nodeClouds } from '@/api'
 import { HttpStatus, NodeCloud } from '@/types'
@@ -27,6 +27,8 @@ export default class Intense extends Vue {
 	protected render() {
 		return (
 			<div class={style['app-conter']}>
+				<AppSearch></AppSearch>
+
 				<ul class={style['app-ul']}>
 					{this.rcmd.map(k => (
 						<li key={k.id} class={style['app-ul-li']}>
