@@ -1,9 +1,10 @@
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Input, FormModel } from 'ant-design-vue'
 import style from '@/style/common/app.search.module.less'
 
 @Component
 export default class AppSearch extends Vue {
+	@Prop({ type: String, default: 'Search' }) placeholder!: string
 	private visible: boolean = false
 
 	private onFocus() {
@@ -19,7 +20,11 @@ export default class AppSearch extends Vue {
 			<div class={style['app-search']}>
 				<FormModel>
 					<FormModel.Item style={{ margin: 0, zIndex: 1000 }}>
-						<Input.Search placeholder="Search" onBlur={this.onBlur} onFocus={this.onFocus}></Input.Search>
+						<Input.Search
+							placeholder={this.placeholder}
+							onBlur={this.onBlur}
+							onFocus={this.onFocus}
+						></Input.Search>
 					</FormModel.Item>
 				</FormModel>
 				<transition name="mask" appear>
