@@ -66,6 +66,15 @@ export type NodeCloudsResponse = Pick<NodeCloudParameter, 'page' | 'size' | 'tot
 }
 
 /**
+ * 音视频列表
+ */
+export type NodeClientCloudsParameter = Pick<NodeCloudParameter, 'page' | 'size'> &
+	Partial<Pick<NodeCloudParameter, 'type' | 'title'>>
+export type NodeClientCloudsResponse = Pick<NodeCloudParameter, 'page' | 'size' | 'total'> & {
+	list: NodeCloud[]
+}
+
+/**
  * 多集媒体目录列表
  */
 export type NodeMultipleCloudsParameter = Pick<NodeCloudParameter, 'page' | 'size'>

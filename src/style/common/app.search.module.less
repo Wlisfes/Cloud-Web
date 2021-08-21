@@ -11,7 +11,7 @@
 			line-height: 1;
 			border: none;
 			outline: none;
-			border-radius: 6px;
+			border-radius: 26px;
 			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 			position: relative;
 			z-index: 20;
@@ -19,8 +19,36 @@
 				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 			}
 		}
-		.ant-input-search-icon {
-			font-size: 24px;
+		.ant-input-suffix {
+			z-index: 1000 !important;
+			.ant-input-search-icon {
+				font-size: 24px;
+			}
+		}
+	}
+
+	&-conter {
+		display: flex;
+		flex-direction: column;
+		.node {
+			position: relative;
+			&-item {
+				height: 34px;
+				display: flex;
+				align-items: center;
+				font-size: 16px;
+				color: #444444;
+				transition: all 300ms;
+				padding: 0 5px;
+				&:hover {
+					background-color: #e6f7ff;
+				}
+			}
+			&-value {
+				flex: 1;
+				overflow: hidden;
+				cursor: pointer;
+			}
 		}
 	}
 }

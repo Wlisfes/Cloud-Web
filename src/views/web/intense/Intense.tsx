@@ -1,23 +1,38 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Image } from 'element-ui'
 import { AppAvatar, AppSearch } from '@/components/common'
-import { NodeScroll } from '@/components/node'
-import { nodeRcmdCloud, nodeClouds } from '@/api'
+import { nodeClientClouds } from '@/api'
 import { HttpStatus, NodeCloud } from '@/types'
 import style from '@/style/web/web.intense.module.less'
 
 @Component
 export default class Intense extends Vue {
 	private rcmd: NodeCloud[] = []
+	private dataSource: Array<{ name: string; id: number }> = []
+	private loading: boolean = false
 
 	protected created() {
-		this.nodeRcmdCloud()
+		this.nodeClientClouds()
 	}
 
-	/**每日推荐**/
-	private async nodeRcmdCloud() {
+	private onSubmit(value: string) {
+		this.loading = true
+		nodeClientClouds({ page: 1, size: 10, title: value })
+			.then(({ code, data }) => {
+				if (code === HttpStatus.OK) {
+					this.dataSource = data.list.map(k => ({ name: k.title, id: k.id }))
+				}
+			})
+			.catch(e => {})
+			.finally(() => {
+				this.loading = false
+			})
+	}
+
+	/**音视频列表-客户端**/
+	private async nodeClientClouds() {
 		try {
-			const { code, data } = await nodeRcmdCloud()
+			const { code, data } = await nodeClientClouds({ page: 1, size: 20 })
 			if (code === HttpStatus.OK) {
 				this.rcmd = data.list
 			}
@@ -27,7 +42,12 @@ export default class Intense extends Vue {
 	protected render() {
 		return (
 			<div class={style['app-conter']}>
-				<AppSearch></AppSearch>
+				<AppSearch
+					loading={this.loading}
+					dataSource={this.dataSource}
+					onChange={this.onSubmit}
+					onSubmit={this.onSubmit}
+				></AppSearch>
 
 				<ul class={style['app-ul']}>
 					{this.rcmd.map(k => (

@@ -46,11 +46,12 @@ export function nodeClouds(params: types.NodeCloudsParameter) {
 	})
 }
 
-/**每日推荐**/
-export function nodeRcmdCloud() {
-	return request<types.NodeCloudsResponse>({
-		url: `/api/cloud/list-rcmd-node`,
-		method: 'GET'
+/**音视频列表-客户端**/
+export function nodeClientClouds(params: types.NodeClientCloudsParameter) {
+	return request<types.NodeClientCloudsResponse>({
+		url: `/api/cloud/client/list-node`,
+		method: 'GET',
+		params
 	})
 }
 
