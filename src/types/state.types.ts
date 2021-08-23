@@ -25,3 +25,15 @@ export type Source<T> = {
 		props?: any
 	) => void
 }
+
+/**客户端列表配置****************************/
+export type Client<T> = {
+	page: number
+	size: number
+	total: number
+	loading: boolean
+	dataSource: T
+	initSource: (merge?: boolean) => void
+	onClose: () => void
+	onMore?: () => void
+}

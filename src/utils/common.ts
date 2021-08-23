@@ -26,3 +26,16 @@ export function ctxFile() {
 		.filter(name => name.indexOf('common') === -1)
 		.map(k => k.slice(1, k.lastIndexOf('.')))
 }
+
+/**滚动是否到底*****************************/
+export function intheEnd(distance = 300) {
+	const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+	const windowHeight = document.documentElement.clientHeight || document.body.clientHeight
+	const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+	return {
+		end: scrollTop + windowHeight >= scrollHeight - distance,
+		scrollTop,
+		windowHeight,
+		scrollHeight
+	}
+}
