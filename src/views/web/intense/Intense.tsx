@@ -26,7 +26,7 @@ export default class Intense extends Vue {
 					if (merge) {
 						this.client.dataSource = this.client.dataSource.concat(data.list)
 					} else {
-						this.client.dataSource = data.list
+						// this.client.dataSource = data.list
 					}
 					this.client.total = data.total
 				}
@@ -47,9 +47,7 @@ export default class Intense extends Vue {
 	}
 
 	protected created() {
-		setTimeout(() => {
-			this.client.initSource()
-		}, 1000)
+		this.client.initSource()
 	}
 
 	protected mounted() {
@@ -63,7 +61,11 @@ export default class Intense extends Vue {
 		return (
 			<div class={style['app-conter']}>
 				<AppSearch onChange={this.onSubmit} onSubmit={this.onSubmit}></AppSearch>
-				<NodeIntenseCloud dataSource={client.dataSource}></NodeIntenseCloud>
+				<NodeIntenseCloud
+					total={client.total}
+					loading={client.loading}
+					dataSource={client.dataSource}
+				></NodeIntenseCloud>
 			</div>
 		)
 	}
