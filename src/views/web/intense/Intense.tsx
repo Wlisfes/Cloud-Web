@@ -8,7 +8,7 @@ import style from '@/style/web/web.intense.module.less'
 @Component
 export default class Intense extends Vue {
 	private rcmd: NodeCloud[] = []
-	private dataSource: Array<{ name: string; id: number }> = []
+	private dataSource: Array<{ value: string; id: number }> = []
 	private loading: boolean = false
 
 	protected created() {
@@ -20,7 +20,7 @@ export default class Intense extends Vue {
 		nodeClientClouds({ page: 1, size: 10, title: value })
 			.then(({ code, data }) => {
 				if (code === HttpStatus.OK) {
-					this.dataSource = data.list.map(k => ({ name: k.title, id: k.id }))
+					this.dataSource = data.list.map(k => ({ value: k.title, id: k.id }))
 				}
 			})
 			.catch(e => {})

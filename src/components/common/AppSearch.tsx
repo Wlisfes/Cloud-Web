@@ -1,4 +1,4 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { Input, FormModel, Popover, Spin, Empty } from 'ant-design-vue'
 import style from '@/style/common/app.search.module.less'
 
@@ -7,13 +7,24 @@ export default class AppSearch extends Vue {
 	$refs!: { conter: HTMLElement }
 
 	@Prop({ type: String, default: 'Search' }) placeholder!: string
-	@Prop({ type: Array, default: () => [] }) dataSource!: Array<{ name: string; id: number }>
+	@Prop({ type: Array, default: () => [] }) dataSource!: Array<{ value: string; id: number }>
 	@Prop({ type: Boolean, default: false }) loading!: boolean
 	private visible: boolean = false
-	private popover: boolean = false
 	private keyword: string = ''
+	private overflow: string = ''
+
+	@Watch('visible')
+	onChangeVisible() {
+		if (this.visible) {
+			this.overflow = document.body.style.overflow
+			document.body.style.overflow = 'hidden'
+		} else {
+			document.body.style.overflow = this.overflow
+		}
+	}
 
 	private onFocus() {
+		console.log(this.keyword)
 		this.visible = true
 	}
 
@@ -33,7 +44,7 @@ export default class AppSearch extends Vue {
 		return (
 			<div ref="conter" class={style['app-search']}>
 				<Popover
-					v-model={this.popover}
+					visible={this.visible && !!this.keyword}
 					getPopupContainer={() => this.$refs.conter}
 					overlayStyle={{ width: '100%' }}
 					trigger="click"
@@ -52,14 +63,21 @@ export default class AppSearch extends Vue {
 					</FormModel>
 					<div slot="content" class={style['app-search-conter']}>
 						{this.loading ? (
-							<Spin size="large"></Spin>
+							<Spin size="large" style={{ padding: '5px 0' }}></Spin>
 						) : this.dataSource.length === 0 ? (
 							<Empty image={(Empty as any).PRESENTED_IMAGE_SIMPLE}></Empty>
 						) : (
 							<div class={style.node}>
 								{this.dataSource.map(k => (
-									<div key={k.id} class={style['node-item']}>
-										<div class={`${style['node-value']} app-ellipsis`}>{k.name}</div>
+									<div
+										key={k.id}
+										class={style['node-item']}
+										onClick={() => {
+											this.keyword = k.value
+											this.onChange()
+										}}
+									>
+										<div class={`${style['node-value']} app-ellipsis`}>{k.value}</div>
 									</div>
 								))}
 							</div>
