@@ -197,7 +197,7 @@ export default class User extends Vue {
 						class="app-source"
 						bordered
 						rowKey={(record: any) => record.id}
-						loading={source.loading}
+						loading={{ wrapperClassName: 'ant-spin-64', spinning: source.loading }}
 						columns={source.column}
 						dataSource={source.dataSource}
 						scroll={{ x: 1100 }}

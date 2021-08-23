@@ -123,7 +123,7 @@ export default class Create extends Vue {
 
 		return (
 			<AppRootNode class={style['app-conter']}>
-				<Spin size="large" spinning={this.loading}>
+				<Spin size="large" class="ant-spin-64" spinning={this.loading}>
 					<FormModel
 						ref="form"
 						class={`app-form ${style['node-source']}`}
