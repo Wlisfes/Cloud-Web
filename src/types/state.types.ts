@@ -27,13 +27,18 @@ export type Source<T> = {
 }
 
 /**客户端列表配置****************************/
-export type Client<T> = {
+export type Client<T, R> = {
 	page: number
 	size: number
+	keyword: string
 	total: number
 	loading: boolean
 	dataSource: T
-	initSource: (merge?: boolean) => void
-	onClose: () => void
-	onMore?: () => void
+	node: R
+	initSource: (merge?: boolean) => Promise<any> /**列表初始化接口**/
+	onClose: () => void /**关闭loading**/
+	onSearch?: (value: string) => void /**搜索列表接口**/
+	onSubmit?: () => void /**搜索提交事件**/
+	onChange?: (props: { value: string; reset: boolean }) => void /**搜索关键字change事件**/
+	onMore?: () => void /**加载更多事件**/
 }

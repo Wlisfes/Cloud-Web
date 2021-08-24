@@ -23,28 +23,42 @@ export default class AppSearch extends Vue {
 		}
 	}
 
-	private onFocus() {
-		console.log(this.keyword)
+	public onClose() {
+		this.visible = false
+	}
+
+	public onFocus() {
 		this.visible = true
 	}
 
-	private onBlur() {
+	public onBlur() {
 		this.visible = false
 	}
 
 	private onChange() {
-		this.$emit('change', this.keyword)
+		this.$emit('change', {
+			value: this.keyword,
+			reset: false
+		})
 	}
 
-	private onSearch() {
-		this.$emit('submit', this.keyword)
+	private onSelect(value: string) {
+		this.keyword = value
+		this.$emit('change', {
+			value: value,
+			reset: true
+		})
+	}
+
+	private onSubmit() {
+		this.$emit('submit')
 	}
 
 	protected render() {
 		return (
 			<div ref="conter" class={style['app-search']}>
 				<Popover
-					visible={this.visible && !!this.keyword}
+					visible={this.visible}
 					getPopupContainer={() => this.$refs.conter}
 					overlayStyle={{ width: '100%' }}
 					trigger="click"
@@ -55,9 +69,10 @@ export default class AppSearch extends Vue {
 							<Input.Search
 								v-model={this.keyword}
 								placeholder={this.placeholder}
+								onClick={this.onFocus}
 								onFocus={this.onFocus}
 								onChange={this.onChange}
-								onSearch={this.onSearch}
+								onSearch={this.onSubmit}
 							></Input.Search>
 						</FormModel.Item>
 					</FormModel>
@@ -69,14 +84,7 @@ export default class AppSearch extends Vue {
 						) : (
 							<div class={style.node}>
 								{this.dataSource.map(k => (
-									<div
-										key={k.id}
-										class={style['node-item']}
-										onClick={() => {
-											this.keyword = k.value
-											this.onChange()
-										}}
-									>
+									<div key={k.id} class={style['node-item']} onClick={() => this.onSelect(k.value)}>
 										<div class={`${style['node-value']} app-ellipsis`}>{k.value}</div>
 									</div>
 								))}
