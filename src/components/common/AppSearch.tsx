@@ -31,8 +31,10 @@ export default class AppSearch extends Vue {
 		this.visible = true
 	}
 
-	public onBlur() {
-		this.visible = false
+	private onKeyup(e: KeyboardEvent) {
+		if (e.code === 'Escape') {
+			this.onClose()
+		}
 	}
 
 	private onChange() {
@@ -69,6 +71,7 @@ export default class AppSearch extends Vue {
 							<Input.Search
 								v-model={this.keyword}
 								placeholder={this.placeholder}
+								onKeyup={this.onKeyup}
 								onClick={this.onFocus}
 								onFocus={this.onFocus}
 								onChange={this.onChange}
@@ -97,7 +100,7 @@ export default class AppSearch extends Vue {
 						<div
 							class="ant-modal-mask"
 							style={{ zIndex: 999, backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
-							onClick={this.onBlur}
+							onClick={this.onClose}
 						></div>
 					)}
 				</transition>
