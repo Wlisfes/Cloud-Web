@@ -10,7 +10,7 @@ import style from '@/style/web/web.intense.module.less'
 export default class Intense extends Vue {
 	private client: Client<Array<NodeCloud>> = {
 		page: 1,
-		size: 16,
+		size: 12,
 		total: 0,
 		loading: true,
 		dataSource: [],
@@ -26,7 +26,7 @@ export default class Intense extends Vue {
 					if (merge) {
 						this.client.dataSource = this.client.dataSource.concat(data.list)
 					} else {
-						// this.client.dataSource = data.list
+						this.client.dataSource = data.list
 					}
 					this.client.total = data.total
 				}
@@ -47,7 +47,7 @@ export default class Intense extends Vue {
 	}
 
 	protected created() {
-		this.client.initSource()
+		setTimeout(() => this.client.initSource(), 1500)
 	}
 
 	protected mounted() {

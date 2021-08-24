@@ -1,98 +1,114 @@
-.node-conter {
-	display: flex;
-	flex-direction: column;
-}
-
-.app-ul {
+.app-conter {
+	width: 100%;
 	max-width: 1480px;
 	margin: 0 auto;
-	padding: 0 10px;
 	display: flex;
-	flex-wrap: wrap;
-	transition: all 300ms;
-	@media (max-width: 678px) {
-		padding: 0 5px;
-	}
-	&-li {
-		width: 25%;
-		display: flex;
-		flex-direction: column;
-		padding: 20px 10px;
-		cursor: pointer;
-		transition: all 300ms;
-		@media (max-width: 992px) {
-			width: 33.3333%;
-		}
-		@media (max-width: 678px) {
-			padding: 10px 5px;
-			width: 50%;
-		}
-		@media (max-width: 480px) {
-			width: 100%;
-		}
-	}
-	&-conter {
-		width: 100%;
-		height: 100%;
+	flex-direction: column;
+
+	.node-ctx {
 		display: flex;
 		flex-direction: column;
 		border-radius: 4px;
 		overflow: hidden;
-		.app-cover {
-			width: 100%;
-			padding-bottom: 56.25%;
-			height: 0;
-			position: relative;
-			&-conter {
-				position: absolute;
-				left: 0;
-				right: 0;
-				top: 0;
-				bottom: 0;
-			}
-			:global {
-				.app-image {
-					width: 100%;
-					height: 100%;
-					.image-slot {
-						height: 100%;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						background-color: #fafafa;
-						i {
-							font-size: 32px;
-							color: #cccccc;
-						}
-					}
-				}
+		box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.16);
+	}
+	.node-cover {
+		width: 100%;
+		padding-bottom: 56.25%;
+		height: 0;
+		position: relative;
+		background-color: #efefef;
+		&-conter {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+		}
+	}
+	.node-footer {
+		padding: 8px 10px;
+		background-color: #ffffff;
+	}
+
+	.node-empty {
+		width: 100%;
+		max-width: 400px;
+		margin: 0 auto;
+		border-radius: 2px;
+		background-color: #efefef;
+		p {
+			text-align: center;
+			letter-spacing: 0.1em;
+			color: #858585;
+			font-size: 18px;
+		}
+	}
+}
+
+.node-skeleton {
+	position: relative;
+	&-item {
+		display: flex;
+		flex-direction: column;
+		width: 25%;
+		padding: 0 10px 60px;
+	}
+	:global {
+		.el-skeleton {
+			display: flex;
+			flex-wrap: wrap;
+		}
+	}
+}
+
+.node-conter {
+	display: flex;
+	flex-wrap: wrap;
+	&-more {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding-bottom: 30px;
+	}
+	&-item {
+		display: flex;
+		flex-direction: column;
+		width: 25%;
+		padding: 0 10px 60px;
+		.node-title {
+			height: 36px;
+			a {
+				line-height: 18px;
+				font-size: 12px;
+				color: #444444;
+				transition: color 0.3s;
+				// &:hover {
+				// 	color: @primary-color;
+				// }
 			}
 		}
-		.app-user {
+		.node-user {
 			display: flex;
-			background-color: #ffffff;
-			padding: 10px;
-			transition: all 300ms;
-			@media (max-width: 678px) {
-				padding: 8px;
-			}
-			&-avatar {
-				width: 36px !important;
-				height: 36px !important;
-				@media (max-width: 678px) {
-					width: 32px !important;
-					height: 32px !important;
-				}
-			}
-			&-title {
+			margin-top: 5px;
+			height: 32px;
+			overflow: hidden;
+			&-nickname {
 				flex: 1;
+				overflow: hidden;
 				margin-left: 10px;
-				font-size: 12px;
-				line-height: 1.4;
+				max-width: 50%;
 				display: flex;
 				align-items: center;
-				@media (max-width: 678px) {
-					margin-left: 5px;
+				a {
+					font-size: 14px;
+					color: #666;
+					font-weight: 600;
+					transition: color 0.3s;
+					// &:hover {
+					// 	color: @primary-color;
+					// }
 				}
 			}
 		}

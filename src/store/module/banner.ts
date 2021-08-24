@@ -20,7 +20,15 @@ const useCover = (url: string) => {
 const banner: Module<BannerState, RootState> = {
 	namespaced: true,
 	state: (): BannerState => ({
-		list: [],
+		list: [
+			{
+				start: '20210823',
+				end: '20290824',
+				cover: 'https://oss.lisfes.cn/cloud/stctic/1624934512799.jpg',
+				name: '情雨随风的青春',
+				search: 'https://play.lisfes.cn'
+			}
+		],
 		current: 0
 	}),
 	mutations: {
