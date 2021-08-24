@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { NodePlayer } from '@/views/web/intense/common'
 import { DPlayer, AppSelectNode } from '@/components/common'
-import { nodeCloud, nodeAliyunPlay } from '@/api'
+import { nodeClientCloud, nodeAliyunPlay } from '@/api'
 import { HttpStatus, NodeCloud } from '@/types'
 import { initPlayer, initCutover } from '@/utils/aliyun-player'
 import { DPlayerEvents } from 'dplayer'
@@ -37,7 +37,7 @@ export default class Player extends Vue {
 
 	/**页面初始化**/
 	private init(id: number) {
-		this.nodeCloud(id).finally(() => {
+		this.nodeClientCloud(id).finally(() => {
 			const { current, state } = this
 			this.$nextTick(() => {
 				if (current.key) {
@@ -54,10 +54,10 @@ export default class Player extends Vue {
 		})
 	}
 
-	/**音视频信息**/
-	private nodeCloud(id: number) {
+	/**音视频信息-客户端**/
+	private nodeClientCloud(id: number) {
 		return new Promise((resolve, reject) => {
-			nodeCloud({ id })
+			nodeClientCloud({ id })
 				.then(({ code, data }) => {
 					if (code === HttpStatus.OK) {
 						if (data.type === 1) {

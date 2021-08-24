@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import * as types from '@/types'
 
-/**创建音视频**/
+/**创建音视频-授权管理端**/
 export function nodeCreateCloud(params: types.NodeCreateCloudParameter) {
 	return request<types.NodeCreateCloudResponse>({
 		url: `/api/cloud/create`,
@@ -10,7 +10,7 @@ export function nodeCreateCloud(params: types.NodeCreateCloudParameter) {
 	})
 }
 
-/**修改音视频媒体**/
+/**修改音视频媒体-授权管理端**/
 export function nodeUpdateCloud(params: types.NodeUpdateCloudParameter) {
 	return request<types.NodeUpdateCloudResponse>({
 		url: `/api/cloud/update`,
@@ -19,7 +19,7 @@ export function nodeUpdateCloud(params: types.NodeUpdateCloudParameter) {
 	})
 }
 
-/**切换音视频媒体状态**/
+/**切换音视频媒体状态-授权管理端**/
 export function nodeCloudCutover(params: types.NodeCloudCutoverParameter) {
 	return request<types.NodeCloudCutoverResponse>({
 		url: `/api/cloud/cutover`,
@@ -28,7 +28,7 @@ export function nodeCloudCutover(params: types.NodeCloudCutoverParameter) {
 	})
 }
 
-/**音视频信息**/
+/**音视频信息-授权管理端**/
 export function nodeCloud(params: types.NodeCloudNodeParameter) {
 	return request<types.NodeCloudNodeResponse>({
 		url: `/api/cloud/info`,
@@ -37,7 +37,16 @@ export function nodeCloud(params: types.NodeCloudNodeParameter) {
 	})
 }
 
-/**音视频列表**/
+/**删除音视频媒体-授权管理端**/
+export function nodeDeleteCloud(params: types.NodeDeleteCloudParameter) {
+	return request<types.NodeDeleteCloudResponse>({
+		url: `/api/cloud/del`,
+		method: 'DELETE',
+		params
+	})
+}
+
+/**音视频列表-授权管理端**/
 export function nodeClouds(params: types.NodeCloudsParameter) {
 	return request<types.NodeCloudsResponse>({
 		url: `/api/cloud/list-node`,
@@ -55,11 +64,11 @@ export function nodeClientClouds(params: types.NodeClientCloudsParameter) {
 	})
 }
 
-/**删除音视频媒体**/
-export function nodeDeleteCloud(params: types.NodeDeleteCloudParameter) {
-	return request<types.NodeDeleteCloudResponse>({
-		url: `/api/cloud/del`,
-		method: 'DELETE',
+/**音视频信息-客户端**/
+export function nodeClientCloud(params: types.NodeCloudNodeParameter) {
+	return request<types.NodeCloudNodeResponse>({
+		url: `/api/cloud/client/info`,
+		method: 'GET',
 		params
 	})
 }
