@@ -26,6 +26,15 @@ module.exports = {
 		}
 	},
 	chainWebpack: config => {
+		config.optimization.minimizer('terser').tap(args => {
+			Object.assign(args[0].terserOptions.compress, {
+				// warnings: false , // 默认 false
+				// drop_console:  ,
+				// drop_debugger: true, // 默认也是true
+				pure_funcs: ['console.log', 'console.error']
+			})
+			return args
+		})
 		config.plugin('preload').tap(() => [
 			{
 				rel: 'preload',
