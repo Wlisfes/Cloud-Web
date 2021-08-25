@@ -52,7 +52,7 @@ export default class NodeIntenseCloud extends Vue {
 							<ul class={style['node-conter']}>
 								{this.dataSource.map(k => (
 									<li key={k.id} class={style['node-conter-item']}>
-										<router-link to={`/player/${k.id}`} class={style['node-ctx']}>
+										<router-link to={`/player/${k.id}`} target="_blank" class={style['node-ctx']}>
 											<div class={style['node-cover']}>
 												<div class={style['node-cover-conter']}>
 													<Image

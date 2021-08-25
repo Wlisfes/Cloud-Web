@@ -18,6 +18,7 @@ export default class Create extends Vue {
 			title: '',
 			cover: '',
 			content: '',
+			html: '',
 			url: '',
 			status: true,
 			order: 0,
@@ -69,6 +70,7 @@ export default class Create extends Vue {
 					title: data.title,
 					cover: data.cover,
 					content: data.content,
+					html: data.html,
 					url: data.url,
 					status: data.status === 1,
 					order: data.order,
@@ -90,6 +92,7 @@ export default class Create extends Vue {
 				title: form.title,
 				cover: form.cover,
 				content: form.content,
+				html: form.html,
 				url: form.url,
 				status: +form.status,
 				order: form.order,
@@ -113,9 +116,9 @@ export default class Create extends Vue {
 		})
 	}
 
-	private onChange(value: string, v: string) {
-		console.log(v)
-		this.state.form.content = v
+	private onChange(value: string, html: string) {
+		this.state.form.html = html
+		this.state.form.content = value
 	}
 
 	protected render() {

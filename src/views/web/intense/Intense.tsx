@@ -88,14 +88,19 @@ export default class Intense extends Vue {
 			})
 		},
 		onSubmit: () => {
-			this.client.initSource().finally(() => {
-				this.$refs.appSearch.onClose()
+			this.client.page = 1
+			this.$nextTick(() => {
+				this.client.initSource().finally(() => {
+					this.$refs.appSearch.onClose()
+				})
 			})
 		}
 	}
 
 	protected created() {
-		setTimeout(() => this.client.initSource(), 1500)
+		this.client.initSource().finally(() => {
+			this.client.onSearch?.('')
+		})
 	}
 
 	protected mounted() {

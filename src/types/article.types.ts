@@ -5,6 +5,8 @@ export type NodeArticle = NodeDate & {
 	title: string
 	cover: string
 	content: string
+	html: string
+	description: string | null
 	url: string
 	status: number
 	order: number
@@ -23,7 +25,7 @@ export type NodeArticleParameter = NodeArticle & {
 /**
  * 创建文章
  */
-export type NodeCreateArticleParameter = Pick<NodeArticle, 'title' | 'cover' | 'content'> &
+export type NodeCreateArticleParameter = Pick<NodeArticle, 'title' | 'cover' | 'content' | 'html'> &
 	Partial<Pick<NodeArticle, 'url' | 'status' | 'order'>> & {
 		source?: number[]
 	}
@@ -32,7 +34,7 @@ export type NodeCreateArticleResponse = Pick<NodeArticleParameter, 'message'>
 /**
  * 修改文章
  */
-export type NodeUpdateArticleParameter = Pick<NodeArticle, 'id' | 'title' | 'cover' | 'content'> &
+export type NodeUpdateArticleParameter = Pick<NodeArticle, 'id' | 'title' | 'cover' | 'content' | 'html'> &
 	Partial<Pick<NodeArticle, 'url' | 'status' | 'order'>> & {
 		source?: number[]
 	}

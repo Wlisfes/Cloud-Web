@@ -6,7 +6,7 @@ import style from '@/style/common/app.search.module.less'
 export default class AppSearch extends Vue {
 	$refs!: { conter: HTMLElement }
 
-	@Prop({ type: String, default: 'Search' }) placeholder!: string
+	@Prop({ type: String, default: '' }) placeholder!: string
 	@Prop({ type: Array, default: () => [] }) dataSource!: Array<{ value: string; id: number }>
 	@Prop({ type: Boolean, default: false }) loading!: boolean
 	private visible: boolean = false
