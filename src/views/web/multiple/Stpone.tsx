@@ -6,32 +6,43 @@ import style from '@/style/web/web.stpone.module.less'
 
 @Component
 export default class Stpone extends Vue {
-	private state = {
-		html: ''
-	}
+	private loading: boolean = true
+	private state: any = {}
 
 	protected created() {
-		this.nodeClientArticle()
+		const id = Number(this.$route.params.id)
+		if (id) {
+			this.init(id)
+		}
+	}
+
+	/**页面初始化**/
+	private init(id: number) {
+		this.nodeClientArticle(id).finally(() => {
+			this.loading = false
+		})
 	}
 
 	/**文章信息-客户端**/
-	private async nodeClientArticle() {
-		try {
-			const { code, data } = await nodeClientArticle({ id: 1 })
-			if (code === HttpStatus.OK) {
-				console.log(data)
-				this.state = Object.assign(this.state, {
-					html: data.html
-				})
+	private nodeClientArticle(id: number) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const { code, data } = await nodeClientArticle({ id })
+				if (code === HttpStatus.OK) {
+					this.state = data
+				}
+				resolve(data)
+			} catch (e) {
+				reject(e)
 			}
-		} catch (e) {}
+		})
 	}
 
 	protected render() {
 		const { state } = this
 		return (
 			<div class={style['app-conter']}>
-				<NodeMultipleStpone html={state.html}></NodeMultipleStpone>
+				<NodeMultipleStpone state={state} loading={this.loading}></NodeMultipleStpone>
 			</div>
 		)
 	}
