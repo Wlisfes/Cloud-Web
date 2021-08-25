@@ -16,30 +16,39 @@ export const routes: RouteConfig[] = [
 				name: 'WEB-Home',
 				component: () => import('@/views/web/home/Home')
 			},
+			/********************************************************************/
 			{
 				path: '/multiple',
 				name: 'WEB-Multiple',
 				component: () => import('@/views/web/multiple/Multiple')
 			},
 			{
+				path: '/stpone/:id',
+				name: 'WEB-Stpone',
+				component: () => import('@/views/web/multiple/Stpone')
+			},
+			/********************************************************************/
+			{
 				path: '/intense',
 				name: 'WEB-Intense',
 				component: () => import('@/views/web/intense/Intense')
 			},
 			{
+				path: '/player/:id',
+				name: 'WEB-Player',
+				component: () => import('@/views/web/intense/Player')
+			},
+			/********************************************************************/
+			{
 				path: '/minute',
 				name: 'WEB-Minute',
 				component: () => import('@/views/web/minute/Minute')
 			},
+			/********************************************************************/
 			{
 				path: '/partner',
 				name: 'WEB-Partner',
 				component: () => import('@/views/web/partner/Partner')
-			},
-			{
-				path: '/player/:id',
-				name: 'WEB-Player',
-				component: () => import('@/views/web/intense/Player')
 			}
 		]
 	},

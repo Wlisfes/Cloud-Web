@@ -59,53 +59,62 @@ export default class NodeMultipleArticle extends Vue {
 							<ul class={style['node-conter']}>
 								{this.dataSource.map(k => (
 									<li key={k.id} class={style['node-conter-item']}>
-										<div class={style['node-ctx']}>
-											<div class={style['node-ctx-title']}>
-												<a class="app-ellipsis">{k.title}</a>
-											</div>
-											<div class={style['node-ctx-content']}>
-												<p class="app-ellipsis-2">{k.description}</p>
-											</div>
-											<div class={style['node-ctx-footer']}>
-												<div class={style['node-icon']}>
-													<span>{k.user.nickname}</span>
+										<router-link
+											to={`/stpone/${k.id}`}
+											target="_blank"
+											style={{ flex: 1, display: 'flex' }}
+										>
+											<div class={style['node-ctx']}>
+												<div class={style['node-ctx-title']}>
+													<a class="app-ellipsis">{k.title}</a>
 												</div>
-												<div class={style['node-icon']}>
-													<i class="el-icon-view" style={{ fontSize: '16px' }}></i>
-													<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+												<div class={style['node-ctx-content']}>
+													<p class="app-ellipsis-2">{k.description}</p>
 												</div>
-												<div class={style['node-icon']}>
-													<i class="el-icon-star-on" style={{ fontSize: '18px' }}></i>
-													<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
-												</div>
-												<div class={style['node-icon']}>
-													<i class="el-icon-chat-dot-square" style={{ fontSize: '16px' }}></i>
-													<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+												<div class={style['node-ctx-footer']}>
+													<div class={style['node-icon']}>
+														<span>{k.user.nickname}</span>
+													</div>
+													<div class={style['node-icon']}>
+														<i class="el-icon-view" style={{ fontSize: '16px' }}></i>
+														<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+													</div>
+													<div class={style['node-icon']}>
+														<i class="el-icon-star-on" style={{ fontSize: '18px' }}></i>
+														<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+													</div>
+													<div class={style['node-icon']}>
+														<i
+															class="el-icon-chat-dot-square"
+															style={{ fontSize: '16px' }}
+														></i>
+														<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class={style['node-cover']}>
-											<div class={style['node-cover-conter']}>
-												<Image
-													class={style['node-cover-image']}
-													alt={k.title}
-													lazy
-													fit="cover"
-													src={`${k.cover}?x-oss-process=style/resize-16-9`}
-												>
-													<SkeletonItem
-														slot="placeholder"
-														variant="image"
-														style={{ width: '100%', height: '100%' }}
-													></SkeletonItem>
-													<SkeletonItem
-														slot="error"
-														variant="image"
-														style={{ width: '100%', height: '100%' }}
-													></SkeletonItem>
-												</Image>
+											<div class={style['node-cover']}>
+												<div class={style['node-cover-conter']}>
+													<Image
+														class={style['node-cover-image']}
+														alt={k.title}
+														lazy
+														fit="cover"
+														src={`${k.cover}?x-oss-process=style/resize-16-9`}
+													>
+														<SkeletonItem
+															slot="placeholder"
+															variant="image"
+															style={{ width: '100%', height: '100%' }}
+														></SkeletonItem>
+														<SkeletonItem
+															slot="error"
+															variant="image"
+															style={{ width: '100%', height: '100%' }}
+														></SkeletonItem>
+													</Image>
+												</div>
 											</div>
-										</div>
+										</router-link>
 									</li>
 								))}
 							</ul>
