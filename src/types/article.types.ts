@@ -57,6 +57,8 @@ export type NodeArticleNodeResponse = NodeArticle
  */
 export type NodeArticlesParameter = Pick<NodeArticleParameter, 'page' | 'size'> &
 	Partial<Pick<NodeArticleParameter, 'status' | 'title'>> & { source?: number }
+export type NodeClientArticlesParameter = Pick<NodeArticleParameter, 'page' | 'size'> &
+	Partial<Pick<NodeArticleParameter, 'title'>> & { source?: number }
 export type NodeArticlesResponse = Pick<NodeArticleParameter, 'page' | 'size' | 'total'> & {
 	list: NodeArticle[]
 }

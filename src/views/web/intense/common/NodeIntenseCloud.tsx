@@ -47,6 +47,7 @@ export default class NodeIntenseCloud extends Vue {
 							</div>
 						</div>
 					</div>
+
 					<div>
 						{this.dataSource.length > 0 ? (
 							<ul class={style['node-conter']}>
@@ -56,12 +57,23 @@ export default class NodeIntenseCloud extends Vue {
 											<div class={style['node-cover']}>
 												<div class={style['node-cover-conter']}>
 													<Image
-														class="app-image"
+														class={style['node-cover-image']}
 														alt={k.title}
 														lazy
 														fit="cover"
 														src={`${k.cover}?x-oss-process=style/resize-16-9`}
-													></Image>
+													>
+														<SkeletonItem
+															slot="placeholder"
+															variant="image"
+															style={{ width: '100%', height: '100%' }}
+														></SkeletonItem>
+														<SkeletonItem
+															slot="error"
+															variant="image"
+															style={{ width: '100%', height: '100%' }}
+														></SkeletonItem>
+													</Image>
 												</div>
 											</div>
 											<div class={style['node-footer']}>
@@ -92,11 +104,11 @@ export default class NodeIntenseCloud extends Vue {
 									</div>
 								)}
 							</ul>
-						) : (
+						) : !this.loading && this.dataSource.length === 0 ? (
 							<div class={style['node-empty']}>
 								<Empty image="https://oss.lisfes.cn/cloud/stctic/1629789570142.png"></Empty>
 							</div>
-						)}
+						) : null}
 					</div>
 				</Skeleton>
 			</div>
