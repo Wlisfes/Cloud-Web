@@ -9,6 +9,7 @@ import style from '@/style/admin/admin.article.common.module.less'
 export default class Create extends Vue {
 	$refs!: { form: FormModel }
 
+	private full: boolean = false
 	private loading: boolean = false
 	private sources: NodeSource[] = []
 	private state = {
@@ -29,6 +30,10 @@ export default class Create extends Vue {
 			cover: [{ required: true, message: '请上传文章封面', trigger: 'blur' }],
 			content: [{ required: true, message: '请输入文章内容', trigger: 'blur' }]
 		}
+	}
+
+	private get editorStyle() {
+		return { height: this.full ? '100%' : '680px', zIndex: this.full ? 1500 : 98 }
 	}
 
 	protected created() {
@@ -202,10 +207,12 @@ export default class Create extends Vue {
 							<FormModel.Item label="文章内容" prop="content">
 								<mavon-editor
 									autofocus={false}
+									style={this.editorStyle}
 									codeStyle="atom-one-dark"
 									tabSize={4}
 									v-model={form.content}
 									onChange={this.onChange}
+									onFullScreen={(full: boolean) => (this.full = full)}
 								></mavon-editor>
 							</FormModel.Item>
 						</div>
