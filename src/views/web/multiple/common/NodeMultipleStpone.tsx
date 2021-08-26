@@ -1,5 +1,6 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { AppAvatar } from '@/components/common'
+import { Tag } from 'ant-design-vue'
 import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
 import { NodeArticle } from '@/types'
 import style from '@/style/web/common/node.multiple.stpone.module.less'
@@ -16,27 +17,42 @@ export default class NodeMultipleStpone extends Vue {
 			<div class={style['app-conter']}>
 				<Skeleton loading={this.loading} animated count={1} class={style['node-skeleton']}>
 					<div slot="template" class={style['node-skeleton-item']}>
+						<h1 class={style['node-h-title']} style={{ display: 'flex' }}>
+							<SkeletonItem
+								variant="h1"
+								style={{ height: '32px', width: '60%', margin: '5px 0' }}
+							></SkeletonItem>
+						</h1>
 						<div class={style['node-user']}>
 							<div class={style['node-user-avatar']}>
-								<SkeletonItem variant="circle" style={{ width: '100%', height: '100%' }}></SkeletonItem>
+								<SkeletonItem variant="circle" style={{ height: '48px', width: '48px' }}></SkeletonItem>
 							</div>
 							<div class={style['node-user-content']}>
-								<SkeletonItem
-									variant="h1"
-									style={{ width: '120px', marginBottom: '8px' }}
-								></SkeletonItem>
-								<SkeletonItem variant="text" style={{ width: '80px' }}></SkeletonItem>
+								<div class={style['node-user-nick']}>
+									<div class={style['nick-conter']}>
+										<SkeletonItem style={{ height: '16px', width: '50px' }}></SkeletonItem>
+									</div>
+									<div class={style['nick-conter']}>
+										<SkeletonItem style={{ height: '14px', width: '280px' }}></SkeletonItem>
+									</div>
+								</div>
+								<div class={style['node-user-source']}>
+									<SkeletonItem style={{ height: '14px', width: '60px' }}></SkeletonItem>
+									<SkeletonItem
+										style={{ height: '14px', width: '180px', marginLeft: '8px' }}
+									></SkeletonItem>
+								</div>
 							</div>
 						</div>
 						<div class={style['node-cover']}>
 							<div class={style['node-cover-conter']}>
-								<SkeletonItem variant="image" style={{ width: '100%', height: '100%' }}></SkeletonItem>
+								<SkeletonItem variant="rect" style={{ height: '100%', width: '100%' }} />
 							</div>
 						</div>
 						<div class={style['node-html-content']}>
 							<SkeletonItem
 								variant="h1"
-								style={{ width: '20%', height: '26px', marginBottom: '20px' }}
+								style={{ width: '40%', height: '24px', marginBottom: '20px' }}
 							></SkeletonItem>
 							<SkeletonItem style={{ height: '16px', marginBottom: '12px' }}></SkeletonItem>
 							<SkeletonItem style={{ height: '16px', marginBottom: '12px' }}></SkeletonItem>
@@ -44,44 +60,46 @@ export default class NodeMultipleStpone extends Vue {
 						</div>
 					</div>
 					<div class={style['node-conter']}>
+						<h1 class={style['node-h-title']}>{state?.title}</h1>
 						<div class={style['node-user']}>
 							<div class={style['node-user-avatar']}>
 								<AppAvatar
 									size={48}
-									src={`${state.user.avatar}?x-oss-process=style/resize-1-1`}
-									username={state.user.nickname}
+									src={`${state?.user?.avatar}?x-oss-process=style/resize-1-1`}
+									username={state?.user?.nickname}
 									rounded={false}
 									style={{ cursor: 'pointer', borderRadius: '50%' }}
 								></AppAvatar>
 							</div>
 							<div class={style['node-user-content']}>
-								<SkeletonItem
-									variant="h1"
-									style={{ width: '120px', marginBottom: '8px' }}
-								></SkeletonItem>
-								<SkeletonItem variant="text" style={{ width: '80px' }}></SkeletonItem>
-							</div>
-						</div>
-						<div class={style['node-cover']}>
-							<div class={style['node-cover-conter']}>
-								<Image
-									class={style['node-cover-image']}
-									alt={state.title}
-									lazy
-									fit="cover"
-									src={`${state.cover}?x-oss-process=style/resize-16-9`}
-								>
-									<SkeletonItem
-										slot="placeholder"
-										variant="image"
-										style={{ width: '100%', height: '100%' }}
-									></SkeletonItem>
-									<SkeletonItem
-										slot="error"
-										variant="image"
-										style={{ width: '100%', height: '100%' }}
-									></SkeletonItem>
-								</Image>
+								<div class={style['node-user-nick']}>
+									<div class={style['nick-conter']} style={{ color: '#444', fontSize: '16px' }}>
+										<span>{state?.user?.nickname}</span>
+									</div>
+									<div class={style['nick-conter']}>
+										<time datetime={state?.createTime}>{state?.createTime}</time>
+									</div>
+									<div class={style['nick-conter']}>
+										<i class="el-icon-view" style={{ fontSize: '16px', marginTop: '2px' }}></i>
+										<span style={{ marginLeft: '5px' }}>{state?.browse || 0}</span>
+									</div>
+									<div class={style['nick-conter']}>
+										<i class="el-icon-star-on" style={{ fontSize: '18px' }}></i>
+										<span style={{ marginLeft: '5px' }}>{state?.browse || 0}</span>
+									</div>
+								</div>
+								<div class={style['node-user-source']}>
+									<span>分类标签:</span>
+									{state?.source.length > 0 ? (
+										<div class={style['node-tags']}>
+											{state?.source.map(k => (
+												<Tag color={k.color}>{k.name}</Tag>
+											))}
+										</div>
+									) : (
+										<div class={style['node-tags']}>----</div>
+									)}
+								</div>
 							</div>
 						</div>
 						<div class="node-html" domPropsInnerHTML={state.html}></div>

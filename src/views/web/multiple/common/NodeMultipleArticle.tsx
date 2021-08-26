@@ -38,6 +38,9 @@ export default class NodeMultipleArticle extends Vue {
 									<SkeletonItem variant="text" style={{ height: '16px', width: '50px' }} />
 								</div>
 								<div class={style['node-icon']}>
+									<SkeletonItem variant="text" style={{ height: '16px', width: '100px' }} />
+								</div>
+								<div class={style['node-icon']}>
 									<SkeletonItem variant="text" style={{ height: '16px', width: '40px' }} />
 								</div>
 								<div class={style['node-icon']}>
@@ -74,6 +77,9 @@ export default class NodeMultipleArticle extends Vue {
 												<div class={style['node-ctx-footer']}>
 													<div class={style['node-icon']}>
 														<span>{k.user.nickname}</span>
+													</div>
+													<div class={style['node-icon']}>
+														<time datetime={k.createTime}>{k.createTime}</time>
 													</div>
 													<div class={style['node-icon']}>
 														<i class="el-icon-view" style={{ fontSize: '16px' }}></i>

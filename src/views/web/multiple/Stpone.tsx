@@ -19,7 +19,9 @@ export default class Stpone extends Vue {
 	/**页面初始化**/
 	private init(id: number) {
 		this.nodeClientArticle(id).finally(() => {
-			this.loading = false
+			setTimeout(() => {
+				this.loading = false
+			}, 3000)
 		})
 	}
 
