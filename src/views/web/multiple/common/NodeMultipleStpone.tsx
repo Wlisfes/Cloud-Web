@@ -126,7 +126,7 @@ export default class NodeMultipleStpone extends Vue {
 								</div>
 							</div>
 						</div>
-						<div class="node-html" ref="html" domPropsInnerHTML={state.html}></div>
+						<div class="node-html markdown-body" ref="html" domPropsInnerHTML={state.html}></div>
 					</div>
 				</Skeleton>
 			</div>
