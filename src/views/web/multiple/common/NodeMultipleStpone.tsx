@@ -1,18 +1,42 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { AppAvatar } from '@/components/common'
-import { Tag } from 'ant-design-vue'
+import { Tag, notification } from 'ant-design-vue'
 import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
 import { NodeArticle } from '@/types'
+import Clipboard from 'clipboard'
 import style from '@/style/web/common/node.multiple.stpone.module.less'
 
 @Component
 export default class NodeMultipleStpone extends Vue {
+	$refs!: { html: HTMLElement }
+
 	@Prop({ type: Object, default: () => null }) state!: NodeArticle
 	@Prop({ type: Boolean, default: true }) loading!: boolean
 
+	@Watch('loading', { immediate: true })
+	private onMounte() {
+		this.$nextTick(() => {
+			if (this.$refs.html) {
+				const pre = Array.from(this.$refs.html.getElementsByTagName('pre')) || []
+				pre.forEach(element => {
+					const node = document.createElement('span')
+					node.innerHTML = '复制代码'
+					node.setAttribute('class', 'pre-copy')
+					element.appendChild(node)
+					const instance = new Clipboard(node, {
+						text: trigger => element.querySelector('code')?.innerText || ''
+					})
+					instance.on('success', e => {
+						e.clearSelection()
+						notification.success({ message: '复制成功', description: '', duration: 1 })
+					})
+				})
+			}
+		})
+	}
+
 	protected render() {
 		const { state } = this
-
 		return (
 			<div class={style['app-conter']}>
 				<Skeleton loading={this.loading} animated count={1} class={style['node-skeleton']}>
@@ -90,7 +114,7 @@ export default class NodeMultipleStpone extends Vue {
 								</div>
 								<div class={style['node-user-source']}>
 									<span>分类标签:</span>
-									{state?.source.length > 0 ? (
+									{state?.source?.length > 0 ? (
 										<div class={style['node-tags']}>
 											{state?.source.map(k => (
 												<Tag color={k.color}>{k.name}</Tag>
@@ -102,7 +126,7 @@ export default class NodeMultipleStpone extends Vue {
 								</div>
 							</div>
 						</div>
-						<div class="node-html" domPropsInnerHTML={state.html}></div>
+						<div class="node-html" ref="html" domPropsInnerHTML={state.html}></div>
 					</div>
 				</Skeleton>
 			</div>
