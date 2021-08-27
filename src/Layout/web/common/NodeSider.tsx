@@ -39,12 +39,12 @@ export default class NodeSider extends Vue {
 					</li>
 					<li class={style['node-link-item']}>
 						<router-link to="/minute" nativeOn-click={this.onTrigger}>
-							🍒 笔记
+							🍒 收录
 						</router-link>
 					</li>
 					<li class={style['node-link-item']}>
 						<router-link to="/partner" nativeOn-click={this.onTrigger}>
-							🍄 友链
+							🍄 生活
 						</router-link>
 					</li>
 				</ul>
