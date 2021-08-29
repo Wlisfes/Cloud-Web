@@ -8,7 +8,8 @@ const asyncRoutes: { [key: string]: Function } = {
 	['/admin/archive/Source']: () => import('@/views/admin/archive/Source'),
 	['/admin/archive/article/Article']: () => import('@/views/admin/archive/article/Article'),
 	['/admin/archive/article/Create']: () => import('@/views/admin/archive/article/Create'),
-	['/admin/archive/article/Update']: () => import('@/views/admin/archive/article/Update')
+	['/admin/archive/article/Update']: () => import('@/views/admin/archive/article/Update'),
+	['/admin/archive/minute/Minute']: () => import('@/views/admin/archive/minute/Minute')
 }
 
 export default asyncRoutes
