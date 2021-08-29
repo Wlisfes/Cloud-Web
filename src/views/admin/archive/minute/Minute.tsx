@@ -2,8 +2,9 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Table, Button, Tooltip, Menu, Tag, Icon, FormModel, Input, Select, notification } from 'ant-design-vue'
 import { Image } from 'element-ui'
 import { AppRootNode, AppSatus, AppPopover, AppCutover } from '@/components/common'
+import { NodeMinute } from '@/views/admin/archive/common'
 import { nodeMinutes, nodeSources, nodeMinuteCutover, nodeDeleteMinute } from '@/api'
-import { HttpStatus, Source, NodeMinute, NodeSource } from '@/types'
+import { HttpStatus, Source, NodeMinute as NodeMinuteState, NodeSource } from '@/types'
 import style from '@/style/admin/admin.minute.module.less'
 
 type SourceOption = {
@@ -16,10 +17,10 @@ type SourceOption = {
 
 @Component
 export default class Minute extends Vue {
-	$refs!: { rootNode: AppRootNode }
+	$refs!: { rootNode: AppRootNode; nodeMinute: NodeMinute }
 
 	private sources: NodeSource[] = []
-	private source: Source<Array<NodeMinute>> & SourceOption = {
+	private source: Source<Array<NodeMinuteState>> & SourceOption = {
 		column: [
 			{ title: '收录封面', align: 'center', width: 125, scopedSlots: { customRender: 'cover' } },
 			{ title: '收录名称', width: '20%', scopedSlots: { customRender: 'name' } },
@@ -144,6 +145,8 @@ export default class Minute extends Vue {
 		const { source } = this
 		return (
 			<AppRootNode ref="rootNode" class={style['app-conter']}>
+				<NodeMinute ref="nodeMinute" onReplay={() => this.source.initSource()}></NodeMinute>
+
 				<FormModel layout="inline" class={style['node-source']}>
 					<div class="node-source-item inline-50">
 						<FormModel.Item>
@@ -192,7 +195,9 @@ export default class Minute extends Vue {
 						<Button onClick={this.source.onReset}>重置</Button>
 					</FormModel.Item>
 					<FormModel.Item>
-						<Button type="primary">新增</Button>
+						<Button type="primary" onClick={() => this.$refs.nodeMinute.init('create')}>
+							新增
+						</Button>
 					</FormModel.Item>
 					<FormModel.Item style={{ marginRight: 0 }}>
 						<Button onClick={() => this.source.initSource()}>刷新</Button>
@@ -216,7 +221,7 @@ export default class Minute extends Vue {
 					onChange={source.onChange}
 					{...{
 						scopedSlots: {
-							cover: (props: NodeMinute) => (
+							cover: (props: NodeMinuteState) => (
 								<div class={style['app-conter-cover']}>
 									<Image
 										alt={props.name}
@@ -226,17 +231,17 @@ export default class Minute extends Vue {
 									></Image>
 								</div>
 							),
-							name: (props: NodeMinute) => (
+							name: (props: NodeMinuteState) => (
 								<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
 									<Tooltip title={props.name}>{props.name}</Tooltip>
 								</div>
 							),
-							description: (props: NodeMinute) => (
+							description: (props: NodeMinuteState) => (
 								<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
 									<Tooltip title={props.description}>{props.description}</Tooltip>
 								</div>
 							),
-							source: (props: NodeMinute) => {
+							source: (props: NodeMinuteState) => {
 								if (props.source?.length > 0) {
 									return (
 										<Tooltip
@@ -255,8 +260,8 @@ export default class Minute extends Vue {
 								}
 								return null
 							},
-							status: (props: NodeMinute) => <AppSatus status={props.status}></AppSatus>,
-							action: (props: NodeMinute) => (
+							status: (props: NodeMinuteState) => <AppSatus status={props.status}></AppSatus>,
+							action: (props: NodeMinuteState) => (
 								<Button.Group>
 									<AppPopover
 										onChange={(option: { key: string }) => this.onChange(option.key, props.id)}
