@@ -126,7 +126,7 @@ export default class NodeMultipleArticle extends Vue {
 								))}
 							</ul>
 						) : !this.loading && this.dataSource.length === 0 ? (
-							<div style={{ borderRadius: '4px', backgroundColor: '#ffffff' }}>
+							<div class={style['node-empty']}>
 								<Empty image={require('@/assets/icon/1629789570141.png')}></Empty>
 							</div>
 						) : null}
