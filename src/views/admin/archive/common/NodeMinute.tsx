@@ -2,7 +2,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, InputNumber, Modal, Radio, Select } from 'ant-design-vue'
 import { Button, Switch, Spin, notification } from 'ant-design-vue'
 import { AppCover } from '@/components/common'
-import { NodeSource } from '@/types'
+import { nodeMinute, nodeCreateMinute, nodeUpdateMinute, nodeSources } from '@/api'
+import { HttpStatus, NodeSource } from '@/types'
 
 @Component
 export default class NodeMinute extends Vue {
@@ -18,7 +19,6 @@ export default class NodeMinute extends Vue {
 		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
 		form: {
 			id: 0,
-			type: 1,
 			name: '',
 			cover: '',
 			description: '',
@@ -32,24 +32,94 @@ export default class NodeMinute extends Vue {
 		rules: {
 			name: [{ required: true, message: '请输入收录名称', trigger: 'blur' }],
 			cover: [{ required: true, message: '请上传收录封面', trigger: 'blur' }],
-			status: [{ required: true, message: '请选择收录状态', trigger: 'blur' }],
-			key: [{ required: true, message: '请上传收录文件', trigger: 'blur' }]
+			status: [{ required: true, message: '请选择传收状态', trigger: 'blur' }]
 		}
 	}
 
-	/**组件调用**/
-	public async init(active: 'create' | 'update', id?: number) {
+	/**分类标签列表**/
+	private async nodeSources() {
+		try {
+			const { code, data } = await nodeSources({ page: 1, size: 200, status: 1 })
+			if (code === HttpStatus.OK) {
+				this.sources = data.list
+			}
+			return data
+		} catch (e) {
+			return e
+		}
+	}
+
+	/**收录信息**/
+	private async nodeMinute(id: number) {
+		try {
+			const { code, data } = await nodeMinute({ id })
+			if (code === HttpStatus.OK) {
+				this.state.form = Object.assign(this.state.form, {
+					name: data.name,
+					cover: data.cover,
+					description: data.description,
+					status: data.status === 1,
+					order: data.order,
+					url: data.url,
+					npm: data.npm,
+					github: data.github,
+					source: data.source.map(k => k.id)
+				})
+			}
+			return data
+		} catch (e) {
+			return e
+		}
+	}
+
+	/**创建收录**/
+	private async nodeCreateMinute() {
 		try {
 			this.loading = true
-			this.active = active
-			this.visible = true
-			// await this.nodeClouds()
-			// await this.nodeCloudSources()
-			if (id) {
-				this.state.form.id = id
-				// await this.nodeCloud(id)
+			const { form } = this.state
+			const { code, data } = await nodeCreateMinute({
+				name: form.name,
+				cover: form.cover,
+				description: form.description || null,
+				status: +form.status,
+				order: form.order,
+				url: form.url,
+				npm: form.npm,
+				github: form.github,
+				source: form.source || []
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$emit('replay')
+				this.onClose()
 			}
+		} catch (e) {
 			this.loading = false
+		}
+	}
+
+	/**修改收录**/
+	private async nodeUpdateMinute() {
+		try {
+			this.loading = true
+			const { form } = this.state
+			const { code, data } = await nodeUpdateMinute({
+				id: form.id,
+				name: form.name,
+				cover: form.cover,
+				description: form.description || null,
+				status: +form.status,
+				order: form.order,
+				url: form.url,
+				npm: form.npm,
+				github: form.github,
+				source: form.source || []
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$emit('replay')
+				this.onClose()
+			}
 		} catch (e) {
 			this.loading = false
 		}
@@ -61,14 +131,31 @@ export default class NodeMinute extends Vue {
 			if (valid) {
 				switch (this.active) {
 					case 'create':
-						// this.nodeCreateCloud()
+						this.nodeCreateMinute()
 						break
 					case 'update':
-						// this.nodeUpdateCloud()
+						this.nodeUpdateMinute()
 						break
 				}
 			}
 		})
+	}
+
+	/**组件调用**/
+	public async init(active: 'create' | 'update', id?: number) {
+		try {
+			this.loading = true
+			this.active = active
+			this.visible = true
+			await this.nodeSources()
+			if (id) {
+				this.state.form.id = id
+				await this.nodeMinute(id)
+			}
+			this.loading = false
+		} catch (e) {
+			this.loading = false
+		}
 	}
 
 	/**组件初始化**/
@@ -79,18 +166,15 @@ export default class NodeMinute extends Vue {
 			this.active = 'create'
 			this.state.form = Object.assign(this.state.form, {
 				id: 0,
-				type: 1,
-				title: '',
+				name: '',
 				cover: '',
 				description: '',
 				status: true,
 				order: 0,
 				source: [],
-				parent: undefined,
-				size: 0,
-				key: '',
-				name: '',
-				path: ''
+				url: '',
+				npm: '',
+				github: ''
 			})
 		}, 300)
 	}
@@ -105,7 +189,7 @@ export default class NodeMinute extends Vue {
 				width={880}
 				centered
 				destroyOnClose
-				// onCancel={this.onClose}
+				onCancel={this.onClose}
 			>
 				<Spin size="large" class="ant-spin-64" spinning={this.loading}>
 					<FormModel
@@ -122,17 +206,6 @@ export default class NodeMinute extends Vue {
 								cover={form.cover}
 								onSubmit={(props: { path: string }) => (form.cover = props.path)}
 							></AppCover>
-						</FormModel.Item>
-						<FormModel.Item label="分类标签">
-							<Select v-model={form.source} allowClear show-search mode="multiple" placeholder="分类标签">
-								{this.sources.map(k => {
-									return (
-										<Select.Option key={k.id} value={k.id} disabled={!k.status}>
-											{k.name}
-										</Select.Option>
-									)
-								})}
-							</Select>
 						</FormModel.Item>
 						<FormModel.Item class="app-form-color" label="收录名称" prop="name">
 							<Input.TextArea
@@ -151,6 +224,17 @@ export default class NodeMinute extends Vue {
 								allowClear
 								placeholder="收录描述"
 							></Input.TextArea>
+						</FormModel.Item>
+						<FormModel.Item label="分类标签">
+							<Select v-model={form.source} allowClear show-search mode="multiple" placeholder="分类标签">
+								{this.sources.map(k => {
+									return (
+										<Select.Option key={k.id} value={k.id} disabled={!k.status}>
+											{k.name}
+										</Select.Option>
+									)
+								})}
+							</Select>
 						</FormModel.Item>
 						<FormModel.Item label="url地址">
 							<Input v-model={form.url} placeholder="url地址"></Input>

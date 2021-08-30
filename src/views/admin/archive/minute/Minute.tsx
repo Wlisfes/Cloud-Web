@@ -134,6 +134,7 @@ export default class Minute extends Vue {
 	private onChange(key: string, id: number) {
 		switch (key) {
 			case 'update':
+				this.$refs.nodeMinute.init('update', id)
 				break
 			case 'delete':
 				this.nodeDeleteMinute(id)
