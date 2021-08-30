@@ -57,7 +57,7 @@ export type NodeMinuteNodeResponse = NodeMinute
 export type NodeMinutesParameter = Pick<NodeMinuteParameter, 'page' | 'size'> &
 	Partial<Pick<NodeMinuteParameter, 'status' | 'npm'>> & { source?: number }
 export type NodeClientMinutesParameter = Pick<NodeMinuteParameter, 'page' | 'size'> &
-	Partial<Pick<NodeMinuteParameter, 'npm'>> & { source?: number }
+	Partial<Pick<NodeMinuteParameter, 'name'>> & { source?: number }
 export type NodeMinutesResponse = Pick<NodeMinuteParameter, 'page' | 'size' | 'total'> & {
 	list: NodeMinute[]
 }

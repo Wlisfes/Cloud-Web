@@ -6,7 +6,7 @@ import { NodeCloud } from '@/types'
 import style from '@/style/web/common/node.intense.cloud.module.less'
 
 @Component
-export default class NodeIntenseCloud extends Vue {
+export default class NodeIntense extends Vue {
 	@Prop({ type: Array, default: () => [] }) dataSource!: NodeCloud[]
 	@Prop({ type: Boolean, default: true }) loading!: boolean
 	@Prop({ type: Number, default: 0 }) total!: number

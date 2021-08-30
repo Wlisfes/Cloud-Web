@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppSearch } from '@/components/common'
-import { NodeIntenseCloud } from '@/views/web/intense/common'
+import { NodeIntense } from '@/views/web/intense/common'
 import { nodeClientClouds } from '@/api'
 import { HttpStatus, Client, NodeCloud } from '@/types'
 import { intheEnd } from '@/utils/common'
@@ -118,11 +118,7 @@ export default class Intense extends Vue {
 					onChange={client.onChange}
 					onSubmit={client.onSubmit}
 				></AppSearch>
-				<NodeIntenseCloud
-					total={client.total}
-					loading={client.loading}
-					dataSource={client.dataSource}
-				></NodeIntenseCloud>
+				<NodeIntense total={client.total} loading={client.loading} dataSource={client.dataSource}></NodeIntense>
 			</div>
 		)
 	}
