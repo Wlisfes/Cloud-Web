@@ -1,7 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppSearch } from '@/components/common'
+import { NodeMinute } from '@/views/web/minute/common'
 import { nodeClientMinutes } from '@/api'
-import { HttpStatus, Client, NodeMinute } from '@/types'
+import { HttpStatus, Client, NodeMinute as NodeMinuteState } from '@/types'
 import { intheEnd } from '@/utils/common'
 import style from '@/style/web/web.multiple.module.less'
 
@@ -14,7 +15,7 @@ type ClientNode = {
 export default class Minute extends Vue {
 	$refs!: { appSearch: AppSearch }
 
-	private client: Client<Array<NodeMinute>, ClientNode> = {
+	private client: Client<Array<NodeMinuteState>, ClientNode> = {
 		page: 1,
 		size: 12,
 		keyword: '',
@@ -117,6 +118,7 @@ export default class Minute extends Vue {
 					onChange={client.onChange}
 					onSubmit={client.onSubmit}
 				></AppSearch>
+				<NodeMinute total={client.total} loading={client.loading} dataSource={client.dataSource}></NodeMinute>
 			</div>
 		)
 	}
