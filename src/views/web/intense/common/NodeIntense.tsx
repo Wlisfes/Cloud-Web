@@ -6,7 +6,7 @@ import { NodeCloud } from '@/types'
 import style from '@/style/web/common/node.intense.cloud.module.less'
 
 @Component
-export default class NodeIntense extends Vue {
+export default class NodeIntenseCloud extends Vue {
 	@Prop({ type: Array, default: () => [] }) dataSource!: NodeCloud[]
 	@Prop({ type: Boolean, default: true }) loading!: boolean
 	@Prop({ type: Number, default: 0 }) total!: number
@@ -106,7 +106,7 @@ export default class NodeIntense extends Vue {
 							</ul>
 						) : !this.loading && this.dataSource.length === 0 ? (
 							<div class={style['node-empty']}>
-								<Empty image="https://oss.lisfes.cn/cloud/stctic/1629789570142.png"></Empty>
+								<Empty image={require('@/assets/icon/1629789570141.png')}></Empty>
 							</div>
 						) : null}
 					</div>

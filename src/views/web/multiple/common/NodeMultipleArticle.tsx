@@ -1,7 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Spin, Icon } from 'ant-design-vue'
 import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
-import { AppAvatar } from '@/components/common'
 import { NodeArticle } from '@/types'
 import style from '@/style/web/common/node.multiple.article.module.less'
 
@@ -128,7 +126,9 @@ export default class NodeMultipleArticle extends Vue {
 								))}
 							</ul>
 						) : !this.loading && this.dataSource.length === 0 ? (
-							<div></div>
+							<div style={{ borderRadius: '4px', backgroundColor: '#ffffff' }}>
+								<Empty image={require('@/assets/icon/1629789570141.png')}></Empty>
+							</div>
 						) : null}
 					</div>
 				</Skeleton>
