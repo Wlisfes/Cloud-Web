@@ -121,7 +121,7 @@ export default class AppCropper extends Vue {
 	protected render() {
 		return (
 			<Modal title="图片上传" dialogStyle={{ maxWidth: '95%' }} v-model={this.visible} width={880} destroyOnClose>
-				<Spin size="large" spinning={this.loading}>
+				<Spin size="large" class="ant-spin-64" spinning={this.loading}>
 					<div class={style['app-cropper']}>
 						<div class={style['app-cropper-ratio']}>
 							<div class={style['app-cropper-ratio-absolute']}>

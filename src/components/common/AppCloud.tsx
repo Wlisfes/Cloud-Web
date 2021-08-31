@@ -94,7 +94,7 @@ export default class AppCloud extends Vue {
 				destroyOnClose
 				onCancel={this.onClose}
 			>
-				<Spin size="large" spinning={this.loading}>
+				<Spin size="large" class="ant-spin-64" spinning={this.loading}>
 					<FormModel ref="formModel" class="app-form" {...{ props: { model: form, rules } }}>
 						<FormModel.Item wrapperCol={wrapperCol} labelCol={labelCol} label="媒体标题" prop="title">
 							<Input v-model={form.title} allowClear placeholder="媒体标题"></Input>

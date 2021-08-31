@@ -234,7 +234,7 @@ export default class NodeSource extends Vue {
 				destroyOnClose
 				onCancel={this.onClose}
 			>
-				<Spin size="large" spinning={this.loading}>
+				<Spin size="large" class="ant-spin-64" spinning={this.loading}>
 					<FormModel
 						ref="form"
 						class="app-form"

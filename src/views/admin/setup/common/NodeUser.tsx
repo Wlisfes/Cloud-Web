@@ -190,7 +190,7 @@ export default class NodeUser extends Vue {
 				destroyOnClose
 				onCancel={this.onClose}
 			>
-				<Spin size="large" spinning={state.loading}>
+				<Spin size="large" class="ant-spin-64" spinning={state.loading}>
 					<FormModel
 						ref="form"
 						class="app-form"
