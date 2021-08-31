@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, InputNumber, Select } from 'ant-design-vue'
 import { Spin, Radio, Switch, TreeSelect, notification } from 'ant-design-vue'
-import { nodeCreateMenu, nodeMenuConter, nodeMenu, nodeUpdateMenu } from '@/api'
-import { HttpStatus, NodeMenuParameter } from '@/types'
+import { nodeCreateMenu, nodeMenuConter, nodeMenu, nodeUpdateMenu, nodeRoles } from '@/api'
+import { HttpStatus, NodeMenuParameter, NodeRoleResponse } from '@/types'
 import { ctxFile } from '@/utils/common'
 
 @Component
@@ -11,6 +11,7 @@ export default class NodeMenu extends Vue {
 
 	private file: string[] = ctxFile()
 	private treeNode: NodeMenuParameter[] = []
+	private roleNode: NodeRoleResponse[] = []
 	private visible: boolean = false
 	private loading: boolean = false
 	private active: string = 'create'
@@ -20,19 +21,34 @@ export default class NodeMenu extends Vue {
 		form: {
 			id: 0,
 			type: 1,
+			role: [],
 			name: '',
 			router: '',
 			keepAlive: true,
 			visible: true,
-			path: '',
+			path: undefined,
 			icon: '',
 			order: 1,
 			parent: null
 		},
 		rules: {
+			role: [{ required: true, message: '请选择节点权限', trigger: 'blur' }],
 			name: [{ required: true, message: '请输入节点名称', trigger: 'blur' }],
 			router: [{ required: true, message: '请输入节点路由', trigger: 'blur' }],
 			path: [{ required: true, message: '请输入文件路径', trigger: 'blur' }]
+		}
+	}
+
+	/**角色列表**/
+	private async nodeRoles() {
+		try {
+			const { code, data } = await nodeRoles({ page: 1, size: 10 })
+			if (code === HttpStatus.OK) {
+				this.roleNode = data.list
+			}
+			return data
+		} catch (e) {
+			return e
 		}
 	}
 
@@ -56,6 +72,7 @@ export default class NodeMenu extends Vue {
 			if (code === HttpStatus.OK) {
 				this.state.form = Object.assign(this.state.form, {
 					type: data.type,
+					role: data.role.map(k => k.id),
 					name: data.name,
 					router: data.router,
 					keepAlive: data.keepAlive === 1,
@@ -79,6 +96,7 @@ export default class NodeMenu extends Vue {
 			const { form } = this.state
 			const { code, data } = await nodeCreateMenu({
 				type: form.type,
+				role: form.role,
 				name: form.name,
 				router: form.router,
 				path: form.path,
@@ -106,6 +124,7 @@ export default class NodeMenu extends Vue {
 			const { code, data } = await nodeUpdateMenu({
 				id: form.id,
 				type: form.type,
+				role: form.role,
 				name: form.name,
 				router: form.router,
 				path: form.path,
@@ -131,6 +150,8 @@ export default class NodeMenu extends Vue {
 			this.loading = true
 			this.active = active
 			this.visible = true
+			await this.nodeRoles()
+			await this.nodeMenuConter()
 			if (id) {
 				if (active === 'update') {
 					this.state.form.id = id
@@ -141,7 +162,6 @@ export default class NodeMenu extends Vue {
 					})
 				}
 			}
-			await this.nodeMenuConter()
 			this.loading = false
 		} catch (e) {
 			this.loading = false
@@ -157,6 +177,7 @@ export default class NodeMenu extends Vue {
 			this.state.form = Object.assign(this.state.form, {
 				id: 0,
 				type: 1,
+				role: [],
 				name: '',
 				router: '',
 				keepAlive: true,
@@ -210,13 +231,24 @@ export default class NodeMenu extends Vue {
 								<Radio value={2}>菜单</Radio>
 							</Radio.Group>
 						</FormModel.Item>
+						<FormModel.Item label="节点权限" prop="role">
+							<Select mode="multiple" v-model={form.role} allowClear placeholder="请选择节点权限">
+								{this.roleNode.map(k => {
+									return (
+										<Select.Option key={k.id} value={k.id}>
+											{k.name}
+										</Select.Option>
+									)
+								})}
+							</Select>
+						</FormModel.Item>
 						{form.type === 1 ? (
 							<div>
 								<FormModel.Item label="节点名称" prop="name">
-									<Input v-model={form.name}></Input>
+									<Input v-model={form.name} placeholder="请输入节点名称"></Input>
 								</FormModel.Item>
 								<FormModel.Item label="节点图标">
-									<Input v-model={form.icon}></Input>
+									<Input v-model={form.icon} placeholder="请输入节点图标"></Input>
 								</FormModel.Item>
 								<FormModel.Item label="上级节点">
 									<TreeSelect
@@ -227,10 +259,11 @@ export default class NodeMenu extends Vue {
 										tree-default-expand-all
 										replaceFields={{ children: 'children', title: 'name', key: 'id', value: 'id' }}
 										dropdown-style={{ maxHeight: '300px', overflow: 'auto' }}
+										placeholder="请选择上级节点"
 									></TreeSelect>
 								</FormModel.Item>
 								<FormModel.Item label="排序号">
-									<InputNumber v-model={form.order}></InputNumber>
+									<InputNumber v-model={form.order} placeholder="0"></InputNumber>
 								</FormModel.Item>
 								<FormModel.Item label="是否可见">
 									<Switch
@@ -244,13 +277,13 @@ export default class NodeMenu extends Vue {
 						) : (
 							<div>
 								<FormModel.Item label="节点名称" prop="name">
-									<Input v-model={form.name}></Input>
+									<Input v-model={form.name} placeholder="请输入节点名称"></Input>
 								</FormModel.Item>
 								<FormModel.Item label="节点路由" prop="router">
-									<Input v-model={form.router}></Input>
+									<Input v-model={form.router} placeholder="请输入节点路由"></Input>
 								</FormModel.Item>
 								<FormModel.Item label="文件路径" prop="path">
-									<Select v-model={form.path} allowClear show-search>
+									<Select v-model={form.path} allowClear show-search placeholder="请选择文件路径">
 										<Select.Option value="Layout">Layout</Select.Option>
 										{this.file.map((name, index) => {
 											return (
@@ -270,13 +303,14 @@ export default class NodeMenu extends Vue {
 										tree-default-expand-all
 										replaceFields={{ children: 'children', title: 'name', key: 'id', value: 'id' }}
 										dropdown-style={{ maxHeight: '300px', overflow: 'auto' }}
+										placeholder="请选择上级节点"
 									></TreeSelect>
 								</FormModel.Item>
 								<FormModel.Item label="节点图标">
-									<Input v-model={form.icon}></Input>
+									<Input v-model={form.icon} placeholder="请输入节点图标"></Input>
 								</FormModel.Item>
 								<FormModel.Item label="排序号">
-									<InputNumber v-model={form.order}></InputNumber>
+									<InputNumber v-model={form.order} placeholder="0"></InputNumber>
 								</FormModel.Item>
 								<FormModel.Item label="是否可见">
 									<Switch

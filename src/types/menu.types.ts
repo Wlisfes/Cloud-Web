@@ -1,11 +1,12 @@
-import { NodeDate } from '@/types'
+import { NodeDate, NodeRoleResponse } from '@/types'
 
-export type NodeMenuParameter = NodeDate & {
+export type NodeMenu = NodeDate & {
 	id: number
 	type: number
+	role: NodeRoleResponse[]
 	name: string
 	router: string
-	path: string
+	path: string | undefined
 	keepAlive: number
 	status: number
 	visible: number
@@ -13,6 +14,9 @@ export type NodeMenuParameter = NodeDate & {
 	order: number | null
 	parent: NodeMenuParameter | null
 	children: NodeMenuParameter[]
+}
+
+export type NodeMenuParameter = NodeMenu & {
 	message: string
 }
 
@@ -23,13 +27,16 @@ export type NodeCreateMenuParameter = Pick<
 	NodeMenuParameter,
 	'type' | 'name' | 'router' | 'path' | 'visible' | 'keepAlive'
 > &
-	Partial<Pick<NodeMenuParameter, 'icon' | 'order' | 'parent'>>
+	Partial<Pick<NodeMenuParameter, 'icon' | 'order' | 'parent'>> & {
+		role: number[]
+	}
 export type NodeCreateMenuResponse = Pick<NodeMenuParameter, 'message'>
 
 /**
  * 菜单信息
  */
-export type NodeIDMenuParameter = Pick<NodeMenuParameter, 'id'>
+export type NodeMenuNodeParameter = Pick<NodeMenuParameter, 'id'>
+export type NodeMenuNodeResponse = NodeMenu
 
 /**
  * 修改菜单
@@ -38,7 +45,9 @@ export type NodeUpdateMenuParameter = Pick<
 	NodeMenuParameter,
 	'id' | 'type' | 'name' | 'router' | 'path' | 'visible' | 'keepAlive'
 > &
-	Partial<Pick<NodeMenuParameter, 'icon' | 'order' | 'parent'>>
+	Partial<Pick<NodeMenuParameter, 'icon' | 'order' | 'parent'>> & {
+		role: number[]
+	}
 export type NodeUpdateMenuResponse = Pick<NodeMenuParameter, 'message'>
 
 /**

@@ -43,8 +43,8 @@ export function nodeMenus() {
 }
 
 /**菜单信息**/
-export function nodeMenu(params: types.NodeIDMenuParameter) {
-	return request<types.NodeMenuParameter>({
+export function nodeMenu(params: types.NodeMenuNodeParameter) {
+	return request<types.NodeMenuNodeResponse>({
 		url: `/api/menu/info`,
 		method: 'GET',
 		params
