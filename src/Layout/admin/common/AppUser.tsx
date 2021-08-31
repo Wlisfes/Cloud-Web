@@ -2,6 +2,7 @@ import { Getter } from 'vuex-class'
 import { Vue, Component } from 'vue-property-decorator'
 import { Icon, Menu, Popover, Modal } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
+import { toggleFull, isFull, watchFull } from 'be-full'
 import { init } from '@/components/instance/init-logout'
 
 @Component
@@ -12,7 +13,23 @@ export default class AppUser extends Vue {
 
 	private state = {
 		popover: false,
-		visible: false
+		visible: false,
+		isFull: isFull(document.documentElement)
+	}
+
+	protected beforeDestroy() {
+		this.watch.cancel()
+	}
+
+	/**监听全屏状态**/
+	private watch = watchFull(document.documentElement, ev => {
+		this.state.isFull = ev
+	})
+
+	/**切换全屏/退出**/
+	private onToggleFull() {
+		toggleFull()
+		this.state.isFull = !this.state.isFull
 	}
 
 	private async onChange(option: { key: string }) {
@@ -24,7 +41,7 @@ export default class AppUser extends Vue {
 				// this.$router.push('/')
 				break
 			case 'github':
-				window.open('https:play.lisfes.cn')
+				window.open('https://github.com/Wlisfes')
 				break
 			default:
 				init().then(({ node, vm }) => {
@@ -53,8 +70,8 @@ export default class AppUser extends Vue {
 					<Icon type="bell" />
 					<sup class="bell-bot"></sup>
 				</div>
-				<div class="app-user-node" style={{ padding: '0 10px' }}>
-					<Icon type="fullscreen" />
+				<div class="app-user-node" style={{ padding: '0 10px' }} onClick={this.onToggleFull}>
+					{state.isFull ? <Icon type="fullscreen-exit" /> : <Icon type="fullscreen" />}
 				</div>
 				<Popover
 					v-model={state.popover}
