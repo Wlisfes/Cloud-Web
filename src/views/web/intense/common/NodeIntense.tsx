@@ -89,7 +89,21 @@ export default class NodeIntenseCloud extends Vue {
 														style={{ cursor: 'pointer', borderRadius: '50%' }}
 													></AppAvatar>
 													<div class={style['node-user-nickname']}>
-														<a class="app-ellipsis">{k.user.nickname}</a>
+														<div style={{ flex: 1, overflow: 'hidden' }}>
+															<a class="app-ellipsis">{k.user.nickname}</a>
+														</div>
+														<div class={style['node-play']}>
+															<i class="el-icon-view"></i>
+															<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+														</div>
+														<div class={style['node-play']}>
+															<i class="el-icon-star-on"></i>
+															<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+														</div>
+														<div class={style['node-play']}>
+															<i class="el-icon-chat-dot-square"></i>
+															<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+														</div>
 													</div>
 												</div>
 											</div>
