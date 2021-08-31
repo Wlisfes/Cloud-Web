@@ -200,6 +200,7 @@ export default class NodeUser extends Vue {
 					>
 						<FormModel.Item label="头像">
 							<AppCover
+								resize="?x-oss-process=style/resize"
 								cover={common.form.avatar}
 								onSubmit={(props: { path: string }) => (common.form.avatar = props.path)}
 							></AppCover>
