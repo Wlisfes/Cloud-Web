@@ -1,15 +1,16 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Input, Modal, Button, Switch, Spin, notification } from 'ant-design-vue'
-import { nodeModuleAction, nodeUpdateModuleAction, nodeCreateModuleAction } from '@/api'
-import { HttpStatus } from '@/types'
+import { FormModel, Input, Modal, Button, Select, Switch, Spin, notification } from 'ant-design-vue'
+import { nodeModule, nodeUpdateModule, nodeCreateModule, nodeModuleActions } from '@/api'
+import { HttpStatus, NodeModule as NodeModuleState } from '@/types'
 
 @Component
-export default class NodeAction extends Vue {
+export default class NodeModule extends Vue {
 	$refs!: { form: FormModel }
 
 	private visible: boolean = false
 	private loading: boolean = false
 	private active: string = 'create'
+	private action: NodeModuleState[] = []
 	private state = {
 		labelCol: { span: 4, style: { width: '100px' } },
 		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
@@ -18,24 +19,39 @@ export default class NodeAction extends Vue {
 			name: '',
 			primary: '',
 			comment: '',
-			status: true
+			status: true,
+			action: []
 		},
 		rules: {
-			name: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
+			name: [{ required: true, message: '请输入模块名称', trigger: 'blur' }],
 			primary: [{ required: true, message: '请输入唯一标识符', trigger: 'blur' }]
 		}
 	}
 
-	/**接口权限信息-授权管理端**/
-	private async nodeModuleAction(id: number) {
+	/**接口权限列表-授权管理端**/
+	private async nodeModuleActions() {
 		try {
-			const { code, data } = await nodeModuleAction({ id })
+			const { code, data } = await nodeModuleActions({ page: 1, size: 10 })
+			if (code === HttpStatus.OK) {
+				this.action = data.list
+			}
+			return data
+		} catch (e) {
+			return e
+		}
+	}
+
+	/**模块信息-授权管理端**/
+	private async nodeModule(id: number) {
+		try {
+			const { code, data } = await nodeModule({ id })
 			if (code === HttpStatus.OK) {
 				this.state.form = Object.assign(this.state.form, {
 					name: data.name,
 					primary: data.primary,
 					comment: data.comment,
-					status: data.status === 1
+					status: data.status === 1,
+					action: data.action.map(k => k.id)
 				})
 			}
 			return data
@@ -44,16 +60,17 @@ export default class NodeAction extends Vue {
 		}
 	}
 
-	/**创建接口权限-授权管理端**/
-	private async nodeCreateModuleAction() {
+	/**创建模块-授权管理端**/
+	private async nodeCreateModule() {
 		try {
 			this.loading = true
 			const { form } = this.state
-			const { code, data } = await nodeCreateModuleAction({
+			const { code, data } = await nodeCreateModule({
 				name: form.name,
 				primary: form.primary,
 				comment: form.comment,
-				status: +form.status
+				status: +form.status,
+				action: form.action
 			})
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
@@ -65,17 +82,18 @@ export default class NodeAction extends Vue {
 		}
 	}
 
-	/**修改接口权限-授权管理端**/
-	private async nodeUpdateModuleAction() {
+	/**修改模块-授权管理端**/
+	private async nodeUpdateModule() {
 		try {
 			this.loading = true
 			const { form } = this.state
-			const { code, data } = await nodeUpdateModuleAction({
+			const { code, data } = await nodeUpdateModule({
 				id: form.id,
 				name: form.name,
 				primary: form.primary,
 				comment: form.comment,
-				status: +form.status
+				status: +form.status,
+				action: form.action
 			})
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
@@ -93,9 +111,10 @@ export default class NodeAction extends Vue {
 			this.loading = true
 			this.active = active
 			this.visible = true
+			await this.nodeModuleActions()
 			if (id) {
 				this.state.form.id = id
-				await this.nodeModuleAction(id)
+				await this.nodeModule(id)
 			}
 			this.loading = false
 		} catch (e) {
@@ -114,7 +133,8 @@ export default class NodeAction extends Vue {
 				name: '',
 				primary: '',
 				comment: '',
-				status: true
+				status: true,
+				action: []
 			})
 		}, 300)
 	}
@@ -125,10 +145,10 @@ export default class NodeAction extends Vue {
 			if (valid) {
 				switch (this.active) {
 					case 'create':
-						this.nodeCreateModuleAction()
+						this.nodeCreateModule()
 						break
 					case 'update':
-						this.nodeUpdateModuleAction()
+						this.nodeUpdateModule()
 						break
 				}
 			}
@@ -154,21 +174,30 @@ export default class NodeAction extends Vue {
 						labelCol={labelCol}
 						wrapperCol={wrapperCol}
 					>
-						<FormModel.Item label="权限标识符" prop="primary">
-							<Input v-model={form.primary} placeholder="权限标识符"></Input>
+						<FormModel.Item label="模块标识符" prop="primary">
+							<Input v-model={form.primary} placeholder="模块标识符"></Input>
 						</FormModel.Item>
-						<FormModel.Item label="权限名称" prop="name">
-							<Input v-model={form.name} placeholder="权限名称"></Input>
+						<FormModel.Item label="模块名称" prop="name">
+							<Input v-model={form.name} placeholder="模块名称"></Input>
 						</FormModel.Item>
-						<FormModel.Item label="权限备注">
+						<FormModel.Item label="接口权限">
+							<Select mode="multiple" v-model={form.action} allowClear placeholder="接口权限">
+								{this.action.map(k => (
+									<Select.Option disabled={!k.status} key={k.id} value={k.id}>
+										{k.name}
+									</Select.Option>
+								))}
+							</Select>
+						</FormModel.Item>
+						<FormModel.Item label="模块备注">
 							<Input.TextArea
 								v-model={form.comment}
 								autoSize={{ minRows: 2, maxRows: 3 }}
 								style={{ marginBottom: 0 }}
-								placeholder="权限备注"
+								placeholder="模块备注"
 							></Input.TextArea>
 						</FormModel.Item>
-						<FormModel.Item label="权限状态">
+						<FormModel.Item label="模块状态">
 							<Switch
 								v-model={form.status}
 								checked-children="开"

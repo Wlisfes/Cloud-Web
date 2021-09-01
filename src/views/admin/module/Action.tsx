@@ -12,11 +12,11 @@ export default class Module extends Vue {
 
 	private source: Source<Array<NodeModule>> = {
 		column: [
-			{ title: '模块名称', dataIndex: 'name', align: 'center', width: '15%' },
-			{ title: '模块唯一标识', dataIndex: 'primary', width: '15%', align: 'center' },
-			{ title: '模块备注', dataIndex: 'comment', align: 'center' },
+			{ title: '权限名称', dataIndex: 'name', align: 'center', width: '15%' },
+			{ title: '权限唯一标识', dataIndex: 'primary', width: '15%', align: 'center' },
+			{ title: '权限备注', dataIndex: 'comment', align: 'center' },
 			{ title: '创建时间', dataIndex: 'createTime', width: '20%', align: 'center' },
-			{ title: '模块状态', align: 'center', width: '12.5%', scopedSlots: { customRender: 'status' } },
+			{ title: '权限状态', align: 'center', width: '12.5%', scopedSlots: { customRender: 'status' } },
 			{ title: '操作', align: 'center', width: '12.5%', scopedSlots: { customRender: 'action' } }
 		],
 		page: 1,
@@ -58,6 +58,7 @@ export default class Module extends Vue {
 			<AppRootNode class={style['app-conter']}>
 				<div class={style['app-conter']}>
 					<NodeAction ref="nodeAction" onReplay={() => this.source.initSource()}></NodeAction>
+
 					<FormModel layout="inline" class={style['node-source']}>
 						<div class="node-source-item inline-100">
 							<FormModel.Item>

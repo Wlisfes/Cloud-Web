@@ -1,14 +1,16 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Button, Tooltip, Tag, Menu, Icon, FormModel, Input, Select, notification } from 'ant-design-vue'
-import { NodeRole } from '@/views/admin/setup/common'
+import { NodeModule } from '@/views/admin/module/common'
 import { AppRootNode, AppSatus } from '@/components/common'
 import { nodeModules, nodeRoleCutover } from '@/api'
-import { HttpStatus, Source, NodeModule } from '@/types'
+import { HttpStatus, Source, NodeModule as NodeModuleState } from '@/types'
 import style from '@/style/admin/admin.module.module.less'
 
 @Component
 export default class Module extends Vue {
-	private source: Source<Array<NodeModule>> = {
+	$refs!: { nodeModule: NodeModule }
+
+	private source: Source<Array<NodeModuleState>> = {
 		column: [
 			{ title: '模块名称', dataIndex: 'name', align: 'center', width: '15%' },
 			{ title: '模块唯一标识', dataIndex: 'primary', width: '15%', align: 'center' },
@@ -54,68 +56,79 @@ export default class Module extends Vue {
 		const { source } = this
 		return (
 			<AppRootNode class={style['app-conter']}>
-				<FormModel layout="inline" class={style['node-source']}>
-					<div class="node-source-item inline-100">
+				<div class={style['app-conter']}>
+					<NodeModule ref="nodeModule" onReplay={() => this.source.initSource()}></NodeModule>
+
+					<FormModel layout="inline" class={style['node-source']}>
+						<div class="node-source-item inline-100">
+							<FormModel.Item>
+								<Select allowClear placeholder="模块状态" style={{ width: '150px' }}>
+									<Select.Option value={0}>已禁用</Select.Option>
+									<Select.Option value={1}>已启用</Select.Option>
+									<Select.Option value={2}>已删除</Select.Option>
+								</Select>
+							</FormModel.Item>
+						</div>
+						<div class="node-source-item inline-100">
+							<FormModel.Item>
+								<Input allowClear placeholder="模块名称" style={{ width: '300px' }}></Input>
+							</FormModel.Item>
+						</div>
 						<FormModel.Item>
-							<Select allowClear placeholder="标签状态" style={{ width: '150px' }}>
-								<Select.Option value={0}>已禁用</Select.Option>
-								<Select.Option value={1}>已启用</Select.Option>
-								<Select.Option value={2}>已删除</Select.Option>
-							</Select>
+							<Button type="primary">查找</Button>
 						</FormModel.Item>
-					</div>
-					<div class="node-source-item inline-100">
 						<FormModel.Item>
-							<Input allowClear placeholder="标签名称" style={{ width: '300px' }}></Input>
+							<Button>重置</Button>
 						</FormModel.Item>
-					</div>
-					<FormModel.Item>
-						<Button type="primary">查找</Button>
-					</FormModel.Item>
-					<FormModel.Item>
-						<Button>重置</Button>
-					</FormModel.Item>
-					<FormModel.Item>
-						<Button type="primary">新增</Button>
-					</FormModel.Item>
-					<FormModel.Item>
-						<Button onClick={() => this.source.initSource()}>刷新</Button>
-					</FormModel.Item>
-				</FormModel>
-				<Table
-					class="app-source"
-					bordered
-					rowKey={(record: any) => record.id}
-					loading={{ wrapperClassName: 'ant-spin-64', spinning: source.loading }}
-					columns={source.column}
-					dataSource={source.dataSource}
-					scroll={{ x: 800 }}
-					pagination={{
-						pageSize: source.size,
-						current: source.page,
-						pageSizeOptions: source.sizeOption,
-						showSizeChanger: source.showSize,
-						total: source.total
-					}}
-					onChange={source.onChange}
-					{...{
-						scopedSlots: {
-							status: (props: NodeModule) => <AppSatus status={props.status}></AppSatus>,
-							action: (props: NodeModule) => (
-								<Button.Group>
-									<Button type="link">编辑</Button>
-									<Button type="link">
-										{!!props.status ? (
-											<span style={{ color: '#eb2f96' }}>禁用</span>
-										) : (
-											<span style={{ color: '#52c41a' }}>启用</span>
-										)}
-									</Button>
-								</Button.Group>
-							)
-						}
-					}}
-				></Table>
+						<FormModel.Item>
+							<Button type="primary" onClick={() => this.$refs.nodeModule.init('create')}>
+								新增
+							</Button>
+						</FormModel.Item>
+						<FormModel.Item>
+							<Button onClick={() => this.source.initSource()}>刷新</Button>
+						</FormModel.Item>
+					</FormModel>
+					<Table
+						class="app-source"
+						bordered
+						rowKey={(record: any) => record.id}
+						loading={{ wrapperClassName: 'ant-spin-64', spinning: source.loading }}
+						columns={source.column}
+						dataSource={source.dataSource}
+						scroll={{ x: 800 }}
+						pagination={{
+							pageSize: source.size,
+							current: source.page,
+							pageSizeOptions: source.sizeOption,
+							showSizeChanger: source.showSize,
+							total: source.total
+						}}
+						onChange={source.onChange}
+						{...{
+							scopedSlots: {
+								status: (props: NodeModuleState) => <AppSatus status={props.status}></AppSatus>,
+								action: (props: NodeModuleState) => (
+									<Button.Group>
+										<Button
+											type="link"
+											onClick={() => this.$refs.nodeModule.init('update', props.id)}
+										>
+											编辑
+										</Button>
+										<Button type="link">
+											{!!props.status ? (
+												<span style={{ color: '#eb2f96' }}>禁用</span>
+											) : (
+												<span style={{ color: '#52c41a' }}>启用</span>
+											)}
+										</Button>
+									</Button.Group>
+								)
+							}
+						}}
+					></Table>
+				</div>
 			</AppRootNode>
 		)
 	}
