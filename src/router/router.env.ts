@@ -11,7 +11,7 @@ const asyncRoutes: { [key: string]: Function } = {
 	['/admin/archive/article/Update']: () => import('@/views/admin/archive/article/Update'),
 	['/admin/archive/minute/Minute']: () => import('@/views/admin/archive/minute/Minute'),
 	['/admin/module/Module']: () => import('@/views/admin/module/Module'),
-	['/admin/module/action']: () => import('@/views/admin/module/Action')
+	['/admin/module/Action']: () => import('@/views/admin/module/Action')
 }
 
 export default asyncRoutes
