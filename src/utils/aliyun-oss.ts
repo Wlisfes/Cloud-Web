@@ -25,7 +25,7 @@ export class AliyunOSSModule {
 		})
 	}
 
-	Buffer(blob: Blob): Promise<Buffer> {
+	Buffer(blob: Blob | File): Promise<Buffer> {
 		return new Promise(resolve => {
 			const reader = new FileReader()
 			reader.readAsArrayBuffer(blob)
