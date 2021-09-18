@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Tag, Button, Menu, Icon, Divider, FormModel, Input, Select, notification } from 'ant-design-vue'
-import { NodeUser, NodeReset, NodeUserRole } from '@/views/admin/setup/common'
+import { NodeUser, NodeReset } from '@/views/admin/setup/common'
 import { AppRootNode, AppAvatar, AppSatus, AppPopover } from '@/components/common'
 import { nodeUsers, nodeRoles, nodeUserCutover } from '@/api'
 import { HttpStatus, Source, NodeUserResponse, NodeRoleResponse } from '@/types'
@@ -16,7 +16,7 @@ type SourceOption = {
 
 @Component
 export default class User extends Vue {
-	$refs!: { nodeUser: NodeUser; nodeReset: NodeReset; nodeUserRole: NodeUserRole; conter: HTMLElement }
+	$refs!: { nodeUser: NodeUser; nodeReset: NodeReset; conter: HTMLElement }
 
 	private roles: NodeRoleResponse[] = []
 	private source: Source<Array<NodeUserResponse>> & SourceOption = {
@@ -86,18 +86,18 @@ export default class User extends Vue {
 
 	protected created() {
 		this.source.initSource()
-		this.nodeRoles()
+		// this.nodeRoles()
 	}
 
 	/**角色列表-不包括子类**/
-	private async nodeRoles() {
-		try {
-			const { code, data } = await nodeRoles({ page: 1, size: 10 })
-			if (code === HttpStatus.OK) {
-				this.roles = data.list
-			}
-		} catch (e) {}
-	}
+	// private async nodeRoles() {
+	// 	try {
+	// 		const { code, data } = await nodeRoles({ page: 1, size: 10 })
+	// 		if (code === HttpStatus.OK) {
+	// 			this.roles = data.list
+	// 		}
+	// 	} catch (e) {}
+	// }
 
 	/**切换用户状态**/
 	private async nodeUserCutover(uid: number) {
@@ -122,9 +122,6 @@ export default class User extends Vue {
 			case 'reset':
 				this.$refs.nodeReset.init(uid)
 				break
-			case 'role':
-				this.$refs.nodeUserRole.init(uid)
-				break
 		}
 	}
 
@@ -135,7 +132,6 @@ export default class User extends Vue {
 				<div class={style['app-conter']} ref="conter">
 					<NodeUser ref="nodeUser" onReplay={() => this.source.initSource()}></NodeUser>
 					<NodeReset ref="nodeReset" onReplay={() => this.source.initSource()}></NodeReset>
-					<NodeUserRole ref="nodeUserRole" onReplay={() => this.source.initSource()}></NodeUserRole>
 
 					<FormModel layout="inline" class={style['node-source']}>
 						<div class="node-source-item inline-50">
@@ -235,10 +231,7 @@ export default class User extends Vue {
 												<Icon type="edit"></Icon>
 												<span>编辑</span>
 											</Menu.Item>
-											<Menu.Item key="role" style={{ color: '#fa8c16' }}>
-												<Icon type="safety"></Icon>
-												<span>权限</span>
-											</Menu.Item>
+
 											<Menu.Item key="reset" style={{ color: '#f5222d' }}>
 												<Icon type="reload"></Icon>
 												<span>重置密码</span>

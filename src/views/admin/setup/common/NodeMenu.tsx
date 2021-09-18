@@ -41,15 +41,15 @@ export default class NodeMenu extends Vue {
 
 	/**角色列表**/
 	private async nodeRoles() {
-		try {
-			const { code, data } = await nodeRoles({ page: 1, size: 10 })
-			if (code === HttpStatus.OK) {
-				this.roleNode = data.list
-			}
-			return data
-		} catch (e) {
-			return e
-		}
+		// try {
+		// 	const { code, data } = await nodeRoles({ page: 1, size: 10 })
+		// 	if (code === HttpStatus.OK) {
+		// 		this.roleNode = data.list
+		// 	}
+		// 	return data
+		// } catch (e) {
+		// 	return e
+		// }
 	}
 
 	/**目录节点**/

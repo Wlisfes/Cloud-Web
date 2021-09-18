@@ -67,7 +67,7 @@ export type NodeUserCutoverResponse = Pick<NodeUserParameter, 'message'>
  * 修改用户信息
  */
 export type NodeUpdateUserParameter = Pick<NodeUserParameter, 'uid' | 'nickname' | 'status'> &
-	Partial<Pick<NodeUserParameter, 'password' | 'email' | 'avatar' | 'mobile' | 'comment'>>
+	Partial<Pick<NodeUserParameter, 'email' | 'avatar' | 'mobile' | 'comment'>> & { role: number }
 export type NodeUpdateUserResponse = Pick<NodeUserParameter, 'message'>
 
 /**
