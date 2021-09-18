@@ -1,17 +1,17 @@
 import request from '@/utils/request'
 import * as types from '@/types'
 
-/**角色列表-不包括子类**/
-export function nodeRoles(params: types.NodeRolesParameter) {
-	return request<types.NodeRolesRespone>({
-		url: `/api/role/list`,
-		method: 'GET',
-		params
+/**创建角色**/
+export function nodeCreateRole(params: types.NodeCreateRoleParameter) {
+	return request<types.NodeCreateRoleRespone>({
+		url: `/api/role/create`,
+		method: 'POST',
+		data: params
 	})
 }
 
-/**角色列表-包括子类**/
-export function nodeRolesChild(params: types.NodeRolesParameter) {
+/**角色列表**/
+export function nodeRoles(params: types.NodeRolesParameter) {
 	return request<types.NodeRolesRespone>({
 		url: `/api/role/list-node`,
 		method: 'GET',
@@ -22,25 +22,7 @@ export function nodeRolesChild(params: types.NodeRolesParameter) {
 /**角色信息**/
 export function nodeRole(params: types.NodeRoleParameter) {
 	return request<types.NodeRoleResponse>({
-		url: `/api/role/node`,
-		method: 'GET',
-		params
-	})
-}
-
-/**用户角色信息**/
-export function nodeUserRole(params?: any) {
-	return request<types.NodeUserRoleRespone>({
-		url: `/api/role/user-node`,
-		method: 'GET',
-		params
-	})
-}
-
-/**用户角色信息-uid**/
-export function nodeUserUidRole(params: types.NodeUserUidRoleParameter) {
-	return request<types.NodeUserUidRoleRespone>({
-		url: `/api/role/user-uid-node`,
+		url: `/api/role/info`,
 		method: 'GET',
 		params
 	})
@@ -50,15 +32,6 @@ export function nodeUserUidRole(params: types.NodeUserUidRoleParameter) {
 export function updateNodeRole(params: types.NodeUpdateRoleParameter) {
 	return request<types.NodeUpdateRoleRespone>({
 		url: `/api/role/update`,
-		method: 'PUT',
-		data: params
-	})
-}
-
-/**修改用户角色权限**/
-export function nodeUpdateUserRole(params: types.NodeUpdateUserRoleParameter) {
-	return request<types.NodeUpdateUserRoleRespone>({
-		url: `/api/role/update-user`,
 		method: 'PUT',
 		data: params
 	})

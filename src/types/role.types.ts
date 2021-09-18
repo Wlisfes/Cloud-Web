@@ -1,52 +1,46 @@
-import { NodeDate, NodeUserResponse } from '@/types'
+import { NodeDate } from '@/types'
 
-export type NodeRoleResponse = NodeDate & {
+export type NodeRole = NodeDate & {
 	id: number
 	primary: string
 	name: string
 	status: number
-	type: number
 	comment: string
-	parent: NodeRoleResponse
-	children: NodeRoleResponse[]
+	module: Array<{ id: number }>
+}
+
+export type NodeRoleResponse = NodeRole & {
 	page: number
 	size: number
 	total: number
-	uid: number
 	message: string
 }
+
+/**
+ * 创建角色
+ */
+export type NodeCreateRoleParameter = Pick<NodeRole, 'primary' | 'name'> &
+	Partial<Pick<NodeRole, 'comment' | 'status'>> & { module?: number[] }
+export type NodeCreateRoleRespone = Pick<NodeRoleResponse, 'message'>
 
 /**
  * 角色列表
  */
 export type NodeRolesParameter = Pick<NodeRoleResponse, 'page' | 'size'>
-export type NodeRolesRespone = Pick<NodeRoleResponse, 'page' | 'size' | 'total'> & { list: NodeRoleResponse[] }
+export type NodeRolesRespone = Pick<NodeRoleResponse, 'page' | 'size' | 'total'> & { list: NodeRole[] }
 
 /**
  * 角色信息
  */
 export type NodeRoleParameter = Pick<NodeRoleResponse, 'id'>
-export type NodeUserRoleRespone = NodeRoleResponse & { user: NodeUserResponse }
+export type NodeUserRoleRespone = NodeRole
 
 /**
- * 角色信息-uid
+ * 修改角色
  */
-export type NodeUserUidRoleParameter = Pick<NodeRoleResponse, 'uid'>
-export type NodeUserUidRoleRespone = NodeRoleResponse & { user: NodeUserResponse }
-
-/**
- * 修改角色权限
- */
-export type NodeUpdateRoleParameter = Pick<NodeRoleResponse, 'id' | 'status' | 'comment'> & { role: number[] }
+export type NodeUpdateRoleParameter = Pick<NodeRole, 'id' | 'primary' | 'name'> &
+	Partial<Pick<NodeRole, 'comment' | 'status'>> & { module?: number[] }
 export type NodeUpdateRoleRespone = Pick<NodeRoleResponse, 'message'>
-
-/**
- * 修改用户角色权限
- */
-export type NodeUpdateUserRoleParameter = Pick<NodeRoleResponse, 'uid' | 'status' | 'primary' | 'comment'> & {
-	role: number[]
-}
-export type NodeUpdateUserRoleRespone = Pick<NodeRoleResponse, 'message'>
 
 /**
  * 切换角色状态
