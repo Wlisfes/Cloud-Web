@@ -35,7 +35,7 @@ export type RegisterResponse = Pick<NodeUserParameter, 'token' | 'message'>
  * 创建用户
  */
 export type NodeCreateUserParameter = Pick<NodeUserParameter, 'nickname' | 'password' | 'status'> &
-	Partial<Pick<NodeUserParameter, 'email' | 'avatar' | 'mobile' | 'comment'>> & { role: number }
+	Partial<Pick<NodeUserParameter, 'email' | 'avatar' | 'mobile' | 'comment'>> & { role: number[] }
 export type NodeCreateUserResponse = Pick<NodeUserParameter, 'message'>
 
 /**
@@ -45,7 +45,7 @@ export type NodeUidUserParameter = Pick<NodeUserParameter, 'uid'>
 export type NodeUserResponse = Pick<
 	NodeUserParameter,
 	'id' | 'uid' | 'account' | 'nickname' | 'email' | 'password' | 'avatar' | 'mobile' | 'status' | 'comment'
-> & { role: NodeRoleResponse } & NodeDate
+> & { role: NodeRoleResponse[] } & NodeDate
 
 /**
  * 用户列表
@@ -67,7 +67,7 @@ export type NodeUserCutoverResponse = Pick<NodeUserParameter, 'message'>
  * 修改用户信息
  */
 export type NodeUpdateUserParameter = Pick<NodeUserParameter, 'uid' | 'nickname' | 'status'> &
-	Partial<Pick<NodeUserParameter, 'email' | 'avatar' | 'mobile' | 'comment'>> & { role: number }
+	Partial<Pick<NodeUserParameter, 'email' | 'avatar' | 'mobile' | 'comment'>> & { role: number[] }
 export type NodeUpdateUserResponse = Pick<NodeUserParameter, 'message'>
 
 /**

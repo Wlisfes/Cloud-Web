@@ -216,11 +216,13 @@ export default class User extends Vue {
 										style={{ margin: '0 auto', cursor: 'pointer', borderRadius: '4px' }}
 									></AppAvatar>
 								),
-								role: (props: NodeUserResponse) => (
-									<Tag style={{ margin: 0 }} color="cyan">
-										{props.role?.name}
-									</Tag>
-								),
+								role: (props: NodeUserResponse) => {
+									return props.role.map(k => (
+										<Tag style={{ margin: 0 }} color="cyan">
+											{k.name}
+										</Tag>
+									))
+								},
 								status: (props: NodeUserResponse) => <AppSatus status={props.status}></AppSatus>,
 								action: (props: NodeUserResponse) => (
 									<Button.Group>

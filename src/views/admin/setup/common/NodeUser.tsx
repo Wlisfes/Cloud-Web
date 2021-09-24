@@ -22,7 +22,7 @@ export default class NodeUser extends Vue {
 			nickname: '',
 			password: '',
 			email: '',
-			role: undefined,
+			role: [],
 			mobile: '',
 			comment: '',
 			status: 1
@@ -53,7 +53,7 @@ export default class NodeUser extends Vue {
 						email: data.email,
 						mobile: data.mobile,
 						comment: data.comment,
-						role: data.role?.id
+						role: data.role.map(k => k.id)
 					})
 				}
 				resolve(data)
@@ -85,7 +85,7 @@ export default class NodeUser extends Vue {
 			const { code, data } = await nodeCreateUser({
 				nickname: form.nickname,
 				password: form.password,
-				role: form.role as any,
+				role: form.role,
 				status: form.status,
 				avatar: form.avatar,
 				email: form.email,
@@ -114,7 +114,7 @@ export default class NodeUser extends Vue {
 				email: form.email,
 				mobile: form.mobile,
 				comment: form.comment,
-				role: form.role as any
+				role: form.role
 			})
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
@@ -154,7 +154,7 @@ export default class NodeUser extends Vue {
 				nickname: '',
 				password: '',
 				email: '',
-				role: undefined,
+				role: [],
 				mobile: '',
 				status: 1
 			})
@@ -239,7 +239,12 @@ export default class NodeUser extends Vue {
 								<Row type="flex">
 									<Col xs={24} sm={12} md={12}>
 										<FormModel.Item prop="role" label="角色">
-											<Select v-model={form.role} allowClear placeholder="请选择角色">
+											<Select
+												v-model={form.role}
+												mode="multiple"
+												allowClear
+												placeholder="请选择角色"
+											>
 												{this.roles.map((k: NodeRole) => (
 													<Select.Option key={k.id} disabled={!k.status}>
 														{k.name}
@@ -280,7 +285,12 @@ export default class NodeUser extends Vue {
 								<Row type="flex">
 									<Col xs={24} sm={12} md={12}>
 										<FormModel.Item prop="role" label="角色">
-											<Select v-model={form.role} allowClear placeholder="请选择角色">
+											<Select
+												v-model={form.role}
+												mode="multiple"
+												allowClear
+												placeholder="请选择角色"
+											>
 												{this.roles.map((k: NodeRole) => (
 													<Select.Option key={k.id} disabled={!k.status}>
 														{k.name}
