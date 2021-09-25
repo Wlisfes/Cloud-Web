@@ -6,6 +6,7 @@ export type NodeModule = NodeDate & {
 	name: string
 	comment: string
 	status: number
+	action: NodeModule[]
 }
 
 export type NodeModuleParameter = NodeModule & {

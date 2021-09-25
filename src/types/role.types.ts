@@ -6,7 +6,7 @@ export type NodeRole = NodeDate & {
 	name: string
 	status: number
 	comment: string
-	module: Array<{ id: number }>
+	action: null | string[]
 }
 
 export type NodeRoleResponse = NodeRole & {
@@ -20,7 +20,7 @@ export type NodeRoleResponse = NodeRole & {
  * 创建角色
  */
 export type NodeCreateRoleParameter = Pick<NodeRole, 'primary' | 'name'> &
-	Partial<Pick<NodeRole, 'comment' | 'status'>> & { module?: number[] }
+	Partial<Pick<NodeRole, 'comment' | 'status'>> & { action?: null | string[] }
 export type NodeCreateRoleRespone = Pick<NodeRoleResponse, 'message'>
 
 /**
@@ -39,7 +39,7 @@ export type NodeUserRoleRespone = NodeRole
  * 修改角色
  */
 export type NodeUpdateRoleParameter = Pick<NodeRole, 'id' | 'primary' | 'name'> &
-	Partial<Pick<NodeRole, 'comment' | 'status'>> & { module?: number[] }
+	Partial<Pick<NodeRole, 'comment' | 'status'>> & { action?: null | string[] }
 export type NodeUpdateRoleRespone = Pick<NodeRoleResponse, 'message'>
 
 /**

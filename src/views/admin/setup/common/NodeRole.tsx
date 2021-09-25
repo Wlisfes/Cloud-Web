@@ -1,13 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Select, notification } from 'ant-design-vue'
+import { FormModel, Input, Modal, Button, Row, Col, Spin, Radio, Checkbox, notification } from 'ant-design-vue'
 import { nodeRole, nodeCreateRole, updateNodeRole, nodeModules } from '@/api'
-import { HttpStatus, NodeRoleResponse, NodeModule } from '@/types'
-
-type State = {
-	visible: boolean
-	loading: boolean
-	dataSource: NodeRoleResponse[]
-}
+import { HttpStatus, NodeModule } from '@/types'
 
 @Component
 export default class NodeRole extends Vue {
@@ -17,14 +11,12 @@ export default class NodeRole extends Vue {
 	private visible: boolean = false
 	private active: string = 'create'
 	private nodeModules: NodeModule[] = []
-	private state = {
-		labelCol: { span: 4, style: { width: '100px' } },
-		wrapperCol: { span: 20, style: { width: 'calc(100% - 100px)' } },
-		form: { id: 0, primary: '', name: '', status: 1, comment: '', module: [] },
-		rules: {
-			name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
-			primary: [{ required: true, message: '请输入角色标识', trigger: 'blur' }]
-		}
+	private labelCol = { span: 4, style: { width: '100px' } }
+	private wrapperCol = { span: 20, style: { width: 'calc(100% - 100px)' } }
+	private form = { id: 0, primary: '', name: '', status: 1, comment: '', action: [] }
+	private rules = {
+		name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+		primary: [{ required: true, message: '请输入角色标识', trigger: 'blur' }]
 	}
 
 	/**模块权限列表-授权管理端**/
@@ -48,12 +40,12 @@ export default class NodeRole extends Vue {
 			try {
 				const { code, data } = await nodeRole({ id })
 				if (code === HttpStatus.OK) {
-					this.state.form = Object.assign(this.state.form, {
+					this.form = Object.assign(this.form, {
 						primary: data.primary,
 						name: data.name,
 						status: data.status,
 						comment: data.comment,
-						module: data.module.map(k => k.id)
+						action: data.action
 					})
 				}
 				resolve(data)
@@ -71,7 +63,7 @@ export default class NodeRole extends Vue {
 			this.visible = true
 			await this.initNodeModules()
 			if (id) {
-				this.state.form.id = id
+				this.form.id = id
 				await this.nodeRole(id)
 			}
 			this.loading = false
@@ -84,13 +76,13 @@ export default class NodeRole extends Vue {
 	private onClose() {
 		this.visible = false
 		setTimeout(() => {
-			this.state.form = Object.assign(this.state.form, {
+			this.form = Object.assign(this.form, {
 				id: 0,
 				primary: '',
 				name: '',
 				status: 1,
 				comment: '',
-				module: []
+				action: []
 			})
 		}, 300)
 	}
@@ -98,13 +90,13 @@ export default class NodeRole extends Vue {
 	/**创建角色**/
 	private async nodeCreateRole() {
 		try {
-			const { form } = this.state
+			const { form } = this
 			const { code, data } = await nodeCreateRole({
 				primary: form.primary,
 				name: form.name,
 				comment: form.comment,
 				status: form.status,
-				module: form.module
+				action: form.action
 			})
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
@@ -119,14 +111,14 @@ export default class NodeRole extends Vue {
 	/**修改角色**/
 	private async updateNodeRole() {
 		try {
-			const { form } = this.state
+			const { form } = this
 			const { code, data } = await updateNodeRole({
 				id: form.id,
 				primary: form.primary,
 				name: form.name,
 				comment: form.comment,
 				status: form.status,
-				module: form.module
+				action: form.action
 			})
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
@@ -156,17 +148,17 @@ export default class NodeRole extends Vue {
 	}
 
 	protected render() {
-		const { form, rules, labelCol, wrapperCol } = this.state
+		const { form, rules, labelCol, wrapperCol } = this
 		return (
 			<Modal
-				title="title"
+				title={this.active === 'create' ? '新增' : '编辑'}
 				dialogStyle={{ maxWidth: '95%' }}
 				v-model={this.visible}
 				width={680}
 				destroyOnClose
 				onCancel={this.onClose}
 			>
-				<Spin size="large" class="ant-spin-64" spinning={this.loading}>
+				<Spin class="ant-spin-64" spinning={this.loading}>
 					<FormModel
 						ref="form"
 						class="app-form"
@@ -194,15 +186,6 @@ export default class NodeRole extends Vue {
 								</FormModel.Item>
 							</Col>
 						</Row>
-						<FormModel.Item label="权限模块">
-							<Select v-model={form.module} mode="multiple" maxTagCount={3} placeholder="权限模块">
-								{this.nodeModules.map(k => (
-									<Select.Option key={k.id} title={k.name} value={k.id} disabled={!k.status}>
-										{k.name}
-									</Select.Option>
-								))}
-							</Select>
-						</FormModel.Item>
 						<FormModel.Item prop="comment" label="角色备注">
 							<Input.TextArea
 								v-model={form.comment}
@@ -217,6 +200,15 @@ export default class NodeRole extends Vue {
 								<Radio value={0}>禁用</Radio>
 							</Radio.Group>
 						</FormModel.Item>
+						<Checkbox.Group class="app-role-group" v-model={form.action}>
+							{this.nodeModules.map(k => (
+								<FormModel.Item label={k.name} style={{ marginBottom: '5px' }}>
+									{k.action.map(v => (
+										<Checkbox value={`${k.primary}:${v.primary}`}>{v.name}</Checkbox>
+									))}
+								</FormModel.Item>
+							))}
+						</Checkbox.Group>
 					</FormModel>
 				</Spin>
 
