@@ -1,5 +1,16 @@
 .app-conter {
 	position: relative;
+	&-cover {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	&-pointer {
+		margin: 0 5px;
+		line-height: 22px;
+		cursor: pointer;
+	}
+
 	.node-source {
 		position: relative;
 		padding-bottom: 10px;
@@ -49,27 +60,6 @@
 					}
 				}
 			}
-		}
-	}
-
-	.app-spin {
-		width: 100%;
-		min-height: 200px;
-		display: flex;
-		flex-direction: column;
-		:global {
-			.ant-spin-dot-spin {
-				margin: auto;
-			}
-		}
-	}
-
-	.node-conter {
-		display: flex;
-		flex-wrap: wrap;
-		&-item {
-			width: 20%;
-			height: 100px;
 		}
 	}
 }
