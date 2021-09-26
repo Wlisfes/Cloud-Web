@@ -2,7 +2,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, InputNumber, Select } from 'ant-design-vue'
 import { Spin, Radio, Switch, TreeSelect, notification } from 'ant-design-vue'
 import { nodeCreateMenu, nodeMenuConter, nodeMenu, nodeUpdateMenu, nodeRoles } from '@/api'
-import { HttpStatus, NodeMenuParameter, NodeRoleResponse } from '@/types'
+import { HttpStatus, NodeMenuParameter, NodeRole } from '@/types'
 import { ctxFile } from '@/utils/common'
 
 @Component
@@ -11,7 +11,7 @@ export default class NodeMenu extends Vue {
 
 	private file: string[] = ctxFile()
 	private treeNode: NodeMenuParameter[] = []
-	private roleNode: NodeRoleResponse[] = []
+	private roleNode: NodeRole[] = []
 	private visible: boolean = false
 	private loading: boolean = false
 	private active: string = 'create'
@@ -41,15 +41,15 @@ export default class NodeMenu extends Vue {
 
 	/**角色列表**/
 	private async nodeRoles() {
-		// try {
-		// 	const { code, data } = await nodeRoles({ page: 1, size: 10 })
-		// 	if (code === HttpStatus.OK) {
-		// 		this.roleNode = data.list
-		// 	}
-		// 	return data
-		// } catch (e) {
-		// 	return e
-		// }
+		try {
+			const { code, data } = await nodeRoles({ page: 1, size: 10 })
+			if (code === HttpStatus.OK) {
+				this.roleNode = data.list
+			}
+			return data
+		} catch (e) {
+			return e
+		}
 	}
 
 	/**目录节点**/

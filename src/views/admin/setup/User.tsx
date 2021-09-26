@@ -1,4 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
 import { Table, Tag, Button, Menu, Icon, Divider, FormModel, Input, Select, notification } from 'ant-design-vue'
 import { NodeUser, NodeReset } from '@/views/admin/setup/common'
 import { AppRootNode, AppAvatar, AppSatus, AppPopover } from '@/components/common'
@@ -16,20 +17,33 @@ type SourceOption = {
 
 @Component
 export default class User extends Vue {
+	@Getter('base/mobile') mobile!: boolean
+
 	$refs!: { nodeUser: NodeUser; nodeReset: NodeReset; conter: HTMLElement }
 
 	private roles: NodeRoleResponse[] = []
+	private get column() {
+		return [
+			...this.source.column,
+			{
+				title: '操作',
+				align: 'center',
+				width: 120,
+				fixed: this.mobile ? false : 'right',
+				scopedSlots: { customRender: 'action' }
+			}
+		]
+	}
 	private source: Source<Array<NodeUserResponse>> & SourceOption = {
 		column: [
-			{ title: '账号', dataIndex: 'account', align: 'center', width: '8%' },
-			{ title: '头像', align: 'center', width: '6%', scopedSlots: { customRender: 'avatar' } },
-			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: '10%', ellipsis: true },
+			{ title: '账号', dataIndex: 'account', align: 'center', width: 100 },
+			{ title: '头像', align: 'center', width: 100, scopedSlots: { customRender: 'avatar' } },
+			{ title: '昵称', dataIndex: 'nickname', align: 'center', width: 150, ellipsis: true },
 			{ title: '邮箱', dataIndex: 'email', align: 'center' },
-			{ title: '手机号', dataIndex: 'mobile', width: '15%', align: 'center' },
-			{ title: '角色', align: 'center', width: '9%', scopedSlots: { customRender: 'role' } },
-			{ title: '注册时间', dataIndex: 'createTime', width: '15%', align: 'center' },
-			{ title: '状态', align: 'center', width: '6%', scopedSlots: { customRender: 'status' } },
-			{ title: '操作', align: 'center', width: '10%', scopedSlots: { customRender: 'action' } }
+			{ title: '手机号', dataIndex: 'mobile', align: 'center' },
+			{ title: '角色', align: 'center', scopedSlots: { customRender: 'role' } },
+			{ title: '注册时间', dataIndex: 'createTime', align: 'center' },
+			{ title: '状态', align: 'center', width: 100, scopedSlots: { customRender: 'status' } }
 		],
 		page: 1,
 		size: 10,
@@ -194,9 +208,9 @@ export default class User extends Vue {
 						bordered
 						rowKey={(record: any) => record.id}
 						loading={{ wrapperClassName: 'ant-spin-64', spinning: source.loading }}
-						columns={source.column}
+						columns={this.column}
 						dataSource={source.dataSource}
-						scroll={{ x: 1100 }}
+						scroll={{ x: 1400 }}
 						pagination={{
 							pageSize: source.size,
 							current: source.page,
@@ -217,11 +231,7 @@ export default class User extends Vue {
 									></AppAvatar>
 								),
 								role: (props: NodeUserResponse) => {
-									return props.role.map(k => (
-										<Tag style={{ margin: 0 }} color="cyan">
-											{k.name}
-										</Tag>
-									))
+									return props.role.map(k => <Tag color="cyan">{k.name}</Tag>)
 								},
 								status: (props: NodeUserResponse) => <AppSatus status={props.status}></AppSatus>,
 								action: (props: NodeUserResponse) => (
@@ -233,7 +243,6 @@ export default class User extends Vue {
 												<Icon type="edit"></Icon>
 												<span>编辑</span>
 											</Menu.Item>
-
 											<Menu.Item key="reset" style={{ color: '#f5222d' }}>
 												<Icon type="reload"></Icon>
 												<span>重置密码</span>
