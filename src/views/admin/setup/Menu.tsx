@@ -149,9 +149,7 @@ export default class Menu extends Vue {
 								return props.type === 1 ? <Tag color="cyan">目录</Tag> : <Tag color="red">菜单</Tag>
 							},
 							router: (props: NodeMenuParameter) => {
-								return !!props.router ? (
-									<router-link to={props.router}>{props.router}</router-link>
-								) : null
+								return !!props.router ? <a>{props.router}</a> : null
 							},
 							icon: (props: NodeMenuParameter) => {
 								return !!props.icon ? (
