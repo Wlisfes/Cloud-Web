@@ -4,7 +4,7 @@ import { Table, Tag, Button, Menu, Icon, Divider, FormModel, Input, Select, noti
 import { NodeUser, NodeReset } from '@/views/admin/setup/common'
 import { AppRootNode, AppAvatar, AppSatus, AppPopover } from '@/components/common'
 import { nodeUsers, nodeRoles, nodeUserCutover } from '@/api'
-import { HttpStatus, Source, NodeUserResponse, NodeRoleResponse } from '@/types'
+import { HttpStatus, Source, NodeUserResponse, NodeRole } from '@/types'
 import style from '@/style/admin/admin.user.module.less'
 
 type SourceOption = {
@@ -21,7 +21,7 @@ export default class User extends Vue {
 
 	$refs!: { nodeUser: NodeUser; nodeReset: NodeReset; conter: HTMLElement }
 
-	private roles: NodeRoleResponse[] = []
+	private roles: NodeRole[] = []
 	private get column() {
 		return [
 			...this.source.column,
@@ -100,18 +100,18 @@ export default class User extends Vue {
 
 	protected created() {
 		this.source.initSource()
-		// this.nodeRoles()
+		this.nodeRoles()
 	}
 
 	/**角色列表-不包括子类**/
-	// private async nodeRoles() {
-	// 	try {
-	// 		const { code, data } = await nodeRoles({ page: 1, size: 10 })
-	// 		if (code === HttpStatus.OK) {
-	// 			this.roles = data.list
-	// 		}
-	// 	} catch (e) {}
-	// }
+	private async nodeRoles() {
+		try {
+			const { code, data } = await nodeRoles({ page: 1, size: 10 })
+			if (code === HttpStatus.OK) {
+				this.roles = data.list
+			}
+		} catch (e) {}
+	}
 
 	/**切换用户状态**/
 	private async nodeUserCutover(uid: number) {
