@@ -1,18 +1,25 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Modal, Spin, Button, Upload } from 'ant-design-vue'
 import Cropper from 'cropperjs'
-import { nodeOssSts } from '@/api'
+import { nodeOssSts, nodeCreatePoster } from '@/api'
 import { HttpStatus } from '@/types'
 import { AliyunOSSModule } from '@/utils/aliyun-oss'
 import style from '@/style/common/app.cropper.module.less'
 import 'cropperjs/dist/cropper.min.css'
+
+enum Path {
+	avatar = 1,
+	upload = 2,
+	cover = 3,
+	photo = 4
+}
 
 @Component
 export default class AppCropper extends Vue {
 	$refs!: { cover: HTMLImageElement }
 
 	@Prop({ type: Number, default: 1 }) ratio!: number
-	@Prop({ type: String, default: 'avatar' }) path!: 'avatar' | 'upload' | 'cover'
+	@Prop({ type: String, default: 'avatar' }) path!: 'avatar' | 'upload' | 'cover' | 'photo'
 
 	private cropper?: Cropper = undefined
 	private visible: boolean = false
@@ -76,6 +83,11 @@ export default class AppCropper extends Vue {
 							const key = oss.create(this.name, this.path)
 							const response = await oss.client.put(key, buffer)
 							if (response.res.status === HttpStatus.OK) {
+								await nodeCreatePoster({
+									type: Path[this.path],
+									path: response.name,
+									url: `${data.path}/${response.name}`
+								})
 								this.$emit('submit', {
 									name: response.name,
 									path: `${data.path}/${response.name}`

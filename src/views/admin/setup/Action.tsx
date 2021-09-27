@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Table, Button, Tooltip, Tag, Menu, Icon, FormModel, Input, Select, notification } from 'ant-design-vue'
-import { NodeAction } from '@/views/admin/module/common'
+import { NodeAction } from '@/views/admin/setup/common'
 import { AppRootNode, AppSatus } from '@/components/common'
 import { nodeModuleActions, nodeRoleCutover } from '@/api'
 import { HttpStatus, Source, NodeModule } from '@/types'
