@@ -49,11 +49,11 @@ export default class NodePartner extends Vue {
 		setTimeout(() => {
 			this.form = Object.assign(this.form, {
 				id: 0,
-				primary: '',
-				name: '',
+				title: '',
+				content: '',
+				html: '',
 				status: 1,
-				comment: '',
-				action: []
+				cover: []
 			})
 		}, 300)
 	}

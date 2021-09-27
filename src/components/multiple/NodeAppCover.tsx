@@ -40,7 +40,7 @@ export default class NodeAppCover extends Vue {
 	protected render() {
 		return (
 			<div class={style['node-cover']}>
-				<AppPoster ref="appPoster"></AppPoster>
+				<AppPoster ref="appPoster" onSubmit={(props: any) => this.$emit('submit', props)}></AppPoster>
 				<AppCropper
 					ref="appCropper"
 					ratio={this.ratio}
@@ -50,7 +50,7 @@ export default class NodeAppCover extends Vue {
 				></AppCropper>
 
 				{this.dataSource.map((k, index) => (
-					<div key={k.id} class={style['node-cover-pointer']}>
+					<div key={index} class={style['node-cover-pointer']}>
 						<div class={style['node-pointer']}>
 							<div class={style['node-pointer-conter']}>
 								<div class={style['node-cover-avatar']}>

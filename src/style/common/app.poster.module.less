@@ -1,0 +1,94 @@
+.app-poster {
+	position: relative;
+
+	&-conter {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 -5px;
+		min-height: 200px;
+	}
+	&-item {
+		width: 25%;
+		@media (max-width: 680px) {
+			width: 33.3333%;
+		}
+		@media (max-width: 414px) {
+			width: 50%;
+		}
+	}
+	&-footer {
+		width: 100%;
+		margin-top: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.node-poster {
+		width: 100%;
+		padding-bottom: 100%;
+		position: relative;
+		overflow: hidden;
+		cursor: pointer;
+		&-conter {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			padding: 5px;
+		}
+	}
+
+	.node-source {
+		position: relative;
+		padding-bottom: 10px;
+		:global {
+			.node-source-item {
+				transition: all 300ms;
+				display: inline-block;
+				@media (max-width: 730px) {
+					display: flex;
+				}
+
+				.ant-form-item {
+					transition: all 300ms;
+					.ant-form-item-children {
+						display: block;
+					}
+				}
+
+				&.inline-last {
+					@media (max-width: 730px) {
+						.ant-form-item {
+							&:last-child {
+								margin-right: 0;
+							}
+						}
+					}
+				}
+
+				&.inline-50 {
+					@media (max-width: 730px) {
+						.ant-form-item {
+							flex: 1;
+							&:last-child {
+								margin-right: 0;
+							}
+							.ant-form-item-control-wrapper {
+								display: block;
+							}
+							.ant-select {
+								width: 100% !important;
+							}
+							.ant-input-affix-wrapper {
+								transition: all 300ms;
+								width: 100% !important;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
