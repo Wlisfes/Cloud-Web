@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Button, FormModel, Select, Tag, Table, notification } from 'ant-design-vue'
-import { Image } from 'element-ui'
 import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
-import { nodePosters } from '@/api'
+import { NodeCover } from '@/views/admin/resource/common'
+import { nodePosters, nodePosterCutover, nodeDeletePoster } from '@/api'
 import { HttpStatus, Source, NodePosterNodeResponse } from '@/types'
 import style from '@/style/admin/admin.poster.module.less'
 
@@ -78,6 +78,34 @@ export default class Poster extends Vue {
 		this.source.initSource()
 	}
 
+	/**删除图床**/
+	private async nodeDeletePoster(id: number) {
+		try {
+			this.source.loading = true
+			const { code, data } = await nodeDeletePoster({ id })
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.source.initSource()
+			}
+		} catch (e) {
+			this.source.loading = false
+		}
+	}
+
+	/**切换图床状态**/
+	private async nodePosterCutover(id: number) {
+		try {
+			this.source.loading = true
+			const { code, data } = await nodePosterCutover({ id })
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+			}
+			this.source.initSource()
+		} catch (e) {
+			this.source.onClose()
+		}
+	}
+
 	protected render() {
 		const { source } = this
 		return (
@@ -146,11 +174,7 @@ export default class Poster extends Vue {
 							scopedSlots: {
 								cover: (props: NodePosterNodeResponse) => (
 									<div class={style['app-conter-cover']}>
-										<Image
-											fit="cover"
-											src={`${props.url}?x-oss-process=style/resize-16-9`}
-											style={{ width: '96px', height: '54px', cursor: 'pointer' }}
-										></Image>
+										<NodeCover url={props.url} type={props.type}></NodeCover>
 									</div>
 								),
 								path: (props: NodePosterNodeResponse) => (
@@ -170,10 +194,10 @@ export default class Poster extends Vue {
 								status: (props: NodePosterNodeResponse) => <AppSatus status={props.status}></AppSatus>,
 								action: (props: NodePosterNodeResponse) => (
 									<Button.Group>
-										<Button type="link">
+										<Button type="link" onClick={() => this.nodePosterCutover(props.id)}>
 											<AppCutover status={props.status}></AppCutover>
 										</Button>
-										<Button type="link">
+										<Button type="link" onClick={() => this.nodeDeletePoster(props.id)}>
 											<span style={{ color: '#ff4d4f' }}>删除</span>
 										</Button>
 									</Button.Group>
