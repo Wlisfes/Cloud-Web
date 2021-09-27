@@ -8,11 +8,13 @@ export default class AppEditor extends Vue {
 	$refs!: { editor: any }
 
 	@Prop({ type: String, default: '' }) content!: string
+	@Prop({ type: String, default: 'preview' }) defaultOpen!: string
+	@Prop({ type: Number, default: 680 }) height!: number
 
 	private full: boolean = false
 
 	private get editorStyle() {
-		return { height: this.full ? '100%' : '680px', zIndex: this.full ? 1500 : 98 }
+		return { height: this.full ? '100%' : `${this.height}px`, zIndex: this.full ? 1500 : 98 }
 	}
 
 	private onChange(content: string, html: string) {
@@ -52,6 +54,7 @@ export default class AppEditor extends Vue {
 			<mavon-editor
 				ref="editor"
 				autofocus={false}
+				defaultOpen={this.defaultOpen}
 				style={this.editorStyle}
 				codeStyle="atom-one-dark"
 				tabSize={null}

@@ -58,6 +58,11 @@ export default class AppCropper extends Vue {
 		})
 	}
 
+	private onChange() {
+		this.onClose()
+		this.$emit('change')
+	}
+
 	private onSubmit() {
 		this.loading = true
 		nodeOssSts()
@@ -83,12 +88,14 @@ export default class AppCropper extends Vue {
 							const key = oss.create(this.name, this.path)
 							const response = await oss.client.put(key, buffer)
 							if (response.res.status === HttpStatus.OK) {
-								await nodeCreatePoster({
+								const node = await nodeCreatePoster({
 									type: Path[this.path],
 									path: response.name,
 									url: `${data.path}/${response.name}`
 								})
 								this.$emit('submit', {
+									id: node.data.id,
+									type: node.data.type,
 									name: response.name,
 									path: `${data.path}/${response.name}`
 								})
@@ -150,6 +157,11 @@ export default class AppCropper extends Vue {
 				</Spin>
 				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
 					<Button onClick={this.onClose}>取消</Button>
+					<Button
+						icon="download"
+						style={{ width: '40px', color: '#ffffff', backgroundColor: '#ff5500', borderColor: '#ff5500' }}
+						onClick={this.onChange}
+					></Button>
 					<Upload
 						accept="image/jpeg,image/png,image/jpg"
 						beforeUpload={this.beforeUpload}
@@ -160,7 +172,7 @@ export default class AppCropper extends Vue {
 							type="danger"
 							icon="upload"
 							disabled={this.loading}
-							style={{ width: '60px', backgroundColor: '#07c160', borderColor: '#07c160' }}
+							style={{ width: '40px', backgroundColor: '#07c160', borderColor: '#07c160' }}
 						></Button>
 					</Upload>
 					<Button

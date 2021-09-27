@@ -10,7 +10,7 @@ export default class AppCover extends Vue {
 	@Prop({ type: String }) cover!: string
 	@Prop({ type: String, default: '?x-oss-process=style/resize-16-9' }) resize!: string
 	@Prop({ type: Number, default: 1 }) ratio!: number
-	@Prop({ type: String, default: 'avatar' }) path!: 'avatar' | 'upload' | 'cover'
+	@Prop({ type: String, default: 'avatar' }) path!: 'avatar' | 'upload' | 'cover' | 'photo'
 
 	protected render() {
 		return (

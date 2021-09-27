@@ -20,7 +20,7 @@ export type NodePosterParameter = NodePoster & {
  * 创建图床
  */
 export type NodeCreatePosterParameter = Pick<NodePosterParameter, 'type' | 'url' | 'path'>
-export type NodeCreatePosterResponse = Pick<NodePosterParameter, 'message'>
+export type NodeCreatePosterResponse = Pick<NodePosterParameter, 'message'> & NodePoster
 
 /**
  * 切换图床状态

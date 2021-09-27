@@ -3,7 +3,7 @@ import * as types from '@/types'
 
 /**创建图床**/
 export function nodeCreatePoster(params: types.NodeCreatePosterParameter) {
-	return request<types.NodeModulesResponse>({
+	return request<types.NodeCreatePosterResponse>({
 		url: `/api/poster/create`,
 		method: 'POST',
 		data: params

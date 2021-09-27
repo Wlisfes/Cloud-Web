@@ -28,7 +28,7 @@ export default class Poster extends Vue {
 		page: 1,
 		size: 10,
 		total: 0,
-		sizeOption: ['10', '15', '20', '30', '40', '50'],
+		sizeOption: ['10', '20', '30', '40', '50'],
 		showSize: true,
 		loading: true,
 		dataSource: [],
@@ -123,6 +123,7 @@ export default class Poster extends Vue {
 									<Select.Option value={1}>avatar</Select.Option>
 									<Select.Option value={2}>upload</Select.Option>
 									<Select.Option value={3}>cover</Select.Option>
+									<Select.Option value={4}>photo</Select.Option>
 								</Select>
 							</FormModel.Item>
 							<FormModel.Item>
