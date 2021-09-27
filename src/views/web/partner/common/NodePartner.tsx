@@ -18,7 +18,7 @@ export default class NodePartner extends Vue {
 					<TimelineItem timestamp="2018/4/13" hide-timestamp>
 						<Card>
 							<h4>更新 Github 模板</h4>
-							<NodePartnerCover dataSource={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}></NodePartnerCover>
+							<NodePartnerCover dataSource={[1, 2, 3, 4, 5, 6, 7]}></NodePartnerCover>
 						</Card>
 					</TimelineItem>
 					<TimelineItem timestamp="2018/4/12" hide-timestamp>
