@@ -1,4 +1,4 @@
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Modal, Button, Spin, FormModel, Select, Pagination } from 'ant-design-vue'
 import { Image, SkeletonItem } from 'element-ui'
 import { nodePosters } from '@/api'
@@ -13,6 +13,8 @@ type SourceOption = {
 
 @Component
 export default class AppPoster extends Vue {
+	@Prop({ type: Boolean, default: false }) multiple!: boolean
+
 	private visible: boolean = false
 	private current: NodePoster[] = []
 	private source: Source<Array<NodePoster>> & SourceOption = {
@@ -68,10 +70,17 @@ export default class AppPoster extends Vue {
 
 	/**选择图片、取消图片事件**/
 	private onSelect(props: NodePoster) {
-		if (this.current.some(k => k.id === props.id)) {
-			this.current = this.current.filter(k => k.id !== props.id)
+		const active = this.current.some(k => k.id === props.id)
+		if (this.multiple) {
+			//可多选
+			if (active) {
+				this.current = this.current.filter(k => k.id !== props.id)
+			} else {
+				this.current.push(props)
+			}
 		} else {
-			this.current.push(props)
+			//单选
+			this.current = active ? [] : [props]
 		}
 	}
 
@@ -83,7 +92,13 @@ export default class AppPoster extends Vue {
 
 	/**组件提交事件**/
 	private onSubmit() {
-		this.$emit('submit', this.current)
+		if (this.multiple) {
+			//可多选
+			this.$emit('submit', this.current)
+		} else {
+			//单选
+			this.$emit('submit', this.current[0] || null)
+		}
 		this.onClose()
 	}
 
@@ -206,7 +221,7 @@ export default class AppPoster extends Vue {
 				</Spin>
 				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
 					<Button onClick={this.onClose}>取消</Button>
-					<Button type="primary" onClick={this.onSubmit}>
+					<Button type="primary" disabled={this.current.length === 0} onClick={this.onSubmit}>
 						确定
 					</Button>
 				</div>

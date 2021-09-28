@@ -45,7 +45,11 @@ export default class NodeAppCover extends Vue {
 	protected render() {
 		return (
 			<div class={style['node-cover']}>
-				<AppPoster ref="appPoster" onSubmit={(props: any) => this.$emit('submit', props)}></AppPoster>
+				<AppPoster
+					ref="appPoster"
+					multiple={true}
+					onSubmit={(props: any) => this.$emit('submit', props)}
+				></AppPoster>
 				<AppCropper
 					ref="appCropper"
 					ratio={this.ratio}
