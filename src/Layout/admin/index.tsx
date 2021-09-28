@@ -53,7 +53,9 @@ export default class Container extends Vue {
 							{!this.collapsed && <h1 class="app-ellipsis">情雨随风的青春</h1>}
 						</router-link>
 					</div>
-					<AppMenu></AppMenu>
+					<div class="app-menu">
+						<AppMenu></AppMenu>
+					</div>
 				</Layout.Sider>
 				<Layout>
 					<Layout.Header style={{ left: this.distance() + 'px' }}>

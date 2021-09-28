@@ -1,7 +1,12 @@
 .app-ellipsis {
+	// overflow: hidden;
+	// white-space: nowrap;
+	// text-overflow: ellipsis;
+	display: -webkit-box;
 	overflow: hidden;
-	white-space: nowrap;
 	text-overflow: ellipsis;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
 }
 .app-ellipsis-2 {
 	display: -webkit-box;
