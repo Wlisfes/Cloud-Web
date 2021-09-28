@@ -1,8 +1,9 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { FormModel, Input, Modal, Button, Spin, notification } from 'ant-design-vue'
+import { FormModel, Input, Modal, Button, Radio, Spin, notification } from 'ant-design-vue'
 import { AppEditor } from '@/components/common'
 import { NodeAppCover } from '@/components/multiple'
-import { HttpStatus } from '@/types'
+import { nodePartner, nodeCreatePartner, nodeUpdatePartner } from '@/api'
+import { HttpStatus, NodePoster } from '@/types'
 
 @Component
 export default class NodePartner extends Vue {
@@ -26,16 +27,94 @@ export default class NodePartner extends Vue {
 		content: [{ required: true, message: '请输入日志内容', trigger: 'blur' }]
 	}
 
+	/**日志信息-uid**/
+	private nodePartner(id: number) {
+		return new Promise(async (resolve, rejcect) => {
+			try {
+				const { code, data } = await nodePartner({ id })
+				if (code === HttpStatus.OK) {
+					this.form = Object.assign(this.form, {
+						id: id,
+						title: data.title,
+						content: data.content,
+						html: data.html,
+						status: data.status,
+						cover: data.cover || []
+					})
+				}
+				resolve(data)
+			} catch (e) {
+				rejcect(e)
+			}
+		})
+	}
+
+	/**创建日志**/
+	private async nodeCreatePartner() {
+		try {
+			const { form } = this
+			const { code, data } = await nodeCreatePartner({
+				title: form.title,
+				content: form.content,
+				html: form.html,
+				status: form.status,
+				cover: form.cover.map((k: NodePoster) => k.id)
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$emit('replay')
+				this.onClose()
+			}
+		} catch (e) {
+			this.loading = false
+		}
+	}
+
+	/**更新日志**/
+	private async nodeUpdatePartner() {
+		try {
+			const { form } = this
+			const { code, data } = await nodeUpdatePartner({
+				id: form.id,
+				title: form.title,
+				content: form.content,
+				html: form.html,
+				status: form.status,
+				cover: form.cover.map((k: NodePoster) => k.id)
+			})
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.$emit('replay')
+				this.onClose()
+			}
+		} catch (e) {
+			this.loading = false
+		}
+	}
+
+	/**图片回调**/
+	private onSubmitCover(props: never) {
+		if (Array.isArray(props)) {
+			this.form.cover = this.form.cover.concat(props)
+		} else {
+			this.form.cover.push(props)
+		}
+	}
+
+	/**图片删除回调**/
+	private onDeleteCover(index: number) {
+		this.form.cover.splice(index, 1)
+	}
+
 	/**组件调用**/
 	public async init(active: 'create' | 'update', id?: number) {
 		try {
 			this.loading = true
 			this.active = active
 			this.visible = true
-			// await this.initNodeModules()
 			if (id) {
 				this.form.id = id
-				// await this.nodeRole(id)
+				await this.nodePartner(id)
 			}
 			this.loading = false
 		} catch (e) {
@@ -56,6 +135,23 @@ export default class NodePartner extends Vue {
 				cover: []
 			})
 		}, 300)
+	}
+
+	/**组件提交事件**/
+	private onSubmit() {
+		this.$refs.formModel.validate(async valid => {
+			if (valid) {
+				this.loading = true
+				switch (this.active) {
+					case 'create':
+						this.nodeCreatePartner()
+						break
+					case 'update':
+						this.nodeUpdatePartner()
+						break
+				}
+			}
+		})
 	}
 
 	protected render() {
@@ -85,10 +181,15 @@ export default class NodePartner extends Vue {
 							<NodeAppCover
 								ratio={16 / 9}
 								dataSource={form.cover}
-								onSubmit={(props: never) => {
-									form.cover.push(props)
-								}}
+								onSubmit={this.onSubmitCover}
+								onDelete={this.onDeleteCover}
 							></NodeAppCover>
+						</FormModel.Item>
+						<FormModel.Item prop="status" label="角色状态">
+							<Radio.Group v-model={form.status} style={{ marginLeft: '10px' }}>
+								<Radio value={1}>启用</Radio>
+								<Radio value={0}>禁用</Radio>
+							</Radio.Group>
 						</FormModel.Item>
 						<FormModel.Item label="日志内容" prop="content">
 							<AppEditor
@@ -103,6 +204,12 @@ export default class NodePartner extends Vue {
 						</FormModel.Item>
 					</FormModel>
 				</Spin>
+				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
+					<Button onClick={this.onClose}>取消</Button>
+					<Button type="primary" disabled={this.loading} onClick={this.onSubmit}>
+						确定
+					</Button>
+				</div>
 			</Modal>
 		)
 	}

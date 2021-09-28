@@ -2,7 +2,7 @@ import { NodeDate } from '@/types'
 
 export type PartnerResponse = NodeDate & {
 	id: number
-	title: number
+	title: string
 	content: string
 	html: string
 	status: number

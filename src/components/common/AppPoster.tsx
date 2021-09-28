@@ -60,7 +60,7 @@ export default class AppPoster extends Vue {
 		},
 		onSearch: () => {
 			this.source.page = 1
-			this.source.size = 10
+			this.source.size = 12
 			this.source.total = 0
 			this.source.initSource()
 		}

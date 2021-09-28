@@ -10,7 +10,7 @@ export function nodeCreatePartner(params: types.NodeCreatePartnerParameter) {
 	})
 }
 
-/**创建日志**/
+/**修改日志**/
 export function nodeUpdatePartner(params: types.NodeUpdatePartnerParameter) {
 	return request<types.NodeUpdatePartnerResponse>({
 		url: `/api/partner/update`,

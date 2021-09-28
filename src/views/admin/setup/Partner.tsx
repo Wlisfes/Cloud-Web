@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Button, FormModel, Select, Table, Tooltip, notification } from 'ant-design-vue'
-import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
+import { Button, FormModel, Select, Table, Tooltip, Menu, Icon, notification } from 'ant-design-vue'
+import { AppRootNode, AppCutover, AppPopover, AppSatus } from '@/components/common'
 import { NodePartner } from '@/views/admin/setup/common'
-import { nodePartners } from '@/api'
+import { nodePartners, nodePartnerCutover, nodeDeletePartner } from '@/api'
 import { HttpStatus, Source, PartnerResponse } from '@/types'
 import style from '@/style/admin/admin.partner.module.less'
 type SourceOption = {
@@ -69,6 +69,46 @@ export default class Partner extends Vue {
 		}
 	}
 
+	/**删除日志**/
+	private async nodeDeletePartner(id: number) {
+		try {
+			this.source.loading = true
+			const { code, data } = await nodeDeletePartner({ id })
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+				this.source.initSource()
+			}
+		} catch (e) {
+			this.source.loading = false
+		}
+	}
+
+	/**切换日志状态**/
+	private async nodePartnerCutover(id: number) {
+		try {
+			this.source.loading = true
+			const { code, data } = await nodePartnerCutover({ id })
+			if (code === HttpStatus.OK) {
+				notification.success({ message: data.message, description: '' })
+			}
+			this.source.initSource()
+		} catch (e) {
+			this.source.onClose()
+		}
+	}
+
+	/**操作**/
+	private onChange(key: string, id: number) {
+		switch (key) {
+			case 'update':
+				this.$refs.nodePartner.init('update', id)
+				break
+			case 'delete':
+				this.nodeDeletePartner(id)
+				break
+		}
+	}
+
 	protected created() {
 		this.source.initSource()
 	}
@@ -130,12 +170,12 @@ export default class Partner extends Vue {
 						{...{
 							scopedSlots: {
 								title: (props: PartnerResponse) => (
-									<div class={`app-ellipsis-1 ${style['app-conter-pointer']}`}>
+									<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
 										<Tooltip title={props.title}>{props.title}</Tooltip>
 									</div>
 								),
 								description: (props: PartnerResponse) => (
-									<div class={`app-ellipsis-1 ${style['app-conter-pointer']}`}>
+									<div class={`app-ellipsis-2 ${style['app-conter-pointer']}`}>
 										<Tooltip title={props.description}>{props.description}</Tooltip>
 									</div>
 								),
@@ -143,10 +183,23 @@ export default class Partner extends Vue {
 								action: (props: PartnerResponse) => (
 									<Button.Group>
 										<Button type="link">
-											<AppCutover status={props.status}></AppCutover>
+											<AppPopover
+												onChange={(option: { key: string }) => {
+													this.onChange(option.key, props.id)
+												}}
+											>
+												<Menu.Item key="update" style={{ color: '#1890ff' }}>
+													<Icon type="edit"></Icon>
+													<span>编辑</span>
+												</Menu.Item>
+												<Menu.Item key="delete" style={{ color: '#ff4d4f' }}>
+													<Icon type="delete"></Icon>
+													<span>删除</span>
+												</Menu.Item>
+											</AppPopover>
 										</Button>
-										<Button type="link">
-											<span style={{ color: '#ff4d4f' }}>删除</span>
+										<Button type="link" onClick={() => this.nodePartnerCutover(props.id)}>
+											<AppCutover status={props.status}></AppCutover>
 										</Button>
 									</Button.Group>
 								)
