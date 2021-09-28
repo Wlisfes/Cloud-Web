@@ -23,7 +23,7 @@ export const routes: RouteConfig[] = [
 				component: () => import('@/views/web/multiple/Multiple')
 			},
 			{
-				path: '/stpone/:id',
+				path: '/multiple/:id',
 				name: 'WEB-Stpone',
 				component: () => import('@/views/web/multiple/Stpone')
 			},

@@ -62,7 +62,7 @@ export default class NodeMultipleArticle extends Vue {
 									<li key={k.id} class={style['node-conter-item']}>
 										<div class={style['node-ctx']}>
 											<router-link
-												to={`/stpone/${k.id}`}
+												to={`/multiple/${k.id}`}
 												target="_blank"
 												style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
 											>
@@ -95,7 +95,7 @@ export default class NodeMultipleArticle extends Vue {
 											</div>
 										</div>
 										<router-link
-											to={`/stpone/${k.id}`}
+											to={`/multiple/${k.id}`}
 											target="_blank"
 											style={{ overflow: 'hidden' }}
 										>
