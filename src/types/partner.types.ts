@@ -1,4 +1,4 @@
-import { NodeDate, NodePoster } from '@/types'
+import { NodeDate, NodePoster, NodeUserResponse } from '@/types'
 
 export type PartnerResponse = NodeDate & {
 	id: number
@@ -8,6 +8,7 @@ export type PartnerResponse = NodeDate & {
 	status: number
 	description: string
 	cover: Array<NodePoster>
+	user: NodeUserResponse
 }
 
 export type PartnerParameter = PartnerResponse & {
