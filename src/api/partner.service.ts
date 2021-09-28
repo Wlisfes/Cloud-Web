@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import * as types from '@/types'
 
-/**创建日志**/
+/**创建日志-授权管理端**/
 export function nodeCreatePartner(params: types.NodeCreatePartnerParameter) {
 	return request<types.NodeCreatePartnerResponse>({
 		url: `/api/partner/create`,
@@ -10,7 +10,7 @@ export function nodeCreatePartner(params: types.NodeCreatePartnerParameter) {
 	})
 }
 
-/**修改日志**/
+/**修改日志-授权管理端**/
 export function nodeUpdatePartner(params: types.NodeUpdatePartnerParameter) {
 	return request<types.NodeUpdatePartnerResponse>({
 		url: `/api/partner/update`,
@@ -19,7 +19,7 @@ export function nodeUpdatePartner(params: types.NodeUpdatePartnerParameter) {
 	})
 }
 
-/**切换日志状态**/
+/**切换日志状态-授权管理端**/
 export function nodePartnerCutover(params: types.NodePartnerCutoverParameter) {
 	return request<types.NodePartnerCutoverResponse>({
 		url: `/api/partner/cutover`,
@@ -28,7 +28,7 @@ export function nodePartnerCutover(params: types.NodePartnerCutoverParameter) {
 	})
 }
 
-/**日志信息**/
+/**日志信息-授权管理端**/
 export function nodePartner(params: types.NodePartnerParameter) {
 	return request<types.NodePartnerResponse>({
 		url: `/api/partner/info`,
@@ -37,7 +37,7 @@ export function nodePartner(params: types.NodePartnerParameter) {
 	})
 }
 
-/**日志列表**/
+/**日志列表-授权管理端**/
 export function nodePartners(params: types.NodePartnersParameter) {
 	return request<types.NodePartnersResponse>({
 		url: `/api/partner/list-node`,
@@ -46,7 +46,16 @@ export function nodePartners(params: types.NodePartnersParameter) {
 	})
 }
 
-/**删除日志**/
+/**日志列表-客户端**/
+export function nodeClientPartners(params: types.NodeClientPartnersParameter) {
+	return request<types.NodePartnersResponse>({
+		url: `/api/partner/client/list-node`,
+		method: 'GET',
+		params
+	})
+}
+
+/**删除日志-授权管理端**/
 export function nodeDeletePartner(params: types.NodeDeletePartnerParameter) {
 	return request<types.NodeDeletePartnerResponse>({
 		url: `/api/partner/del`,

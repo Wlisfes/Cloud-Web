@@ -1,10 +1,11 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Image, SkeletonItem } from 'element-ui'
+import { NodePoster } from '@/types'
 import style from '@/style/web/common/node.partner.module.less'
 
 @Component
 export default class NodeCover extends Vue {
-	@Prop({ type: Array, default: () => [] }) dataSource!: string[]
+	@Prop({ type: Array, default: () => [] }) dataSource!: NodePoster[]
 
 	private createCover(cover: string): JSX.Element {
 		return (
@@ -30,9 +31,7 @@ export default class NodeCover extends Vue {
 						<li key={index} class={style['node-cover-item']}>
 							<div class={style['pic-conter']}>
 								<div class={style['pic-conter-content']}>
-									{this.createCover(
-										'https://oss.lisfes.cn/cloud/cover/2021-08/1630405868183.jpg?x-oss-process=style/resize'
-									)}
+									{this.createCover(`${k.url}?x-oss-process=style/resize`)}
 								</div>
 							</div>
 						</li>
@@ -40,9 +39,7 @@ export default class NodeCover extends Vue {
 						<li key={index} class={style['node-cover-item']}>
 							<div class={style['pic-conter']}>
 								<div class={style['pic-conter-content']}>
-									{this.createCover(
-										'https://oss.lisfes.cn/cloud/cover/2021-08/1630405868183.jpg?x-oss-process=style/resize'
-									)}
+									{this.createCover(`${k.url}?x-oss-process=style/resize`)}
 								</div>
 							</div>
 						</li>

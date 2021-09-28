@@ -1,4 +1,4 @@
-import { NodeDate } from '@/types'
+import { NodeDate, NodePoster } from '@/types'
 
 export type PartnerResponse = NodeDate & {
 	id: number
@@ -7,12 +7,7 @@ export type PartnerResponse = NodeDate & {
 	html: string
 	status: number
 	description: string
-	cover: Array<{
-		id: number
-		type: number
-		url: string
-		path: string
-	}>
+	cover: Array<NodePoster>
 }
 
 export type PartnerParameter = PartnerResponse & {
@@ -52,6 +47,7 @@ export type NodePartnerResponse = PartnerResponse
  * 日志列表
  */
 export type NodePartnersParameter = Pick<PartnerParameter, 'page' | 'size'> & Partial<Pick<PartnerParameter, 'status'>>
+export type NodeClientPartnersParameter = Pick<PartnerParameter, 'page' | 'size'>
 export type NodePartnersResponse = Pick<PartnerParameter, 'page' | 'size' | 'total'> & { list: PartnerResponse[] }
 
 /**

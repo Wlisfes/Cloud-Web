@@ -159,7 +159,7 @@ export default class NodePartner extends Vue {
 		return (
 			<Modal
 				title={this.active === 'create' ? '新增' : '编辑'}
-				dialogStyle={{ maxWidth: '95%', paddingBottom: 0 }}
+				dialogStyle={{ maxWidth: '95%', padding: '20px 0' }}
 				v-model={this.visible}
 				width={1080}
 				centered
