@@ -37,6 +37,11 @@ export default class NodeAppCover extends Vue {
 		})
 	}
 
+	/**图片删除回调**/
+	public onDelete(current: number) {
+		this.$emit('delete', current)
+	}
+
 	protected render() {
 		return (
 			<div class={style['node-cover']}>
@@ -59,6 +64,9 @@ export default class NodeAppCover extends Vue {
 										style={{ width: '100%', height: '100%' }}
 										src={`${k.url + this.resize}`}
 									></Image>
+								</div>
+								<div class={style['node-pointer-delete']} onClick={() => this.onDelete(index)}>
+									<Icon type="close" style={{ fontSize: '16px', color: 'red' }}></Icon>
 								</div>
 							</div>
 						</div>

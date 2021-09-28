@@ -1,7 +1,7 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Modal, Button, Spin, FormModel, Select, Pagination, notification } from 'ant-design-vue'
+import { Vue, Component } from 'vue-property-decorator'
+import { Modal, Button, Spin, FormModel, Select, Pagination } from 'ant-design-vue'
 import { Image, SkeletonItem } from 'element-ui'
-import { nodePosters, nodePosterCutover, nodeDeletePoster } from '@/api'
+import { nodePosters } from '@/api'
 import { HttpStatus, Source, NodePoster } from '@/types'
 import style from '@/style/common/app.poster.module.less'
 type SourceOption = {
@@ -14,6 +14,7 @@ type SourceOption = {
 @Component
 export default class AppPoster extends Vue {
 	private visible: boolean = false
+	private current: NodePoster[] = []
 	private source: Source<Array<NodePoster>> & SourceOption = {
 		column: [],
 		page: 1,
@@ -65,9 +66,13 @@ export default class AppPoster extends Vue {
 		}
 	}
 
-	private onSubmit(props: NodePoster) {
-		this.$emit('submit', props)
-		this.onClose()
+	/**选择图片、取消图片事件**/
+	private onSelect(props: NodePoster) {
+		if (this.current.some(k => k.id === props.id)) {
+			this.current = this.current.filter(k => k.id !== props.id)
+		} else {
+			this.current.push(props)
+		}
 	}
 
 	/**组件调用**/
@@ -76,10 +81,17 @@ export default class AppPoster extends Vue {
 		this.source.initSource()
 	}
 
+	/**组件提交事件**/
+	private onSubmit() {
+		this.$emit('submit', this.current)
+		this.onClose()
+	}
+
 	/**组件初始化**/
 	private onClose() {
-		// this.source.page = 1
 		this.visible = false
+		this.source.page = 1
+		this.current = []
 	}
 
 	protected render() {
@@ -138,32 +150,40 @@ export default class AppPoster extends Vue {
 							</FormModel.Item>
 						</FormModel>
 						<div class={style['app-poster-conter']}>
-							{source.dataSource.map(k => (
-								<div class={style['app-poster-item']}>
-									<div class={style['node-poster']}>
-										<div class={style['node-poster-conter']} onClick={() => this.onSubmit(k)}>
-											<Image
-												fit="cover"
-												style={{ width: '100%', height: '100%' }}
-												src={`${k.url}?x-oss-process=style/resize`}
-											>
-												<SkeletonItem
-													slot="placeholder"
-													variant="image"
-													style={{ width: '100%', height: '100%' }}
-												></SkeletonItem>
-												<SkeletonItem
-													slot="error"
-													variant="image"
-													style={{ width: '100%', height: '100%' }}
-												></SkeletonItem>
-											</Image>
+							{source.dataSource.map(k => {
+								const active = this.current.some(v => v.id === k.id)
+								return (
+									<div key={k.id} class={style['app-poster-item']}>
+										<div class={style['node-poster']}>
+											<div class={style['node-poster-conter']} onClick={() => this.onSelect(k)}>
+												<div
+													class={style['node-poster-border']}
+													style={{ borderColor: active ? 'red' : '#ffffff' }}
+												>
+													<Image
+														fit="cover"
+														style={{ width: '100%', height: '100%' }}
+														src={`${k.url}?x-oss-process=style/resize`}
+													>
+														<SkeletonItem
+															slot="placeholder"
+															variant="image"
+															style={{ width: '100%', height: '100%' }}
+														></SkeletonItem>
+														<SkeletonItem
+															slot="error"
+															variant="image"
+															style={{ width: '100%', height: '100%' }}
+														></SkeletonItem>
+													</Image>
+												</div>
+											</div>
 										</div>
 									</div>
-								</div>
-							))}
+								)
+							})}
 						</div>
-						{source.total && (
+						{source.total > 0 && (
 							<div class={style['app-poster-footer']}>
 								<Pagination
 									current={source.page}
@@ -186,6 +206,9 @@ export default class AppPoster extends Vue {
 				</Spin>
 				<div slot="footer" style={{ display: 'flex', justifyContent: 'center' }}>
 					<Button onClick={this.onClose}>取消</Button>
+					<Button type="primary" onClick={this.onSubmit}>
+						确定
+					</Button>
 				</div>
 			</Modal>
 		)
