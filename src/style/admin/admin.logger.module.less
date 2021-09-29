@@ -1,0 +1,101 @@
+.app-conter {
+	position: relative;
+	&-cover {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	&-pointer {
+		margin: 0 5px;
+		line-height: 22px;
+		cursor: pointer;
+	}
+
+	.node-source {
+		position: relative;
+		padding-bottom: 10px;
+		:global {
+			.node-source-item {
+				transition: all 300ms;
+				display: inline-block;
+				@media (max-width: 730px) {
+					display: flex;
+				}
+
+				.ant-form-item {
+					transition: all 300ms;
+					.ant-form-item-children {
+						display: block;
+					}
+				}
+
+				&.inline-last {
+					@media (max-width: 730px) {
+						.ant-form-item {
+							&:last-child {
+								margin-right: 0;
+							}
+						}
+					}
+				}
+
+				&.inline-50 {
+					@media (max-width: 730px) {
+						.ant-form-item {
+							flex: 1;
+							&:last-child {
+								margin-right: 0;
+							}
+							.ant-form-item-control-wrapper {
+								display: block;
+							}
+							.ant-select {
+								width: 100% !important;
+							}
+							.ant-input-affix-wrapper {
+								transition: all 300ms;
+								width: 100% !important;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/*******************************************************************/
+.node-logger {
+	min-height: 200px;
+	display: flex;
+	flex-direction: column;
+	&-item {
+		display: flex;
+		align-items: center;
+		font-size: 15px;
+		overflow: hidden;
+		.item-label {
+			width: 100px;
+			position: relative;
+			text-align: right;
+			line-height: 40px;
+			&::after {
+				content: ':';
+				position: relative;
+				top: -0.5px;
+				margin: 0 8px 0 2px;
+			}
+		}
+		.item-value {
+			flex: 1;
+			overflow: hidden;
+		}
+		.item-pre {
+			background-color: #f7f7f7;
+			border-radius: 4px;
+			position: relative;
+			padding: 5px 10px;
+			line-height: 1.4;
+		}
+	}
+}
