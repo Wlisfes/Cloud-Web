@@ -1,5 +1,27 @@
 .app-conter {
 	position: relative;
+	&-cover {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.node-placeholder {
+			width: 100%;
+			height: 100%;
+			background-color: #f2f2f2;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			i {
+				font-size: 18px;
+			}
+		}
+	}
+	&-pointer {
+		margin: 0 5px;
+		line-height: 22px;
+		cursor: pointer;
+	}
+
 	.node-source {
 		position: relative;
 		padding-bottom: 10px;

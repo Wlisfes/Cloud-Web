@@ -1,6 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, InputNumber, Modal, Button, Switch, Spin, notification } from 'ant-design-vue'
 import { ColorPicker } from 'element-ui'
+import { AppCover } from '@/components/common'
 import { nodeSource, nodeUpdateSource, nodeCreateSource } from '@/api'
 import { HttpStatus } from '@/types'
 
@@ -20,6 +21,7 @@ export default class NodeSource extends Vue {
 		form: {
 			id: 0,
 			name: '',
+			icon: '',
 			color: '',
 			comment: '',
 			status: true,
@@ -27,7 +29,8 @@ export default class NodeSource extends Vue {
 		},
 		rules: {
 			name: [{ required: true, message: '请输入分类标签名称', trigger: 'blur' }],
-			color: [{ required: true, message: '请选择分类标签颜色', trigger: 'blur' }]
+			color: [{ required: true, message: '请选择分类标签颜色', trigger: 'blur' }],
+			icon: [{ required: true, message: '请上传标签图标', trigger: 'blur' }]
 		}
 	}
 
@@ -38,6 +41,7 @@ export default class NodeSource extends Vue {
 			if (code === HttpStatus.OK) {
 				this.state.form = Object.assign(this.state.form, {
 					name: data.name,
+					icon: data.icon,
 					color: data.color,
 					comment: data.comment,
 					status: data.status === 1,
@@ -57,6 +61,7 @@ export default class NodeSource extends Vue {
 			const { form } = this.state
 			const { code, data } = await nodeCreateSource({
 				name: form.name,
+				icon: form.icon,
 				color: form.color,
 				comment: form.comment || null,
 				status: +form.status,
@@ -80,6 +85,7 @@ export default class NodeSource extends Vue {
 			const { code, data } = await nodeUpdateSource({
 				id: form.id,
 				name: form.name,
+				icon: form.icon,
 				color: form.color,
 				comment: form.comment || null,
 				status: +form.status,
@@ -120,6 +126,7 @@ export default class NodeSource extends Vue {
 			this.state.form = Object.assign(this.state.form, {
 				id: 0,
 				name: '',
+				icon: '',
 				color: '',
 				comment: '',
 				status: true,
@@ -163,6 +170,13 @@ export default class NodeSource extends Vue {
 						labelCol={labelCol}
 						wrapperCol={wrapperCol}
 					>
+						<FormModel.Item label="标签图标" prop="icon">
+							<AppCover
+								path="avatar"
+								cover={form.icon}
+								onSubmit={(props: { path: string }) => (form.icon = props.path)}
+							></AppCover>
+						</FormModel.Item>
 						<FormModel.Item label="标签名称" prop="name">
 							<Input v-model={form.name}></Input>
 						</FormModel.Item>

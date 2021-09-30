@@ -1,4 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
+import { Image } from 'element-ui'
 import { Table, Tag, Button, FormModel, Select, Input, Menu, Icon, notification } from 'ant-design-vue'
 import { NodeSource } from '@/views/admin/archive/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
@@ -19,10 +20,11 @@ export default class Source extends Vue {
 
 	private source: SourceState<Array<NodeSourceState>> & SourceOption = {
 		column: [
-			{ title: '分类名称', width: '20%', scopedSlots: { customRender: 'name' } },
+			{ title: '标签图标', width: 80, scopedSlots: { customRender: 'icon' } },
+			{ title: '标签名称', width: '20%', scopedSlots: { customRender: 'name' } },
 			{ title: '备注', dataIndex: 'comment', align: 'center' },
 			{ title: '排序号', dataIndex: 'order', width: '10%', align: 'center' },
-			{ title: '分类状态', align: 'center', width: '10%', scopedSlots: { customRender: 'status' } },
+			{ title: '标签状态', align: 'center', width: '10%', scopedSlots: { customRender: 'status' } },
 			{ title: '创建时间', dataIndex: 'createTime', align: 'center', width: '20%' },
 			{ title: '操作', align: 'center', width: '18.75%', scopedSlots: { customRender: 'action' } }
 		],
@@ -192,6 +194,23 @@ export default class Source extends Vue {
 									<Tag color={props.color} style={{ marginLeft: '6px' }}>
 										{props.name}
 									</Tag>
+								),
+								icon: (props: NodeSourceState) => (
+									<div class={style['app-conter-cover']}>
+										<Image
+											alt={props.name}
+											fit="cover"
+											src={`${props.icon}?x-oss-process=style/resize`}
+											style={{ width: '48px', height: '48px', cursor: 'pointer' }}
+										>
+											<div class={style['node-placeholder']} slot="placeholder">
+												<i class="el-icon-picture"></i>
+											</div>
+											<div class={style['node-placeholder']} slot="error">
+												<i class="el-icon-picture"></i>
+											</div>
+										</Image>
+									</div>
 								),
 								status: (props: NodeSourceState) => <AppSatus status={props.status}></AppSatus>,
 								action: (props: NodeSourceState) => (

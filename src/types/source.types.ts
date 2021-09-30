@@ -3,6 +3,7 @@ import { NodeDate } from '@/types'
 export type NodeSource = NodeDate & {
 	id: number
 	name: string
+	icon: string
 	color: string
 	status: number
 	order: number
@@ -18,14 +19,14 @@ export type NodeSourceParameter = NodeSource & {
 /**
  * 创建标签
  */
-export type NodeCreateSourceParameter = Pick<NodeSourceParameter, 'name' | 'color'> &
+export type NodeCreateSourceParameter = Pick<NodeSourceParameter, 'name' | 'color' | 'icon'> &
 	Partial<Pick<NodeSourceParameter, 'status' | 'order' | 'comment'>>
 export type NodeCreateSourceResponse = Pick<NodeSourceParameter, 'message'>
 
 /**
  * 修改标签
  */
-export type NodeUpdateSourceParameter = Pick<NodeSourceParameter, 'id' | 'name' | 'color'> &
+export type NodeUpdateSourceParameter = Pick<NodeSourceParameter, 'id' | 'name' | 'color' | 'icon'> &
 	Partial<Pick<NodeSourceParameter, 'status' | 'order' | 'comment'>>
 export type NodeUpdateSourceResponse = Pick<NodeSourceParameter, 'message'>
 
