@@ -28,7 +28,7 @@ export default class AppPoster extends Vue {
 		dataSource: [],
 		option: {
 			status: undefined,
-			type: undefined
+			type: 3
 		},
 		initSource: async () => {
 			try {
@@ -57,7 +57,7 @@ export default class AppPoster extends Vue {
 		},
 		onReset: () => {
 			this.source.option.status = undefined
-			this.source.option.type = undefined
+			this.source.option.type = 3
 			this.source.onSearch?.()
 		},
 		onSearch: () => {
@@ -129,7 +129,6 @@ export default class AppPoster extends Vue {
 								<FormModel.Item>
 									<Select
 										v-model={source.option.type}
-										allowClear
 										placeholder="图片类型"
 										style={{ width: '150px' }}
 									>
