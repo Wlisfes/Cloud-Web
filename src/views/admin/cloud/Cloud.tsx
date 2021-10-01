@@ -4,6 +4,7 @@ import { Image } from 'element-ui'
 import { NodeCloud } from '@/views/admin/cloud/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus, AppPlayer } from '@/components/common'
 import { nodeClouds, nodeCloudCutover, nodeDeleteCloud } from '@/api'
+import { init } from '@/components/instance/init-common'
 import { HttpStatus, Source, NodeCloud as NodeCloudState } from '@/types'
 import style from '@/style/admin/admin.cloud.module.less'
 
@@ -89,14 +90,13 @@ export default class Cloud extends Vue {
 	/**删除媒体**/
 	private async nodeDeleteCloud(id: number) {
 		try {
-			this.source.loading = true
 			const { code, data } = await nodeDeleteCloud({ id })
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
-				this.source.initSource()
 			}
+			return data
 		} catch (e) {
-			this.source.loading = false
+			return e
 		}
 	}
 
@@ -121,7 +121,24 @@ export default class Cloud extends Vue {
 				this.$refs.nodeCloud.init('update', id)
 				break
 			case 'delete':
-				this.nodeDeleteCloud(id)
+				init({
+					name: 'Cloud-Common',
+					content: (
+						<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
+							<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
+							<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
+						</div>
+					)
+				})
+					.then(({ self, done }) => {
+						self.loading = true
+						this.nodeDeleteCloud(id).finally(() => {
+							done()
+							this.source.loading = true
+							this.source.initSource()
+						})
+					})
+					.catch(({ done }) => done())
 				break
 			case 'preview':
 				this.$refs.player.init(id)
