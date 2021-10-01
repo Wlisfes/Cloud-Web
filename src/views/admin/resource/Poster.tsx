@@ -92,18 +92,14 @@ export default class Poster extends Vue {
 		})
 			.then(({ self, done }) => {
 				self.loading = true
-				nodeDeletePoster({ id })
-					.then(({ code, data }) => {
-						if (code === HttpStatus.OK) {
-							done()
-							this.source.loading = true
-							notification.success({ message: data.message, description: '' })
-							this.source.initSource()
-						}
-					})
-					.finally(() => {
-						this.source.loading = false
-					})
+				nodeDeletePoster({ id }).then(({ code, data }) => {
+					if (code === HttpStatus.OK) {
+						done()
+						this.source.loading = true
+						notification.success({ message: data.message, description: '' })
+						this.source.initSource()
+					}
+				})
 			})
 			.catch(({ done }) => done())
 	}

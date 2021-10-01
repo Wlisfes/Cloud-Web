@@ -87,18 +87,14 @@ export default class Logs extends Vue {
 		})
 			.then(({ self, done }) => {
 				self.loading = true
-				nodeDeleteLogger({ id })
-					.then(({ code, data }) => {
-						if (code === HttpStatus.OK) {
-							done()
-							this.source.loading = true
-							notification.success({ message: data.message, description: '' })
-							this.source.initSource()
-						}
-					})
-					.finally(() => {
-						this.source.loading = false
-					})
+				nodeDeleteLogger({ id }).then(({ code, data }) => {
+					if (code === HttpStatus.OK) {
+						done()
+						this.source.loading = true
+						notification.success({ message: data.message, description: '' })
+						this.source.initSource()
+					}
+				})
 			})
 			.catch(({ done }) => done())
 	}
