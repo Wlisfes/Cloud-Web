@@ -3,6 +3,7 @@ import { Button, FormModel, Select, Table, Tooltip, Menu, Icon, notification } f
 import { AppRootNode, AppCutover, AppPopover, AppSatus } from '@/components/common'
 import { NodePartner } from '@/views/admin/setup/common'
 import { nodePartners, nodePartnerCutover, nodeDeletePartner } from '@/api'
+import { init } from '@/components/instance/init-common'
 import { HttpStatus, Source, PartnerResponse } from '@/types'
 import style from '@/style/admin/admin.partner.module.less'
 type SourceOption = {
@@ -72,14 +73,13 @@ export default class Partner extends Vue {
 	/**删除日志**/
 	private async nodeDeletePartner(id: number) {
 		try {
-			this.source.loading = true
 			const { code, data } = await nodeDeletePartner({ id })
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
-				this.source.initSource()
 			}
+			return data
 		} catch (e) {
-			this.source.loading = false
+			return e
 		}
 	}
 
@@ -104,7 +104,24 @@ export default class Partner extends Vue {
 				this.$refs.nodePartner.init('update', id)
 				break
 			case 'delete':
-				this.nodeDeletePartner(id)
+				init({
+					name: 'Partner-Common',
+					content: (
+						<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
+							<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
+							<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
+						</div>
+					)
+				})
+					.then(({ self, done }) => {
+						self.loading = true
+						this.nodeDeletePartner(id).finally(() => {
+							done()
+							this.source.loading = true
+							this.source.initSource()
+						})
+					})
+					.catch(({ done }) => done())
 				break
 		}
 	}

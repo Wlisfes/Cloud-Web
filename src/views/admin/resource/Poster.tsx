@@ -1,8 +1,9 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Button, FormModel, Select, Tag, Table, notification } from 'ant-design-vue'
+import { Button, FormModel, Select, Tag, Table, Icon, notification } from 'ant-design-vue'
 import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
 import { NodeCover } from '@/views/admin/resource/common'
 import { nodePosters, nodePosterCutover, nodeDeletePoster } from '@/api'
+import { init } from '@/components/instance/init-common'
 import { HttpStatus, Source, NodePosterNodeResponse } from '@/types'
 import style from '@/style/admin/admin.poster.module.less'
 
@@ -79,17 +80,32 @@ export default class Poster extends Vue {
 	}
 
 	/**删除图床**/
-	private async nodeDeletePoster(id: number) {
-		try {
-			this.source.loading = true
-			const { code, data } = await nodeDeletePoster({ id })
-			if (code === HttpStatus.OK) {
-				notification.success({ message: data.message, description: '' })
-				this.source.initSource()
-			}
-		} catch (e) {
-			this.source.loading = false
-		}
+	private nodeDeletePoster(id: number) {
+		init({
+			name: 'Poster-Common',
+			content: (
+				<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
+					<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
+					<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
+				</div>
+			)
+		})
+			.then(({ self, done }) => {
+				self.loading = true
+				nodeDeletePoster({ id })
+					.then(({ code, data }) => {
+						if (code === HttpStatus.OK) {
+							done()
+							this.source.loading = true
+							notification.success({ message: data.message, description: '' })
+							this.source.initSource()
+						}
+					})
+					.finally(() => {
+						this.source.loading = false
+					})
+			})
+			.catch(({ done }) => done())
 	}
 
 	/**切换图床状态**/

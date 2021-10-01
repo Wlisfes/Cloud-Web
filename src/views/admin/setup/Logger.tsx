@@ -1,8 +1,9 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Button, FormModel, Select, Tag, Table, Tooltip, notification } from 'ant-design-vue'
+import { Button, FormModel, Select, Tag, Table, Tooltip, Icon, notification } from 'ant-design-vue'
 import { AppRootNode } from '@/components/common'
 import { NodeLogger } from '@/views/admin/setup/common'
 import { nodeLoggers, nodeDeleteLogger } from '@/api'
+import { init } from '@/components/instance/init-common'
 import { HttpStatus, Source, LoggerResponse } from '@/types'
 import style from '@/style/admin/admin.logger.module.less'
 type SourceOption = {
@@ -74,17 +75,32 @@ export default class Logs extends Vue {
 	}
 
 	/**删除Logger**/
-	private async nodeDeleteLogger(id: number) {
-		try {
-			this.source.loading = true
-			const { code, data } = await nodeDeleteLogger({ id })
-			if (code === HttpStatus.OK) {
-				notification.success({ message: data.message, description: '' })
-				this.source.initSource()
-			}
-		} catch (e) {
-			this.source.loading = false
-		}
+	private nodeDeleteLogger(id: number) {
+		init({
+			name: 'Logger-Common',
+			content: (
+				<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
+					<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
+					<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
+				</div>
+			)
+		})
+			.then(({ self, done }) => {
+				self.loading = true
+				nodeDeleteLogger({ id })
+					.then(({ code, data }) => {
+						if (code === HttpStatus.OK) {
+							done()
+							this.source.loading = true
+							notification.success({ message: data.message, description: '' })
+							this.source.initSource()
+						}
+					})
+					.finally(() => {
+						this.source.loading = false
+					})
+			})
+			.catch(({ done }) => done())
 	}
 
 	protected created() {

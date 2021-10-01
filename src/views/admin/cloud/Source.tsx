@@ -4,6 +4,7 @@ import { NodeSource } from '@/views/admin/cloud/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
 import { nodeCloudSources, nodeCloudSourceCutover, nodeDeleteCloudSource } from '@/api'
 import { HttpStatus, Source as SourceState, NodeCloudSource } from '@/types'
+import { init } from '@/components/instance/init-common'
 import style from '@/style/admin/admin.cloud-source.module.less'
 
 type SourceOption = {
@@ -83,14 +84,13 @@ export default class Source extends Vue {
 	/**删除分类标签**/
 	private async nodeDeleteCloudSource(id: number) {
 		try {
-			this.source.loading = true
 			const { code, data } = await nodeDeleteCloudSource({ id })
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '' })
-				this.source.initSource()
 			}
+			return data
 		} catch (e) {
-			this.source.loading = false
+			return e
 		}
 	}
 
@@ -115,7 +115,24 @@ export default class Source extends Vue {
 				this.$refs.nodeSource.init('update', id)
 				break
 			case 'delete':
-				this.nodeDeleteCloudSource(id)
+				init({
+					name: 'CloudSource-Common',
+					content: (
+						<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
+							<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
+							<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
+						</div>
+					)
+				})
+					.then(({ self, done }) => {
+						self.loading = true
+						this.nodeDeleteCloudSource(id).finally(() => {
+							done()
+							this.source.loading = true
+							this.source.initSource()
+						})
+					})
+					.catch(({ done }) => done())
 				break
 		}
 	}
