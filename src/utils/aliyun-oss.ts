@@ -35,7 +35,7 @@ export class AliyunOSSModule {
 		})
 	}
 
-	create(fileName: string, path: 'avatar' | 'upload' | 'cover' | 'photo'): string {
+	create(fileName: string, path: 'avatar' | 'upload' | 'cover' | 'photo' | 'root'): string {
 		const name = fileName.split('.').pop()?.toLowerCase() || 'jpg'
 		const date = day().format('YYYY-MM')
 		return `cloud/${path}/${date}/${Date.now()}.${name}`

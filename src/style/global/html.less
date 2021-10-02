@@ -1,8 +1,22 @@
 .node-html {
+	li {
+		list-style: disc;
+	}
+	mark {
+		color: #48b378;
+		line-height: 1;
+		padding: 1px 4px;
+		border-radius: 4px;
+		background-color: #ebebeb;
+		font-family: 'Operator Mono', Consolas, Monaco, Menlo, monospace;
+	}
 	pre {
-		background-color: #282c34;
+		background-color: #282c34 !important;
 		border-radius: 4px;
 		position: relative;
+		.hljs {
+			padding: 0;
+		}
 		.pre-copy {
 			position: absolute;
 			top: 5px;

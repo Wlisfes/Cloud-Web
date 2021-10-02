@@ -52,6 +52,7 @@ export default class AppEditor extends Vue {
 	protected render() {
 		return (
 			<mavon-editor
+				class="node-html"
 				ref="editor"
 				autofocus={false}
 				defaultOpen={this.defaultOpen}
