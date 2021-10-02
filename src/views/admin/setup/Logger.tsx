@@ -13,7 +13,7 @@ type SourceOption = {
 }
 
 @Component
-export default class Logs extends Vue {
+export default class Logger extends Vue {
 	$refs!: { nodeLogger: NodeLogger }
 
 	private source: Source<Array<LoggerResponse>> & SourceOption = {

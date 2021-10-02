@@ -6,6 +6,7 @@ const asyncRoutes: { [key: string]: Function } = {
 	['/admin/setup/Module']: () => import('@/views/admin/setup/Module'),
 	['/admin/setup/Action']: () => import('@/views/admin/setup/Action'),
 	['/admin/setup/Logger']: () => import('@/views/admin/setup/Logger'),
+	['/admin/setup/Chunk']: () => import('@/views/admin/setup/Chunk'),
 	['/admin/setup/Partner']: () => import('@/views/admin/setup/Partner'),
 	['/admin/cloud/Cloud']: () => import('@/views/admin/cloud/Cloud'),
 	['/admin/cloud/Source']: () => import('@/views/admin/cloud/Source'),
