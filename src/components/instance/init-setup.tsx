@@ -1,7 +1,7 @@
 import { Vue } from 'vue-property-decorator'
 import { Drawer, Tooltip, Icon } from 'ant-design-vue'
 import { Image } from 'element-ui'
-import { primaryTheme, updateTheme } from '@/utils/theme'
+import { primaryTheme } from '@/utils/theme'
 import style from '@/style/instance/init-setup.module.less'
 
 export function init(): Promise<{ self: any; done: Function }> {
@@ -23,7 +23,7 @@ export function init(): Promise<{ self: any; done: Function }> {
 					}, 300)
 				},
 				onUpdate(color: string) {
-					updateTheme(color, true)
+					console.log(color)
 				},
 				onClose() {
 					reject({ self: this, done: this.remove })
