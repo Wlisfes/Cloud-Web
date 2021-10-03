@@ -1,5 +1,6 @@
 const path = require('path')
 const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
+const createThemeColorReplacerPlugin = require('./src/themeColor')
 const resolve = dir => path.join(__dirname, dir)
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
 				'@': resolve('src')
 			}
 		},
-		plugins: [new AntdDayjsWebpackPlugin()],
+		plugins: [new AntdDayjsWebpackPlugin(), createThemeColorReplacerPlugin()],
 		externals: {
 			// 'element-ui': 'ELEMENT'
 			// 'ant-design-vue': 'AntDesignVue',
@@ -125,7 +126,7 @@ module.exports = {
 		loaderOptions: {
 			less: {
 				modifyVars: {
-					'primary-color': '#FA541C'
+					// 'primary-color': '#FA541C'
 				},
 				javascriptEnabled: true
 			},

@@ -3,9 +3,8 @@ import { FormModel, Input, InputNumber, Modal, Button, Switch, Spin, notificatio
 import { ColorPicker } from 'element-ui'
 import { AppCover } from '@/components/common'
 import { nodeSource, nodeUpdateSource, nodeCreateSource } from '@/api'
+import { primaryColor } from '@/utils/theme'
 import { HttpStatus } from '@/types'
-
-const primaryColor = ['#F5222D', '#FA541C', '#FAAD14', '#13C2C2', '#52C41A', '#1890FF', '#2F54EB', '#722ED1']
 
 @Component
 export default class NodeSource extends Vue {

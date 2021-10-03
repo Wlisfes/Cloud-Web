@@ -3,7 +3,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Icon, Menu, Popover, Modal } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
 import { toggleFull, isFull, watchFull } from 'be-full'
-import { init } from '@/components/instance/init-logout'
+import * as logout from '@/components/instance/init-logout'
+import * as setup from '@/components/instance/init-setup'
 
 @Component
 export default class AppUser extends Vue {
@@ -44,7 +45,7 @@ export default class AppUser extends Vue {
 				window.open('https://github.com/Wlisfes')
 				break
 			default:
-				init().then(({ node, vm }) => {
+				logout.init().then(({ node, vm }) => {
 					node.init()
 					vm.$once('logout-submit', () => {
 						setTimeout(async () => {
@@ -60,6 +61,16 @@ export default class AppUser extends Vue {
 				})
 				break
 		}
+	}
+
+	/**设置**/
+	private onSetup() {
+		setup
+			.init()
+			.then(({ self, done }) => {
+				done()
+			})
+			.catch(({ self, done }) => done())
 	}
 
 	protected render() {
@@ -111,7 +122,7 @@ export default class AppUser extends Vue {
 						</div>
 					)}
 				</Popover>
-				<div class="app-user-node" style={{ padding: '0 10px' }}>
+				<div class="app-user-node" style={{ padding: '0 10px' }} onClick={this.onSetup}>
 					<Icon type="setting" />
 				</div>
 

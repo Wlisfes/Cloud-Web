@@ -72,7 +72,7 @@ export default class Container extends Vue {
 									flex: 1,
 									display: 'flex',
 									justifyContent: 'flex-end',
-									margin: '0 30px 0 15px'
+									margin: '0 6px 0 15px'
 								}}
 							>
 								<AppUser></AppUser>
