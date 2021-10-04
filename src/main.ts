@@ -20,6 +20,7 @@ new Vue({
 	async created() {
 		notification.config({ duration: 2 })
 		store.dispatch('banner/initBanner')
+		store.dispatch('app/initApp').then(state => {})
 	},
 	render: h => h(App)
 }).$mount('#app')

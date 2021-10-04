@@ -1,7 +1,7 @@
 import { Vue } from 'vue-property-decorator'
 import { Drawer, Tooltip, Icon } from 'ant-design-vue'
 import { Image } from 'element-ui'
-import { primaryTheme, nodeUpdateTheme } from '@/theme'
+import { primaryTheme } from '@/theme'
 import store from '@/store'
 import style from '@/style/instance/init-setup.module.less'
 
@@ -29,10 +29,7 @@ export function init(): Promise<{ self: any; done: Function }> {
 					}, 300)
 				},
 				onUpdatePrimary(color: string) {
-					nodeUpdateTheme(color).then(async ({ done }) => {
-						await store.dispatch('app/setPrimary', color)
-						done()
-					})
+					store.dispatch('app/setPrimary', color)
 				},
 				onUpdateTheme(theme: string) {
 					store.dispatch('app/setTheme', theme)
