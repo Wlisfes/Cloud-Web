@@ -1,3 +1,5 @@
+export * from './init-theme'
+
 /**主题色列表**/
 export const primaryColor = ['#F5222D', '#FA541C', '#FAAD14', '#13C2C2', '#52C41A', '#1890FF', '#2F54EB', '#722ED1']
 

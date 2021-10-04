@@ -2,7 +2,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, InputNumber, Modal, Button, Switch, Spin, notification } from 'ant-design-vue'
 import { ColorPicker } from 'element-ui'
 import { nodeCloudSource, nodeUpdateCloudSource, nodeCreateCloudSource } from '@/api'
-import { primaryColor } from '@/utils/theme'
+import { primaryColor } from '@/theme'
 import { HttpStatus } from '@/types'
 
 @Component

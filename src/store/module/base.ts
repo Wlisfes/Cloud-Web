@@ -10,7 +10,6 @@ export interface BaseState {
 	width: number
 	mobile: boolean
 	collapsed: boolean
-	theme: string
 	multiple: Array<any>
 	menu: Array<any>
 	list: Array<any>
@@ -26,7 +25,6 @@ const base: Module<BaseState, RootState> = {
 		width: 0,
 		mobile: false,
 		collapsed: false,
-		theme: 'dark',
 		multiple: [],
 		menu: [],
 		list: [],
@@ -39,7 +37,6 @@ const base: Module<BaseState, RootState> = {
 		width: state => state.width,
 		mobile: state => state.mobile,
 		collapsed: state => state.collapsed,
-		theme: state => state.theme,
 		multiple: state => state.multiple,
 		menu: state => state.menu,
 		list: state => state.list,
@@ -57,9 +54,6 @@ const base: Module<BaseState, RootState> = {
 		},
 		SET_COLLAPSED: (state, collapsed: boolean) => {
 			state.collapsed = collapsed
-		},
-		SET_THEME: (state, theme: string) => {
-			state.theme = theme
 		},
 		SET_MULTIPLE: (state, route) => {
 			const n = state.multiple.some(k => k.path === route.path)

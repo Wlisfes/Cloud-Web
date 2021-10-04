@@ -3,7 +3,7 @@ import { FormModel, Input, InputNumber, Modal, Button, Switch, Spin, notificatio
 import { ColorPicker } from 'element-ui'
 import { AppCover } from '@/components/common'
 import { nodeSource, nodeUpdateSource, nodeCreateSource } from '@/api'
-import { primaryColor } from '@/utils/theme'
+import { primaryColor } from '@/theme'
 import { HttpStatus } from '@/types'
 
 @Component

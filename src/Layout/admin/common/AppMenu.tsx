@@ -4,7 +4,7 @@ import { Menu, Icon } from 'ant-design-vue'
 
 @Component
 export default class AppMenu extends Vue {
-	@Getter('base/theme') theme!: string
+	@Getter('app/theme') theme!: string
 	@Getter('base/collapsed') collapsed!: boolean
 	@Getter('base/mobile') mobile!: boolean
 	@Getter('base/menu') dataSource!: Array<any>

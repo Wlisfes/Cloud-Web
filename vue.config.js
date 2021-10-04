@@ -1,18 +1,7 @@
-const path = require('path')
 const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
-const AntDThemeWebpackPlugin = require('antd-theme-webpack-plugin')
+const AntdThemeColorPlugin = require('./src/theme/theme.config')
+const path = require('path')
 const resolve = dir => path.join(__dirname, dir)
-
-const themeOption = {
-	antDir: resolve('./node_modules/ant-design-vue'), //antd包位置
-	styleDir: resolve('./src/style/theme'), //主题文件所在文件夹
-	varFile: resolve('./src/style/theme/theme.less'), //自定义默认主题色
-	mainLessFile: resolve('./src/style/theme/index.less'), //项目中其他自定义样式、文件可为空
-	outputFilePath: resolve('./public/theme/theme-color.less'), //提取的less文件输出地址
-	themeVariables: ['@primary-color'], //主题变量
-	indexFileName: './public/index.html', //index.html文件所在位置
-	generateOnce: false //是否只生成一次
-}
 
 module.exports = {
 	publicPath: process.env.VUE_APP_BASE_PATH,
@@ -27,15 +16,7 @@ module.exports = {
 				'@': resolve('src')
 			}
 		},
-		plugins: [new AntdDayjsWebpackPlugin(), new AntDThemeWebpackPlugin(themeOption)],
-		externals: {
-			// 'element-ui': 'ELEMENT'
-			// 'ant-design-vue': 'AntDesignVue',
-			// 'mavon-editor': 'MavonEditor',
-			// dplayer: 'DPlayer',
-			// 'flv.js': 'FlvJs',
-			// 'ali-oss': 'AliOss'
-		}
+		plugins: [new AntdDayjsWebpackPlugin(), AntdThemeColorPlugin()]
 	},
 	css: {
 		loaderOptions: {
@@ -89,61 +70,6 @@ module.exports = {
 						reuseExistingChunk: true,
 						enforce: true
 					}
-					// commons: {
-					// 	name: 'chunk-commons', // 打包后的文件名
-					// 	test: resolve('src/components'),
-					// 	minChunks: 3,
-					// 	priority: 5,
-					// 	reuseExistingChunk: true
-					// },
-					// elementUI: {
-					// 	name: 'chunk-element-ui',
-					// 	test: /[\\/]node_modules[\\/]_?element-ui(.*)/,
-					// 	chunks: 'initial',
-					// 	priority: 20,
-					// 	reuseExistingChunk: true,
-					// 	enforce: true
-					// },
-					// antDesignVue: {
-					// 	name: 'chunk-ant-design-vue',
-					// 	test: /[\\/]node_modules[\\/]ant-design-vue[\\/]/,
-					// 	chunks: 'initial',
-					// 	priority: 20,
-					// 	reuseExistingChunk: true,
-					// 	enforce: true
-					// },
-					// dplayer: {
-					// 	name: 'chunk-dplayer',
-					// 	test: /[\\/]node_modules[\\/]dplayer[\\/]/,
-					// 	chunks: 'initial',
-					// 	priority: 3,
-					// 	reuseExistingChunk: true,
-					// 	enforce: true
-					// },
-					// flvJs: {
-					// 	name: 'chunk-flv-js',
-					// 	test: /[\\/]node_modules[\\/]flv.js[\\/]/,
-					// 	chunks: 'initial',
-					// 	priority: 3,
-					// 	reuseExistingChunk: true,
-					// 	enforce: true
-					// },
-					// mavonEditor: {
-					// 	name: 'chunk-mavon-editor',
-					// 	test: /[\\/]node_modules[\\/]mavon-editor[\\/]/,
-					// 	chunks: 'initial',
-					// 	priority: 3,
-					// 	reuseExistingChunk: true,
-					// 	enforce: true
-					// },
-					// aliOss: {
-					// 	name: 'chunk-ali-oss',
-					// 	test: /[\\/]node_modules[\\/]ali-oss[\\/]/,
-					// 	chunks: 'initial',
-					// 	priority: 3,
-					// 	reuseExistingChunk: true,
-					// 	enforce: true
-					// }
 				}
 			})
 			config.optimization.runtimeChunk('single')

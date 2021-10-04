@@ -5,7 +5,7 @@ import { AppMultiple, AppMenu, AppTitle, AppUser } from '@/Layout/admin/common'
 
 @Component
 export default class Container extends Vue {
-	@Getter('base/theme') theme!: string
+	@Getter('app/theme') theme!: string
 	@Getter('base/mobile') mobile!: boolean
 	@Getter('base/collapsed') collapsed!: boolean
 
