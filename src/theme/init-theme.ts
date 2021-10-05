@@ -24,11 +24,17 @@ const themeColor = {
 	}
 }
 
-export const nodeUpdateTheme = (newPrimaryColor: string): Promise<{ done: Function }> => {
+export const nodeUpdateTheme = (props: { primary: string; loading: boolean }): Promise<{ done: Function }> => {
 	return new Promise(resolve => {
-		const done = message.loading('正在切换主题', 0)
-		themeColor.changeColor(newPrimaryColor).finally(() => {
-			resolve({ done })
-		})
+		if (props.loading) {
+			const done = message.loading('正在切换主题', 0)
+			themeColor.changeColor(props.primary).finally(() => {
+				resolve({ done })
+			})
+		} else {
+			themeColor.changeColor(props.primary).finally(() => {
+				resolve({ done: () => {} })
+			})
+		}
 	})
 }

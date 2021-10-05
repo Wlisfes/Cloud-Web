@@ -29,7 +29,7 @@ export function init(): Promise<{ self: any; done: Function }> {
 					}, 300)
 				},
 				onUpdatePrimary(color: string) {
-					store.dispatch('app/setPrimary', color)
+					store.dispatch('app/setPrimary', { primary: color, loading: true })
 				},
 				onUpdateTheme(theme: string) {
 					store.dispatch('app/setTheme', theme)

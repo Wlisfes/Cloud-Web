@@ -38,9 +38,11 @@ const app: Module<AppState, RootState> = {
 			return new Promise(resolve => {
 				const theme = getCookie(UNIK.theme) || 'dark'
 				const primary = getCookie(UNIK.primary) || '#1890FF'
-				Promise.all([dispatch('setTheme', theme), dispatch('setPrimary', primary)]).finally(() => {
-					resolve(state)
-				})
+				Promise.all([dispatch('setTheme', theme), dispatch('setPrimary', { primary, loading: false })]).finally(
+					() => {
+						resolve(state)
+					}
+				)
 			})
 		},
 		setTheme: ({ commit }, theme: string) => {
@@ -49,11 +51,11 @@ const app: Module<AppState, RootState> = {
 				resolve(true)
 			})
 		},
-		setPrimary: ({ commit }, primary: string) => {
+		setPrimary: ({ commit }, props: { primary: string; loading: boolean }) => {
 			return new Promise(resolve => {
-				nodeUpdateTheme(primary).then(({ done }) => {
+				nodeUpdateTheme(props).then(({ done }) => {
 					done()
-					commit('SET_PRIMARY', primary)
+					commit('SET_PRIMARY', props.primary)
 					resolve(true)
 				})
 			})
