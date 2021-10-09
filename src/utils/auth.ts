@@ -6,7 +6,7 @@ export function getToken(): string | undefined {
 }
 
 export function setToken(token: string) {
-	return Cookies.set(APP_AUTH_TOKEN, token)
+	return Cookies.set(APP_AUTH_TOKEN, token, { expires: 1 })
 }
 
 export function delToken() {
