@@ -3,7 +3,7 @@ import { Getter } from 'vuex-class'
 import { Icon, Popover, Menu, Avatar } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
 import { init } from '@/components/instance/init-logout'
-import { toggleFull, isFull, watchFull } from 'be-full'
+// import { toggleFull, isFull, watchFull } from 'be-full'
 import style from '@/style/common/node.user.module.less'
 
 @Component
@@ -13,21 +13,21 @@ export default class NodeUser extends Vue {
 	@Getter('user/avatar') avatar!: string
 
 	private popover: boolean = false
-	private isFull: boolean = isFull(document.documentElement)
+	private isFull: boolean = false //isFull(document.documentElement)
 
-	protected beforeDestroy() {
-		this.watch.cancel()
-	}
+	// protected beforeDestroy() {
+	// 	this.watch.cancel()
+	// }
 
-	/**监听全屏状态**/
-	private watch = watchFull(document.documentElement, ev => {
-		console.log(ev)
-		this.isFull = ev
-	})
+	// /**监听全屏状态**/
+	// private watch = watchFull(document.documentElement, ev => {
+	// 	console.log(ev)
+	// 	this.isFull = ev
+	// })
 
 	/**切换全屏/退出**/
 	private onToggleFull() {
-		toggleFull()
+		// toggleFull()
 		this.isFull = !this.isFull
 	}
 
@@ -60,9 +60,11 @@ export default class NodeUser extends Vue {
 			<div class={style['node-user']}>
 				{this.uid && (
 					<div style={{ display: 'flex' }}>
-						<div class={style['node-user-source']} onClick={this.onToggleFull}>
-							{this.isFull ? <Icon type="fullscreen-exit" /> : <Icon type="fullscreen" />}
-						</div>
+						{false && (
+							<div class={style['node-user-source']} onClick={this.onToggleFull}>
+								{this.isFull ? <Icon type="fullscreen-exit" /> : <Icon type="fullscreen" />}
+							</div>
+						)}
 						<div class={style['node-user-source']}>
 							<Icon type="bell" />
 							<sup class={style['bell-bot']}></sup>

@@ -15,21 +15,21 @@ export default class AppUser extends Vue {
 	private state = {
 		popover: false,
 		visible: false,
-		isFull: isFull(document.documentElement)
+		isFull: false //isFull(document.documentElement)
 	}
 
-	protected beforeDestroy() {
-		this.watch.cancel()
-	}
+	// protected beforeDestroy() {
+	// 	this.watch.cancel()
+	// }
 
-	/**监听全屏状态**/
-	private watch = watchFull(document.documentElement, ev => {
-		this.state.isFull = ev
-	})
+	// /**监听全屏状态**/
+	// private watch = watchFull(document.documentElement, ev => {
+	// 	this.state.isFull = ev
+	// })
 
 	/**切换全屏/退出**/
 	private onToggleFull() {
-		toggleFull()
+		// toggleFull()
 		this.state.isFull = !this.state.isFull
 	}
 
@@ -81,9 +81,11 @@ export default class AppUser extends Vue {
 					<Icon type="bell" />
 					<sup class="bell-bot"></sup>
 				</div>
-				<div class="app-user-node" style={{ padding: '0 10px' }} onClick={this.onToggleFull}>
-					{state.isFull ? <Icon type="fullscreen-exit" /> : <Icon type="fullscreen" />}
-				</div>
+				{false && (
+					<div class="app-user-node" style={{ padding: '0 10px' }} onClick={this.onToggleFull}>
+						{state.isFull ? <Icon type="fullscreen-exit" /> : <Icon type="fullscreen" />}
+					</div>
+				)}
 				<Popover
 					v-model={state.popover}
 					destroyTooltipOnHide
