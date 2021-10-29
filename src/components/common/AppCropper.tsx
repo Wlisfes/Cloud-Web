@@ -26,6 +26,7 @@ export default class AppCropper extends Vue {
 	private loading: boolean = false
 	private cover: string = ''
 	private name: string = ''
+	private file: File | null = null
 
 	public upload(cover?: string) {
 		this.visible = true
@@ -83,6 +84,27 @@ export default class AppCropper extends Vue {
 							}
 						})
 
+						// const fn = async () => {
+						// 	const buffer = await oss.Buffer(this.file as File)
+						// 	const key = oss.create(this.name, this.path)
+						// 	const response = await oss.client.put(key, buffer)
+						// 	if (response.res.status === HttpStatus.OK) {
+						// 		const node = await nodeCreatePoster({
+						// 			type: Path[this.path],
+						// 			path: response.name,
+						// 			url: `${data.path}/${response.name}`
+						// 		})
+						// 		this.$emit('submit', {
+						// 			id: node.data.id,
+						// 			type: node.data.type,
+						// 			name: response.name,
+						// 			path: `${data.path}/${response.name}`
+						// 		})
+						// 		this.onClose()
+						// 	}
+						// }
+						// fn()
+
 						this.cropper?.getCroppedCanvas().toBlob(async blob => {
 							const buffer = await oss.Buffer(blob as Blob)
 							const key = oss.create(this.name, this.path)
@@ -117,6 +139,7 @@ export default class AppCropper extends Vue {
 		const cover = URL.createObjectURL(file)
 		this.loading = true
 		this.name = file.name
+		this.file = file
 		this.cover = cover
 		this.$nextTick(() => {
 			if (!this.cropper) {
