@@ -12,7 +12,7 @@ export function setCookie(key: string, data: any, expires?: number) {
 		return Cookies.set(key, JSON.stringify(data))
 	}
 	return Cookies.set(key, JSON.stringify(data), {
-		expires: Date.now() + expires
+		expires: new Date(new Date().getTime() + expires)
 	})
 }
 
