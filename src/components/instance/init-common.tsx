@@ -1,12 +1,11 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Modal, Button, Icon } from 'ant-design-vue'
-import { useInstance, VMInstance } from '@/utils/instance'
+import { useInstance, VMInstance, VMInstanceProps } from '@/utils/instance'
 
-export interface InitCommonProps {
+export interface InitCommonProps extends VMInstanceProps {
 	content?: JSX.Element
 	confirm?: string
 	cancel?: string
-	getContainer?: () => Element
 }
 
 export function init(props?: InitCommonProps): Promise<VMInstance> {

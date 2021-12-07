@@ -2,11 +2,11 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Drawer, Tooltip, Icon } from 'ant-design-vue'
 import { Image } from 'element-ui'
 import { primaryTheme } from '@/theme'
-import { useInstance, VMInstance } from '@/utils/instance'
+import { useInstance, VMInstance, VMInstanceProps } from '@/utils/instance'
 import store from '@/store'
 import style from '@/style/instance/init-setup.module.less'
 
-export function init(): Promise<VMInstance> {
+export function init(props?: VMInstanceProps): Promise<VMInstance> {
 	const { onMounte, onUnmounte } = useInstance()
 
 	@Component
@@ -34,9 +34,11 @@ export function init(): Promise<VMInstance> {
 		}
 
 		/**组件卸载**/
-		protected onUnmounte(key: string) {
+		protected onUnmounte(key: 'close' | 'submit') {
 			onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true }).finally(() => {
-				this.visible = false
+				this.$emit(key, () => {
+					this.visible = false
+				})
 			})
 		}
 
@@ -95,9 +97,12 @@ export function init(): Promise<VMInstance> {
 
 	return new Promise(resolve => {
 		const Component = Vue.extend(SetupDrawer)
-		const node = new Component()
-		node.$mount(document.createElement('div'))
-		document.body.appendChild(node.$el)
+		const node = new Component().$mount(document.createElement('div'))
+		if (typeof props?.getContainer === 'function') {
+			props.getContainer().appendChild?.(node.$el)
+		} else {
+			document.body.appendChild(node.$el)
+		}
 		resolve(node as SetupDrawer)
 	})
 }

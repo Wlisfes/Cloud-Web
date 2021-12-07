@@ -61,7 +61,9 @@ export default class AppUser extends Vue {
 
 	/**设置**/
 	private initNodeSetup() {
-		initSetup()
+		initSetup().then(node => {
+			node.$once('close', (done: Function) => done())
+		})
 	}
 
 	protected render() {

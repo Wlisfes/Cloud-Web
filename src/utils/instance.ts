@@ -2,6 +2,10 @@ import { Vue } from 'vue-property-decorator'
 export const vm = new Vue()
 export type VMInstance = typeof vm
 
+export interface VMInstanceProps {
+	getContainer?: () => Element
+}
+
 export function useInstance() {
 	return {
 		onMounte: (callback?: Function) => {

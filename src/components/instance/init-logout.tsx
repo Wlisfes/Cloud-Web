@@ -1,8 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Modal, Icon, Button } from 'ant-design-vue'
-import { useInstance, VMInstance } from '@/utils/instance'
+import { useInstance, VMInstance, VMInstanceProps } from '@/utils/instance'
 
-export function init(): Promise<VMInstance> {
+export function init(props?: VMInstanceProps): Promise<VMInstance> {
 	const { onMounte, onUnmounte } = useInstance()
 	@Component
 	class RootModal extends Vue {
@@ -70,7 +70,11 @@ export function init(): Promise<VMInstance> {
 	return new Promise(resolve => {
 		const Component = Vue.extend(RootModal)
 		const node = new Component().$mount(document.createElement('div'))
-		document.body.appendChild(node.$el)
+		if (typeof props?.getContainer === 'function') {
+			props.getContainer().appendChild?.(node.$el)
+		} else {
+			document.body.appendChild(node.$el)
+		}
 
 		resolve(node as RootModal)
 	})

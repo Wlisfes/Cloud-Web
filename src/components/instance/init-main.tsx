@@ -2,11 +2,11 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Modal, FormModel, Button, Input, Icon, Statistic, notification } from 'ant-design-vue'
 import { nodeEmailCode } from '@/api'
 import { HttpStatus } from '@/types'
-import { useInstance, VMInstance } from '@/utils/instance'
+import { useInstance, VMInstance, VMInstanceProps } from '@/utils/instance'
 import store from '@/store'
 import style from '@/style/instance/init-main.module.less'
 
-export function init(): Promise<VMInstance> {
+export function init(props?: VMInstanceProps): Promise<VMInstance> {
 	const { onMounte, onUnmounte } = useInstance()
 
 	@Component
@@ -122,7 +122,7 @@ export function init(): Promise<VMInstance> {
 		}
 
 		/**组件卸载**/
-		protected onUnmounte(key: string) {
+		protected onUnmounte(key: 'close' | 'submit') {
 			onUnmounte({ el: this.$el.parentNode as Element, remove: true }).finally(() => {
 				this.$emit(key, () => {
 					this.visible = false
@@ -279,7 +279,11 @@ export function init(): Promise<VMInstance> {
 	return new Promise(resolve => {
 		const Component = Vue.extend(RootModal)
 		const node = new Component().$mount(document.createElement('div'))
-		document.body.appendChild(node.$el)
+		if (typeof props?.getContainer === 'function') {
+			props.getContainer().appendChild?.(node.$el)
+		} else {
+			document.body.appendChild(node.$el)
+		}
 
 		resolve(node as RootModal)
 	})
