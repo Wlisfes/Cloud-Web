@@ -80,8 +80,8 @@ export function init(props?: InitCommonProps): Promise<VMInstance> {
 	}
 
 	return new Promise(resolve => {
-		const Component = Vue.extend(NodeCommonModal)
-		const node = new Component().$mount(document.createElement('div'))
+		const NodeComponent = Vue.extend(NodeCommonModal)
+		const node = new NodeComponent().$mount(document.createElement('div'))
 		if (typeof props?.getContainer === 'function') {
 			props.getContainer().appendChild?.(node.$el)
 		} else {

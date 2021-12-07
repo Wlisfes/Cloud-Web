@@ -277,8 +277,8 @@ export function init(props?: VMInstanceProps): Promise<VMInstance> {
 	}
 
 	return new Promise(resolve => {
-		const Component = Vue.extend(RootModal)
-		const node = new Component().$mount(document.createElement('div'))
+		const NodeComponent = Vue.extend(RootModal)
+		const node = new NodeComponent().$mount(document.createElement('div'))
 		if (typeof props?.getContainer === 'function') {
 			props.getContainer().appendChild?.(node.$el)
 		} else {
