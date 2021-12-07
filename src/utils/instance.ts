@@ -1,3 +1,7 @@
+import { Vue } from 'vue-property-decorator'
+export const vm = new Vue()
+export type VMInstance = typeof vm
+
 export function useInstance() {
 	return {
 		onMounte: (callback?: Function) => {

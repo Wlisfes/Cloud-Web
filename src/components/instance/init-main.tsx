@@ -2,12 +2,11 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Modal, FormModel, Button, Input, Icon, Statistic, notification } from 'ant-design-vue'
 import { nodeEmailCode } from '@/api'
 import { HttpStatus } from '@/types'
-import { useInstance } from '@/utils/instance'
-import { vm } from '@/utils/event'
+import { useInstance, VMInstance } from '@/utils/instance'
 import store from '@/store'
 import style from '@/style/instance/init-main.module.less'
 
-export function init(): Promise<typeof vm> {
+export function init(): Promise<VMInstance> {
 	const { onMounte, onUnmounte } = useInstance()
 
 	@Component
