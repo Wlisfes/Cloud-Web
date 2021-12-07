@@ -25,9 +25,9 @@ function useError(error: AxiosError) {
 				break
 			case 403:
 				notification.error({ message: '账号异常', description: data.message })
-				store.dispatch('user/reset').then(() => {
-					router.replace(`/`)
-				})
+				// store.dispatch('user/reset').then(() => {
+				// 	router.replace(`/`)
+				// })
 				break
 			default:
 				notification.error({ message: '服务器开了小个差', description: data.message })
