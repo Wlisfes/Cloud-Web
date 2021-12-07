@@ -1,85 +1,94 @@
-import { Vue } from 'vue-property-decorator'
-import { Modal, Button } from 'ant-design-vue'
+import { Vue, Component } from 'vue-property-decorator'
+import { Modal, Button, Icon } from 'ant-design-vue'
+import { useInstance, VMInstance } from '@/utils/instance'
 
-interface NodeComponent {
-	name: string
-	content: JSX.Element
+export interface InitCommonProps {
+	content?: JSX.Element
 	confirm?: string
 	cancel?: string
-	onClose?: (self: any) => Promise<any>
-	onSubmit?: (self: any) => Promise<any>
+	getContainer?: () => Element
 }
 
-export function init(props: NodeComponent): Promise<{ self: any; done: Function }> {
-	return new Promise((resolve, reject) => {
-		const nodeComponent = Vue.extend({
-			name: props.name,
-			data() {
-				return {
-					visible: true,
-					loading: false
-				}
-			},
-			methods: {
-				remove() {
-					this.visible = false
-					const timeout = setTimeout(() => {
-						const node = this.$el.parentNode as HTMLElement
-						node.remove()
-						clearTimeout(timeout)
-					}, 300)
-				},
-				async onClose() {
-					await props.onClose?.(this)
-					reject({ self: this, done: this.remove })
-				},
-				async onSubmit() {
-					await props.onSubmit?.(this)
-					resolve({ self: this, done: this.remove })
-				}
-			},
-			render() {
-				return (
-					<Modal
-						v-model={this.visible}
-						width={480}
-						closable={false}
-						maskClosable={false}
-						footer={null}
-						onClose={this.onClose}
-					>
-						<div>{props.content}</div>
-						<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-							<Button type="primary" onClick={this.onClose}>
-								{props.cancel || '取消'}
-							</Button>
-							<Button
-								type="danger"
-								style={{ marginLeft: '10px' }}
-								loading={this.loading}
-								onClick={this.onSubmit}
-							>
-								{props.confirm || '确定'}
-							</Button>
-						</div>
-					</Modal>
-				)
-			}
-		})
+export function init(props?: InitCommonProps): Promise<VMInstance> {
+	const { onMounte, onUnmounte } = useInstance()
+	@Component
+	class NodeCommonModal extends Vue {
+		private visible: boolean = false
+		private loading: boolean = false
 
-		const node = new nodeComponent().$mount(document.createElement('div'))
-		document.body.appendChild(node.$el)
+		/**组件挂载**/
+		protected mounted() {
+			onMounte().finally(() => {
+				this.visible = true
+			})
+		}
+
+		/**组件卸载**/
+		protected onUnmounte(key: 'close' | 'submit') {
+			if (key === 'submit') {
+				this.loading = true
+				this.$emit(key, (delay?: number) => {
+					onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true, delay }).finally(() => {
+						this.loading = false
+						this.visible = false
+					})
+				})
+			} else {
+				onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true }).finally(() => {
+					this.$emit(key, () => {
+						this.visible = false
+					})
+				})
+			}
+		}
+
+		protected render() {
+			return (
+				<Modal
+					v-model={this.visible}
+					width={480}
+					closable={false}
+					maskClosable={false}
+					footer={null}
+					onCancel={() => this.onUnmounte('close')}
+				>
+					<div>
+						{props?.content ? (
+							props?.content
+						) : (
+							<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
+								<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
+								<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
+							</div>
+						)}
+					</div>
+					<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+						<Button type="primary" onClick={() => this.onUnmounte('close')}>
+							{props?.cancel || '取消'}
+						</Button>
+						<Button
+							type="danger"
+							style={{ marginLeft: '10px' }}
+							loading={this.loading}
+							onClick={() => this.onUnmounte('submit')}
+						>
+							{props?.confirm || '确定'}
+						</Button>
+					</div>
+				</Modal>
+			)
+		}
+	}
+
+	return new Promise(resolve => {
+		const Component = Vue.extend(NodeCommonModal)
+		const node = new Component().$mount(document.createElement('div'))
+		if (typeof props?.getContainer === 'function') {
+			props.getContainer().appendChild?.(node.$el)
+		} else {
+			document.body.appendChild(node.$el)
+		}
+
+		resolve(node as NodeCommonModal)
 	})
 }
-
-// init({
-//     content: <div>Holle</div>,
-//     onClose: self => {
-//         self.loading = true
-//         return new Promise(resolve => {
-//             setTimeout(() => {
-//                 resolve(true)
-//             }, 3000)
-//         })
-//     }
-// }).then(() => {})

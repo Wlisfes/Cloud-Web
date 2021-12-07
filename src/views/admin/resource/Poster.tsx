@@ -3,7 +3,7 @@ import { Button, FormModel, Select, Tag, Table, Icon, notification } from 'ant-d
 import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
 import { NodeCover } from '@/views/admin/resource/common'
 import { nodePosters, nodePosterCutover, nodeDeletePoster } from '@/api'
-import { init } from '@/components/instance/init-common'
+import { init as initCommon } from '@/components/instance/init-common'
 import { HttpStatus, Source, NodePosterNodeResponse } from '@/types'
 import style from '@/style/admin/admin.poster.module.less'
 
@@ -81,17 +81,9 @@ export default class Poster extends Vue {
 
 	/**删除图床**/
 	private nodeDeletePoster(id: number) {
-		init({
-			name: 'Poster-Common',
-			content: (
-				<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
-					<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
-					<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
-				</div>
-			)
-		})
-			.then(({ self, done }) => {
-				self.loading = true
+		initCommon().then(node => {
+			node.$once('close', (done: Function) => done())
+			node.$once('submit', (done: Function) => {
 				nodeDeletePoster({ id }).then(({ code, data }) => {
 					if (code === HttpStatus.OK) {
 						done()
@@ -101,7 +93,7 @@ export default class Poster extends Vue {
 					}
 				})
 			})
-			.catch(({ done }) => done())
+		})
 	}
 
 	/**切换图床状态**/

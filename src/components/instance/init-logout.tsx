@@ -17,22 +17,22 @@ export function init(): Promise<VMInstance> {
 		}
 
 		/**组件卸载**/
-		protected onUnmounte(key: string) {
-			onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true }).finally(() => {
-				this.$emit(key, () => {
-					this.visible = false
+		protected onUnmounte(key: 'close' | 'submit') {
+			if (key === 'submit') {
+				this.loading = true
+				this.$emit(key, (delay?: number) => {
+					onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true, delay }).finally(() => {
+						this.loading = false
+						this.visible = false
+					})
 				})
-			})
-		}
-
-		protected onSubmit() {
-			this.loading = true
-			this.$emit('submit', (delay?: number) => {
-				onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true, delay }).finally(() => {
-					this.loading = false
-					this.visible = false
+			} else {
+				onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true }).finally(() => {
+					this.$emit(key, () => {
+						this.visible = false
+					})
 				})
-			})
+			}
 		}
 
 		protected render() {
@@ -57,7 +57,7 @@ export function init(): Promise<VMInstance> {
 							type="danger"
 							style={{ marginLeft: '10px' }}
 							loading={this.loading}
-							onClick={this.onSubmit}
+							onClick={() => this.onUnmounte('submit')}
 						>
 							退出登录
 						</Button>

@@ -4,7 +4,7 @@ import { NodeSource } from '@/views/admin/cloud/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
 import { nodeCloudSources, nodeCloudSourceCutover, nodeDeleteCloudSource } from '@/api'
 import { HttpStatus, Source as SourceState, NodeCloudSource } from '@/types'
-import { init } from '@/components/instance/init-common'
+import { init as initCommon } from '@/components/instance/init-common'
 import style from '@/style/admin/admin.cloud-source.module.less'
 
 type SourceOption = {
@@ -115,24 +115,17 @@ export default class Source extends Vue {
 				this.$refs.nodeSource.init('update', id)
 				break
 			case 'delete':
-				init({
-					name: 'CloudSource-Common',
-					content: (
-						<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
-							<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
-							<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
-						</div>
-					)
-				})
-					.then(({ self, done }) => {
-						self.loading = true
+				initCommon().then(node => {
+					node.$once('close', (done: Function) => done())
+					node.$once('submit', (done: Function) => {
 						this.nodeDeleteCloudSource(id).finally(() => {
 							done()
 							this.source.loading = true
 							this.source.initSource()
 						})
 					})
-					.catch(({ done }) => done())
+				})
+
 				break
 		}
 	}

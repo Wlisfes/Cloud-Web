@@ -4,7 +4,7 @@ import { Table, Tag, Button, FormModel, Select, Input, Menu, Icon, notification 
 import { NodeSource } from '@/views/admin/archive/common'
 import { AppRootNode, AppPopover, AppCutover, AppSatus } from '@/components/common'
 import { nodeSources, nodeSourceCutover, nodeDeleteSource } from '@/api'
-import { init } from '@/components/instance/init-common'
+import { init as initCommon } from '@/components/instance/init-common'
 import { HttpStatus, Source as SourceState, NodeSource as NodeSourceState } from '@/types'
 import style from '@/style/admin/admin.source.module.less'
 
@@ -117,24 +117,16 @@ export default class Source extends Vue {
 				this.$refs.nodeSource.init('update', id)
 				break
 			case 'delete':
-				init({
-					name: 'Source-Common',
-					content: (
-						<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
-							<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
-							<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
-						</div>
-					)
-				})
-					.then(({ self, done }) => {
-						self.loading = true
+				initCommon().then(node => {
+					node.$once('close', (done: Function) => done())
+					node.$once('submit', (done: Function) => {
 						this.nodeDeleteSource(id).finally(() => {
 							done()
 							this.source.loading = true
 							this.source.initSource()
 						})
 					})
-					.catch(({ done }) => done())
+				})
 				break
 		}
 	}

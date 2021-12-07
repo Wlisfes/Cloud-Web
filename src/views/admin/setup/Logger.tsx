@@ -3,7 +3,7 @@ import { Button, FormModel, Select, Tag, Table, Tooltip, Icon, notification } fr
 import { AppRootNode } from '@/components/common'
 import { NodeLogger } from '@/views/admin/setup/common'
 import { nodeLoggers, nodeDeleteLogger } from '@/api'
-import { init } from '@/components/instance/init-common'
+import { init as initCommon } from '@/components/instance/init-common'
 import { HttpStatus, Source, LoggerResponse } from '@/types'
 import style from '@/style/admin/admin.logger.module.less'
 type SourceOption = {
@@ -76,17 +76,9 @@ export default class Logger extends Vue {
 
 	/**删除Logger**/
 	private nodeDeleteLogger(id: number) {
-		init({
-			name: 'Logger-Common',
-			content: (
-				<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
-					<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
-					<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
-				</div>
-			)
-		})
-			.then(({ self, done }) => {
-				self.loading = true
+		initCommon().then(node => {
+			node.$once('close', (done: Function) => done())
+			node.$once('submit', (done: Function) => {
 				nodeDeleteLogger({ id }).then(({ code, data }) => {
 					if (code === HttpStatus.OK) {
 						done()
@@ -96,7 +88,7 @@ export default class Logger extends Vue {
 					}
 				})
 			})
-			.catch(({ done }) => done())
+		})
 	}
 
 	protected created() {
