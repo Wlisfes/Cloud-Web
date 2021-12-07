@@ -10,20 +10,20 @@ export function useInstance() {
 				resolve('mounte')
 			})
 		},
-		onUnmounte: ({ el, callback, remove }: { el: Element; callback?: Function; remove?: boolean }) => {
+		onUnmounte: (props: { el: Element; callback?: Function; remove?: boolean; delay?: number }) => {
 			return new Promise((resolve, reject) => {
-				if (!el) {
+				if (!props.el) {
 					reject('el元素不能为空')
 				}
 
-				typeof callback === 'function' && callback()
+				typeof props.callback === 'function' && props.callback()
 				const timeout = setTimeout(() => {
-					if (remove) {
+					if (props.remove) {
 						// el?.previousElementSibling?.remove?.()
-						el?.remove?.()
+						props.el?.remove?.()
 						clearTimeout(timeout)
 					}
-				}, 300)
+				}, props.delay || 300)
 				resolve('unMounte')
 			})
 		}

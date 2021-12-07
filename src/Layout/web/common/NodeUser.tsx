@@ -2,7 +2,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 import { Icon, Popover, Menu, Avatar } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
-import { init } from '@/components/instance/init-logout'
+import { init as initLogout } from '@/components/instance/init-logout'
 // import { toggleFull, isFull, watchFull } from 'be-full'
 import style from '@/style/common/node.user.module.less'
 
@@ -37,17 +37,13 @@ export default class NodeUser extends Vue {
 				this.$router.push('/admin')
 				break
 			case 'logout':
-				init().then(({ node, vm }) => {
-					node.init()
-					vm.$once('logout-submit', () => {
+				initLogout().then(node => {
+					node.$once('close', (done: Function) => done())
+					node.$once('submit', (done: Function) => {
 						setTimeout(async () => {
 							await this.$store.dispatch('user/logout')
-							node.onClose()
-						}, 500)
-					})
-					vm.$once('logout-close', () => {
-						vm.$off('logout-submit')
-						vm.$off('logout-close')
+							done()
+						}, 1000)
 					})
 				})
 				break

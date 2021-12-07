@@ -3,8 +3,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import { Icon, Menu, Popover, Modal } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
 import { toggleFull, isFull, watchFull } from 'be-full'
-import * as logout from '@/components/instance/init-logout'
-import * as setup from '@/components/instance/init-setup'
+import { init as initLogout } from '@/components/instance/init-logout'
+import { init as initSetup } from '@/components/instance/init-setup'
 
 @Component
 export default class AppUser extends Vue {
@@ -45,18 +45,14 @@ export default class AppUser extends Vue {
 				window.open('https://github.com/Wlisfes')
 				break
 			default:
-				logout.init().then(({ node, vm }) => {
-					node.init()
-					vm.$once('logout-submit', () => {
+				initLogout().then(node => {
+					node.$once('close', (done: Function) => done())
+					node.$once('submit', (done: Function) => {
 						setTimeout(async () => {
 							await this.$store.dispatch('user/logout')
-							node.onClose()
+							done()
 							this.$router.push('/')
-						}, 500)
-					})
-					vm.$once('logout-close', () => {
-						vm.$off('logout-submit')
-						vm.$off('logout-close')
+						}, 1000)
 					})
 				})
 				break
@@ -64,13 +60,8 @@ export default class AppUser extends Vue {
 	}
 
 	/**设置**/
-	private onSetup() {
-		setup
-			.init()
-			.then(({ self, done }) => {
-				done()
-			})
-			.catch(({ self, done }) => done())
+	private initNodeSetup() {
+		initSetup()
 	}
 
 	protected render() {
@@ -124,7 +115,7 @@ export default class AppUser extends Vue {
 						</div>
 					)}
 				</Popover>
-				<div class="app-user-node" style={{ padding: '0 10px' }} onClick={this.onSetup}>
+				<div class="app-user-node" style={{ padding: '0 10px' }} onClick={this.initNodeSetup}>
 					<Icon type="setting" />
 				</div>
 
