@@ -52,9 +52,7 @@ export function init(props?: InitCommonProps): Promise<VMInstance> {
 					onCancel={() => this.onUnmounte('close')}
 				>
 					<div>
-						{props?.content ? (
-							props?.content
-						) : (
+						{props?.content || (
 							<div style={{ display: 'flex', alignItems: 'center', marginBottom: '45px' }}>
 								<Icon type="exclamation-circle" style={{ fontSize: '32px', color: '#ff4d4f' }} />
 								<h2 style={{ margin: '0 0 0 10px', fontSize: '18px' }}>确定要删除吗？</h2>
