@@ -39,3 +39,8 @@ export function intheEnd(distance = 300) {
 		scrollHeight
 	}
 }
+
+/**读取静态文件**/
+export function useFile(path: 'icon' | 'static', name: string) {
+	return require(`@/assets/${path + '/' + name}`)
+}

@@ -5,12 +5,13 @@
 	flex-direction: column;
 	margin: -15px;
 }
+
 .node-source {
 	display: flex;
 	flex-wrap: wrap;
 	background-color: #f0f2f5;
 	margin: 0 -7.5px;
-	@media (max-width: 680px) {
+	@media (max-width: 678px) {
 		margin: 0;
 		padding: 0 10px;
 	}
@@ -20,6 +21,9 @@
 		margin-bottom: 15px;
 		@media (max-width: 1080px) {
 			width: 50%;
+			&:last-child {
+				width: 100%;
+			}
 		}
 		@media (max-width: 540px) {
 			width: 100%;
@@ -32,7 +36,7 @@
 			display: flex;
 			align-items: center;
 			font-size: 15px;
-			line-height: 1.7;
+			line-height: 24px;
 			color: #444444;
 			padding: 8px 12px;
 		}
@@ -43,5 +47,31 @@
 			font-size: 24px;
 			font-family: Arial, Helvetica, sans-serif;
 		}
+	}
+}
+
+.node-compute {
+	display: flex;
+	flex-direction: column;
+	background-color: #f0f2f5;
+	padding-bottom: 15px;
+	@media (max-width: 678px) {
+		padding: 0 17.5px 15px;
+	}
+	&-tabs {
+		background-color: #ffffff;
+		:global {
+			.ant-tabs-tab {
+				padding: 12px 5px;
+				margin-right: 20px;
+				&:first-child {
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+	&-container {
+		height: 400px;
+		background-color: #ffffff;
 	}
 }
