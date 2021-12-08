@@ -21,12 +21,7 @@ export default class NodeCompute extends Vue {
 	]
 
 	protected mounted() {
-		this.useECharts(
-			this.useOption({
-				XData: ['2021-01', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-				YData: [10, 52, 200, 334, 390, 330, 220, 334, 390, 330, 220, 280]
-			})
-		)
+		this.onChange(1)
 	}
 
 	/**组合图表参数**/
@@ -39,7 +34,8 @@ export default class NodeCompute extends Vue {
 					splitLine: { show: true, lineStyle: { type: 'dashed' } },
 					type: 'category',
 					data: props.XData,
-					axisTick: { alignWithLabel: true }
+					axisTick: { alignWithLabel: true },
+					axisLabel: { margin: 20 }
 				}
 			],
 			yAxis: [{ splitLine: { show: true, lineStyle: { type: 'dashed' } }, type: 'value' }],
