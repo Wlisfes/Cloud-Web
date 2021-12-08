@@ -1,6 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Tabs, Avatar } from 'ant-design-vue'
 import { init as initECharts, EChartsOption, EChartsType } from 'echarts'
+import { nodeComputeGroup } from '@/api'
+import { HttpStatus } from '@/types'
 import { useFile } from '@/utils/common'
 import style from '@/style/admin/admin.home.module.less'
 
@@ -19,45 +21,34 @@ export default class NodeCompute extends Vue {
 	]
 
 	protected mounted() {
-		this.initNodeECharts({
-			tooltip: {
-				trigger: 'axis',
-				axisPointer: { type: 'shadow' }
-			},
-			grid: {
-				left: '20px',
-				right: '20px',
-				bottom: '20px',
-				top: '20px',
-				containLabel: true
-			},
+		this.useECharts(
+			this.useOption({
+				XData: ['2021-01', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				YData: [10, 52, 200, 334, 390, 330, 220, 334, 390, 330, 220, 280]
+			})
+		)
+	}
+
+	/**组合图表参数**/
+	private useOption(props: { XData: Array<string | number>; YData: number[] }): EChartsOption {
+		return {
+			tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+			grid: { left: '20px', right: '20px', bottom: '20px', top: '20px', containLabel: true },
 			xAxis: [
 				{
 					splitLine: { show: true, lineStyle: { type: 'dashed' } },
 					type: 'category',
-					data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+					data: props.XData,
 					axisTick: { alignWithLabel: true }
 				}
 			],
-			yAxis: [
-				{
-					splitLine: { show: true, lineStyle: { type: 'dashed' } },
-					type: 'value'
-				}
-			],
-			series: [
-				{
-					name: '增量',
-					type: 'bar',
-					barWidth: '50%',
-					data: [10, 52, 200, 334, 390, 330, 220, 334, 390, 330, 220, 280]
-				}
-			]
-		})
+			yAxis: [{ splitLine: { show: true, lineStyle: { type: 'dashed' } }, type: 'value' }],
+			series: [{ name: '增量', type: 'bar', barWidth: '50%', data: props.YData }]
+		}
 	}
 
 	/**创建图表**/
-	private initNodeECharts(option: EChartsOption) {
+	private useECharts(option: EChartsOption) {
 		setTimeout(() => {
 			if (!this.instance) {
 				this.instance = initECharts(this.$refs.compute)
@@ -71,11 +62,25 @@ export default class NodeCompute extends Vue {
 		}, 0)
 	}
 
+	private async onChange(current: number) {
+		try {
+			const { code, data } = await nodeComputeGroup({ current })
+			if (code === HttpStatus.OK) {
+				this.useECharts(
+					this.useOption({
+						XData: data.list.map(k => k.key),
+						YData: data.list.map(k => k.value)
+					})
+				)
+			}
+		} catch (e) {}
+	}
+
 	protected render() {
 		return (
 			<div class={style['node-compute']}>
 				<div class={style['node-compute-tabs']}>
-					<Tabs v-model={this.current}>
+					<Tabs v-model={this.current} onChange={this.onChange}>
 						{this.nodeTabs.map(item => (
 							<Tabs.TabPane
 								key={item.key}

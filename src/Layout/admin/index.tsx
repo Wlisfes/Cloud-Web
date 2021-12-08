@@ -50,7 +50,7 @@ export default class Container extends Vue {
 					<div class="app-admin-container-logo">
 						<router-link class="app-admin-container-logo-conter" to="/admin">
 							<img src="https://oss.lisfes.cn/cloud/stctic/1625035983457.png" />
-							{!this.collapsed && <h1 class="app-ellipsis">情雨随风的青春</h1>}
+							{!this.collapsed && <h1 class="app-ellipsis">妖雨录</h1>}
 						</router-link>
 					</div>
 					<div class="app-menu">

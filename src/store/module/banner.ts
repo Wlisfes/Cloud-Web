@@ -25,7 +25,7 @@ const banner: Module<BannerState, RootState> = {
 				start: '20210823',
 				end: '20290824',
 				cover: 'https://oss.lisfes.cn/cloud/stctic/1624934512799.jpg',
-				name: '情雨随风的青春',
+				name: '妖雨录',
 				search: 'https://play.lisfes.cn'
 			}
 		],
