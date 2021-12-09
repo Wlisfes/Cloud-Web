@@ -1,9 +1,10 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { Button, FormModel, Select, Tag, Table, Icon, notification } from 'ant-design-vue'
+import { Button, FormModel, Select, Tag, Table, Icon, Dropdown, Menu, notification } from 'ant-design-vue'
 import { AppRootNode, AppCutover, AppSatus } from '@/components/common'
 import { NodeCover } from '@/views/admin/resource/common'
 import { nodePosters, nodePosterCutover, nodeDeletePoster } from '@/api'
 import { init as initCommon } from '@/components/instance/init-common'
+import { init as initCropper } from '@/components/instance/init-cropper'
 import { HttpStatus, Source, NodePosterNodeResponse } from '@/types'
 import style from '@/style/admin/admin.poster.module.less'
 
@@ -13,6 +14,7 @@ type SourceOption = {
 		type: number | undefined
 	}
 }
+type cropperKey = 'avatar' | 'upload' | 'cover' | 'photo'
 
 @Component
 export default class Poster extends Vue {
@@ -110,8 +112,26 @@ export default class Poster extends Vue {
 		}
 	}
 
+	/**新增图床**/
+	private onInitCropper(key: cropperKey) {
+		const Map = { avatar: 1, cover: 16 / 9, photo: 1, upload: 1 }
+		initCropper({
+			path: key,
+			ratio: Map[key]
+		}).then(node => {
+			node.$once('close', (done: Function) => done())
+			node.$once('change', (done: Function) => done())
+			node.$once('submit', ({ done }: { done: Function }) => {
+				this.source.initSource()
+				done()
+			})
+		})
+	}
+
 	protected render() {
 		const { source } = this
+
+		const maCursor = { margin: 0, cursor: 'pointer', width: '100%', textAlign: 'center' }
 		return (
 			<AppRootNode>
 				<div class={style['app-conter']}>
@@ -152,7 +172,31 @@ export default class Poster extends Vue {
 							<Button onClick={this.source.onReset}>重置</Button>
 						</FormModel.Item>
 						<FormModel.Item>
-							<Button type="primary">新增</Button>
+							<Dropdown trigger={['click']}>
+								<Button type="primary">新增</Button>
+								<Menu slot="overlay" onClick={(e: { key: cropperKey }) => this.onInitCropper(e.key)}>
+									<Menu.Item key="avatar">
+										<Tag color="pink" style={maCursor}>
+											Avatar
+										</Tag>
+									</Menu.Item>
+									<Menu.Item key="upload">
+										<Tag color="cyan" style={maCursor}>
+											Upload
+										</Tag>
+									</Menu.Item>
+									<Menu.Item key="cover">
+										<Tag color="blue" style={maCursor}>
+											Cover
+										</Tag>
+									</Menu.Item>
+									<Menu.Item key="photo">
+										<Tag color="purple" style={maCursor}>
+											Photo
+										</Tag>
+									</Menu.Item>
+								</Menu>
+							</Dropdown>
 						</FormModel.Item>
 						<FormModel.Item style={{ marginRight: 0 }}>
 							<Button onClick={() => this.source.initSource()}>刷新</Button>
@@ -192,8 +236,10 @@ export default class Poster extends Vue {
 										<Tag color="pink">Avatar</Tag>
 									) : props.type === 2 ? (
 										<Tag color="cyan">Upload</Tag>
-									) : (
+									) : props.type === 3 ? (
 										<Tag color="blue">Cover</Tag>
+									) : (
+										<Tag color="purple">Photo</Tag>
 									)
 								},
 								status: (props: NodePosterNodeResponse) => <AppSatus status={props.status}></AppSatus>,
