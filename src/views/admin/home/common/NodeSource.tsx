@@ -1,18 +1,36 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 import { Icon, Divider, Avatar } from 'ant-design-vue'
 import { Skeleton, SkeletonItem } from 'element-ui'
-import { NodeComputeTotalResponse } from '@/types'
+import { nodeComputeTotal } from '@/api'
+import { HttpStatus, NodeComputeTotalResponse } from '@/types'
 import style from '@/style/admin/admin.home.module.less'
 
 @Component
 export default class NodeSource extends Vue {
-	@Prop({ type: Object, default: () => null }) node!: NodeComputeTotalResponse
+	private node: NodeComputeTotalResponse | null = null
+	private loading: boolean = true
+
+	protected created() {
+		this.nodeComputeTotal()
+	}
+
+	/**各类总数统计**/
+	private async nodeComputeTotal() {
+		try {
+			const { code, data } = await nodeComputeTotal()
+			if (code === HttpStatus.OK) {
+				this.node = data
+				this.loading = false
+			}
+		} catch (e) {
+			this.loading = false
+		}
+	}
 
 	private useSource(props: { title: string; total: number; cover: string }) {
-		const { node } = this
 		const flexColumn = { display: 'flex', flexDirection: 'column' }
 		return (
-			<Skeleton loading={node === null} animated>
+			<Skeleton loading={this.loading} animated>
 				<div slot="template" class={style['item-conter']}>
 					<div class={style['item-header']}>
 						<div style={{ flex: 1 }}>{props.title}</div>

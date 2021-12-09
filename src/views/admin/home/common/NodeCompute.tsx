@@ -1,5 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Tabs, Avatar } from 'ant-design-vue'
+import { Skeleton, SkeletonItem } from 'element-ui'
 import { init as initECharts, EChartsOption, EChartsType } from 'echarts'
 import { nodeComputeGroup } from '@/api'
 import { HttpStatus } from '@/types'
@@ -10,6 +11,7 @@ import style from '@/style/admin/admin.home.module.less'
 export default class NodeCompute extends Vue {
 	$refs!: { compute: HTMLDivElement }
 
+	private loading: boolean = true
 	private instance!: EChartsType
 	private current: number = 1
 	private nodeTabs = [
@@ -62,6 +64,7 @@ export default class NodeCompute extends Vue {
 		try {
 			const { code, data } = await nodeComputeGroup({ current })
 			if (code === HttpStatus.OK) {
+				this.loading = false
 				this.useECharts(
 					this.useOption({
 						XData: data.list.map(k => k.key),
@@ -69,7 +72,9 @@ export default class NodeCompute extends Vue {
 					})
 				)
 			}
-		} catch (e) {}
+		} catch (e) {
+			this.loading = false
+		}
 	}
 
 	protected render() {
@@ -92,7 +97,17 @@ export default class NodeCompute extends Vue {
 						))}
 					</Tabs>
 				</div>
-				<div ref="compute" class={style['node-compute-container']}></div>
+
+				<Skeleton loading={this.loading} animated>
+					<div slot="template" class={style['node-compute-placeholder']}>
+						{Object.keys([...Array(12)]).map(k => (
+							<div key={k} style={{ flex: 1 }}>
+								<SkeletonItem style={{ width: '50%', height: '100%', margin: '0 25%' }} />
+							</div>
+						))}
+					</div>
+					<div ref="compute" class={style['node-compute-container']}></div>
+				</Skeleton>
 			</div>
 		)
 	}
