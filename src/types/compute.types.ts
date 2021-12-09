@@ -1,9 +1,14 @@
+export type MonthTotal = {
+	total: number
+	count: number
+}
+
 export type NodeCompute = {
-	user: number
-	cloud: number
-	article: number
-	minute: number
-	source: number
+	user: MonthTotal
+	cloud: MonthTotal
+	article: MonthTotal
+	minute: MonthTotal
+	source: MonthTotal
 	current: number
 	list: Array<{ key: string; value: number }>
 }
