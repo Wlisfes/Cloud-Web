@@ -14,10 +14,16 @@ export enum Path {
 	cover = 3,
 	photo = 4
 }
+export type pathString = 'avatar' | 'upload' | 'cover' | 'photo'
 export interface InitCropperProps extends VMInstanceProps {
 	ratio?: number
-	path: 'avatar' | 'upload' | 'cover' | 'photo'
+	path: pathString
 	cover?: string
+}
+export interface InitOSSUploadProps {
+	file: File | Blob
+	path: pathString
+	event: string
 }
 
 export function init(props?: InitCropperProps): Promise<VMInstance> {
@@ -64,6 +70,52 @@ export function init(props?: InitCropperProps): Promise<VMInstance> {
 			})
 		}
 
+		/**上传图片**/
+		private async initOSSUpload(node: InitOSSUploadProps) {
+			try {
+				this.loading = true
+				const { code, data } = await nodeOssSts()
+				if (code === HttpStatus.OK) {
+					const { accessKeyId, accessKeySecret, stsToken } = data
+					const oss = this.initOSS({ accessKeyId, accessKeySecret, stsToken })
+
+					const buffer = await oss.Buffer(node.file)
+					const key = oss.create(this.name, node.path)
+					const response = await oss.client.put(key, buffer)
+
+					if (response.res.status === HttpStatus.OK) {
+						const result = await nodeCreatePoster({
+							type: Path[props?.path || 'photo'],
+							path: response.name,
+							url: `${data.path}/${response.name}`
+						})
+						this.$emit(node.event, {
+							props: {
+								id: result.data.id,
+								type: result.data.type,
+								name: response.name,
+								path: `${data.path}/${response.name}`
+							},
+							done: (delay?: number) => {
+								onUnmounte({
+									el: (this as any)._vnode.elm.parentNode,
+									remove: true,
+									delay
+								}).finally(() => {
+									this.loading = false
+									this.visible = false
+								})
+							}
+						})
+					}
+				}
+				return false
+			} catch (e) {
+				this.loading = false
+				return false
+			}
+		}
+
 		/**组件挂载后图片注入**/
 		public upload(cover?: string) {
 			if (cover) {
@@ -99,96 +151,21 @@ export function init(props?: InitCropperProps): Promise<VMInstance> {
 			}
 
 			const cover = URL.createObjectURL(file)
-			this.loading = true
 			this.name = file.name
 			this.cover = cover
 
-			try {
-				const { code, data } = await nodeOssSts()
-				if (code === HttpStatus.OK) {
-					const { accessKeyId, accessKeySecret, stsToken } = data
-					const oss = this.initOSS({ accessKeyId, accessKeySecret, stsToken })
-
-					const buffer = await oss.Buffer(file)
-					const key = oss.create(this.name, props?.path || 'photo')
-					const response = await oss.client.put(key, buffer)
-
-					if (response.res.status === HttpStatus.OK) {
-						const node = await nodeCreatePoster({
-							type: Path[props?.path || 'photo'],
-							path: response.name,
-							url: `${data.path}/${response.name}`
-						})
-						this.$emit('submit', {
-							props: {
-								id: node.data.id,
-								type: node.data.type,
-								name: response.name,
-								path: `${data.path}/${response.name}`
-							},
-							done: (delay?: number) => {
-								onUnmounte({
-									el: (this as any)._vnode.elm.parentNode,
-									remove: true,
-									delay
-								}).finally(() => {
-									this.loading = false
-									this.visible = false
-								})
-							}
-						})
-					}
-				}
-				return false
-			} catch (e) {
-				this.loading = false
-				return false
-			}
+			return await this.initOSSUpload({ file, path: props?.path || 'photo', event: 'submit' })
 		}
 
 		/**图片裁剪上传**/
-		private async initCropperUpload() {
-			try {
-				this.loading = true
-				const { code, data } = await nodeOssSts()
-				if (code === HttpStatus.OK) {
-					const { accessKeyId, accessKeySecret, stsToken } = data
-					const oss = this.initOSS({ accessKeyId, accessKeySecret, stsToken })
-
-					this.cropper?.getCroppedCanvas().toBlob(async blob => {
-						const buffer = await oss.Buffer(blob as Blob)
-						const key = oss.create(this.name, props?.path || 'avatar')
-						const response = await oss.client.put(key, buffer)
-						if (response.res.status === HttpStatus.OK) {
-							const node = await nodeCreatePoster({
-								type: Path[props?.path || 'avatar'],
-								path: response.name,
-								url: `${data.path}/${response.name}`
-							})
-							this.$emit('submit', {
-								props: {
-									id: node.data.id,
-									type: node.data.type,
-									name: response.name,
-									path: `${data.path}/${response.name}`
-								},
-								done: (delay?: number) => {
-									onUnmounte({
-										el: (this as any)._vnode.elm.parentNode,
-										remove: true,
-										delay
-									}).finally(() => {
-										this.loading = false
-										this.visible = false
-									})
-								}
-							})
-						}
-					})
-				}
-			} catch (e) {
-				this.loading = false
-			}
+		private initCropperUpload() {
+			this.cropper?.getCroppedCanvas().toBlob(async blob => {
+				await this.initOSSUpload({
+					file: blob as Blob,
+					path: props?.path || 'avatar',
+					event: 'submit'
+				})
+			})
 		}
 
 		/**组件挂载**/
