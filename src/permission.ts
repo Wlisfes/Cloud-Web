@@ -19,6 +19,7 @@ router.beforeEach(async (to, form, next) => {
 				const route = await store.dispatch('base/useRouter')
 				await new Promise(resolve => {
 					router.addRoute(route)
+					router.addRoute({ path: '*', redirect: '/404' })
 					resolve(route)
 				})
 
