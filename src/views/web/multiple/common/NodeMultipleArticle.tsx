@@ -90,7 +90,7 @@ export default class NodeMultipleArticle extends Vue {
 												</div>
 												<div class={style['node-icon']}>
 													<i class="el-icon-chat-dot-square" style={{ fontSize: '16px' }}></i>
-													<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+													<span style={{ marginLeft: '5px' }}>{k.comment || 0}</span>
 												</div>
 											</div>
 										</div>

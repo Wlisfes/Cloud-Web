@@ -12,6 +12,7 @@ export type NodeCloud = NodeDate & {
 	order: number
 	size: number
 	browse: number
+	comment: number
 	description: string | null
 	parent: NodeCloud | null
 	children: NodeCloud[]

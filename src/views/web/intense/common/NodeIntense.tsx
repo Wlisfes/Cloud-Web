@@ -102,7 +102,7 @@ export default class NodeIntenseCloud extends Vue {
 														</div>
 														<div class={style['node-play']}>
 															<i class="el-icon-chat-dot-square"></i>
-															<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+															<span style={{ marginLeft: '5px' }}>{k.comment || 0}</span>
 														</div>
 													</div>
 												</div>

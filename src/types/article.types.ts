@@ -11,6 +11,7 @@ export type NodeArticle = NodeDate & {
 	status: number
 	order: number
 	browse: number
+	comment: number
 	source: NodeSource[]
 	user: NodeUserResponse
 }
