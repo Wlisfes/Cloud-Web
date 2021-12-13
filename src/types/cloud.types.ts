@@ -13,6 +13,7 @@ export type NodeCloud = NodeDate & {
 	size: number
 	browse: number
 	comment: number
+	star: { total: number; where: boolean }
 	description: string | null
 	parent: NodeCloud | null
 	children: NodeCloud[]

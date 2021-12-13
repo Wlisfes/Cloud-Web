@@ -97,8 +97,16 @@ export default class NodeIntenseCloud extends Vue {
 															<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
 														</div>
 														<div class={style['node-play']}>
-															<i class="el-icon-star-on"></i>
-															<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+															<i
+																class="el-icon-star-on"
+																style={{
+																	fontSize: '18px',
+																	color: k.star.where ? '#1989fa' : '#999999'
+																}}
+															></i>
+															<span style={{ marginLeft: '5px' }}>
+																{k.star.total || 0}
+															</span>
 														</div>
 														<div class={style['node-play']}>
 															<i class="el-icon-chat-dot-square"></i>
