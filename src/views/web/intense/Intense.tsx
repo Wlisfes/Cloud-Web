@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppSearch } from '@/components/common'
 import { NodeIntense } from '@/views/web/intense/common'
-import { nodeClientClouds } from '@/api'
+import { nodeClientClouds, nodeSearchClouds } from '@/api'
 import { HttpStatus, Client, NodeCloud } from '@/types'
 import { intheEnd } from '@/utils/common'
 import style from '@/style/web/web.intense.module.less'
@@ -65,9 +65,10 @@ export default class Intense extends Vue {
 		onSearch: async value => {
 			try {
 				this.client.node.loading = true
-				const { code, data } = await nodeClientClouds({
+				const { code, data } = await nodeSearchClouds({
 					page: 1,
 					size: 10,
+					status: 1,
 					title: value
 				})
 				if (code === HttpStatus.OK) {

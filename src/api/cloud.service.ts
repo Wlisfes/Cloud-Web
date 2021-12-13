@@ -55,10 +55,21 @@ export function nodeClouds(params: types.NodeCloudsParameter) {
 	})
 }
 
+/******************************************************************************/
+
 /**音视频列表-客户端**/
 export function nodeClientClouds(params: types.NodeClientCloudsParameter) {
 	return request<types.NodeClientCloudsResponse>({
 		url: `/api/cloud/client/list-node`,
+		method: 'GET',
+		params
+	})
+}
+
+/**音视频关键字搜索-客户端**/
+export function nodeSearchClouds(params: types.NodeCloudsParameter) {
+	return request<types.NodeCloudsResponse>({
+		url: `/api/cloud/client/keyword-node`,
 		method: 'GET',
 		params
 	})

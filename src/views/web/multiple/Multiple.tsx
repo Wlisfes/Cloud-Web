@@ -68,6 +68,7 @@ export default class Multiple extends Vue {
 				const { code, data } = await nodeSearchArticles({
 					page: 1,
 					size: 10,
+					status: 1,
 					title: value
 				})
 				if (code === HttpStatus.OK) {
