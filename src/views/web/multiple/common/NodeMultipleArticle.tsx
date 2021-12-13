@@ -1,5 +1,6 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
+import { isToken } from '@/directives/command/is-login'
 import { NodeArticle } from '@/types'
 import style from '@/style/web/common/node.multiple.article.module.less'
 
@@ -8,6 +9,18 @@ export default class NodeMultipleArticle extends Vue {
 	@Prop({ type: Array, default: () => [] }) dataSource!: NodeArticle[]
 	@Prop({ type: Boolean, default: true }) loading!: boolean
 	@Prop({ type: Number, default: 0 }) total!: number
+
+	/**收藏、取消**/
+	private async onNodeStar() {
+		const status = await isToken()
+		console.log(status)
+		if (status === 2) {
+			this.$emit('refresh')
+		} else if (status === 1) {
+			try {
+			} catch (e) {}
+		}
+	}
 
 	protected render() {
 		return (
@@ -84,7 +97,10 @@ export default class NodeMultipleArticle extends Vue {
 													<i class="el-icon-view" style={{ fontSize: '16px' }}></i>
 													<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
 												</div>
-												<div class={style['node-icon']}>
+												<div
+													class={style['node-icon']}
+													onClick={(e: Event) => isToken(this.onNodeStar, e)}
+												>
 													<i
 														class="el-icon-star-on"
 														style={{

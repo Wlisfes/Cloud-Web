@@ -123,7 +123,7 @@ export function init(props?: VMInstanceProps): Promise<VMInstance> {
 
 		/**组件卸载**/
 		protected onUnmounte(key: 'close' | 'submit') {
-			onUnmounte({ el: this.$el.parentNode as Element, remove: true }).finally(() => {
+			onUnmounte({ el: (this as any)._vnode.elm.parentNode, remove: true }).finally(() => {
 				this.$emit(key, () => {
 					this.visible = false
 				})

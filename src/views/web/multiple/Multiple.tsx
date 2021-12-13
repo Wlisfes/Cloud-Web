@@ -26,14 +26,14 @@ export default class Multiple extends Vue {
 			data: [],
 			loading: false
 		},
-		initSource: (merge = false) => {
+		initSource: (merge = false, page?: number, size?: number) => {
 			return new Promise(async (resolve, rejcet) => {
 				try {
 					this.client.loading = true
 					const { client } = this
 					const { code, data } = await nodeClientArticles({
-						page: client.page,
-						size: client.size,
+						page: page || client.page,
+						size: size || client.size,
 						title: client.keyword
 					})
 					if (code === HttpStatus.OK) {
@@ -59,8 +59,14 @@ export default class Multiple extends Vue {
 			const { end } = intheEnd()
 			if (!client.loading && end && client.total > client.dataSource.length) {
 				this.client.page++
+				this.client.size = 12
 				this.client.initSource(true)
 			}
+		},
+		onRefresh: () => {
+			const { dataSource } = this.client
+			const size = dataSource.length > 12 ? dataSource.length : 12
+			this.client.initSource(false, 1, size)
 		},
 		onSearch: async value => {
 			try {
@@ -123,6 +129,7 @@ export default class Multiple extends Vue {
 					total={client.total}
 					loading={client.loading}
 					dataSource={client.dataSource}
+					onRefresh={this.client.onRefresh}
 				></NodeMultipleArticle>
 			</div>
 		)

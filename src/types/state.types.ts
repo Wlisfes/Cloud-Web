@@ -35,9 +35,10 @@ export type Client<T, R> = {
 	loading: boolean
 	dataSource: T
 	node: R
-	initSource: (merge?: boolean) => Promise<any> /**列表初始化接口**/
+	initSource: (merge?: boolean, page?: number, size?: number) => Promise<any> /**列表初始化接口**/
 	onClose: () => void /**关闭loading**/
 	onSearch?: (value: string) => void /**搜索列表接口**/
+	onRefresh?: () => void /**刷新列表事件**/
 	onSubmit?: () => void /**搜索提交事件**/
 	onChange?: (props: { value: string; reset: boolean }) => void /**搜索关键字change事件**/
 	onMore?: () => void /**加载更多事件**/
