@@ -12,6 +12,7 @@ export type NodeArticle = NodeDate & {
 	order: number
 	browse: number
 	comment: number
+	star: { total: number; where: boolean }
 	source: NodeSource[]
 	user: NodeUserResponse
 }

@@ -85,8 +85,14 @@ export default class NodeMultipleArticle extends Vue {
 													<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
 												</div>
 												<div class={style['node-icon']}>
-													<i class="el-icon-star-on" style={{ fontSize: '18px' }}></i>
-													<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
+													<i
+														class="el-icon-star-on"
+														style={{
+															fontSize: '18px',
+															color: k.star.where ? '#1989fa' : '#999999'
+														}}
+													></i>
+													<span style={{ marginLeft: '5px' }}>{k.star.total || 0}</span>
 												</div>
 												<div class={style['node-icon']}>
 													<i class="el-icon-chat-dot-square" style={{ fontSize: '16px' }}></i>
