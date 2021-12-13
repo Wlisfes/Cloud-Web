@@ -1,7 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppSearch } from '@/components/common'
 import { NodeMultipleArticle } from '@/views/web/multiple/common'
-import { nodeClientArticles } from '@/api'
+import { nodeClientArticles, nodeSearchArticles } from '@/api'
 import { HttpStatus, Client, NodeArticle } from '@/types'
 import { intheEnd } from '@/utils/common'
 import style from '@/style/web/web.multiple.module.less'
@@ -65,7 +65,7 @@ export default class Multiple extends Vue {
 		onSearch: async value => {
 			try {
 				this.client.node.loading = true
-				const { code, data } = await nodeClientArticles({
+				const { code, data } = await nodeSearchArticles({
 					page: 1,
 					size: 10,
 					title: value

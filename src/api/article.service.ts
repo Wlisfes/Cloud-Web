@@ -66,6 +66,15 @@ export function nodeClientArticles(params: types.NodeClientArticlesParameter) {
 	})
 }
 
+/**文章关键字搜索-客户端**/
+export function nodeSearchArticles(params: types.NodeArticlesParameter) {
+	return request<types.NodeArticlesResponse>({
+		url: `/api/article/client/keyword-node`,
+		method: 'GET',
+		params
+	})
+}
+
 /**文章信息-客户端**/
 export function nodeClientArticle(params: types.NodeArticleNodeParameter) {
 	return request<types.NodeArticleNodeResponse>({
