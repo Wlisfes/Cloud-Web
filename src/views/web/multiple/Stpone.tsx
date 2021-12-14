@@ -42,7 +42,11 @@ export default class Stpone extends Vue {
 		const { state } = this
 		return (
 			<div class={style['app-conter']}>
-				<NodeMultipleStpone state={state} loading={this.loading}></NodeMultipleStpone>
+				<NodeMultipleStpone
+					state={state}
+					loading={this.loading}
+					onRefresh={(id: number) => this.init(id)}
+				></NodeMultipleStpone>
 			</div>
 		)
 	}

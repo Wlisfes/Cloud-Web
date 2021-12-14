@@ -13,6 +13,9 @@ export default class NodeMultipleArticle extends Vue {
 
 	/**收藏、取消**/
 	private async onNodeStar(props: NodeArticle, e?: Event) {
+		e?.preventDefault()
+		e?.stopPropagation()
+
 		const code = await isToken()
 		if (code === 2) {
 			this.$emit('refresh')

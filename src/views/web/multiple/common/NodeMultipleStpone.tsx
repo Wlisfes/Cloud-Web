@@ -1,8 +1,10 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { AppAvatar } from '@/components/common'
 import { Tag, notification } from 'ant-design-vue'
-import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
-import { NodeArticle } from '@/types'
+import { Skeleton, SkeletonItem } from 'element-ui'
+import { nodeCreateStar, nodeCancelStar } from '@/api'
+import { isToken } from '@/directives/command/is-login'
+import { NodeArticle, HttpStatus } from '@/types'
 import Clipboard from 'clipboard'
 import style from '@/style/web/common/node.multiple.stpone.module.less'
 
@@ -12,6 +14,43 @@ export default class NodeMultipleStpone extends Vue {
 
 	@Prop({ type: Object, default: () => null }) state!: NodeArticle
 	@Prop({ type: Boolean, default: true }) loading!: boolean
+
+	/**收藏、取消**/
+	private async onNodeStar(props: NodeArticle, e?: Event) {
+		e?.preventDefault()
+		e?.stopPropagation()
+
+		const code = await isToken()
+		if (code === 2) {
+			this.$emit('refresh', props.id)
+		} else if (code === 1 && props.star.where) {
+			//已收藏
+			this.nodeCancelStar(props.id)
+		} else if (code === 1 && !props.star.where) {
+			//未收藏
+			this.nodeCreateStar(props.id)
+		}
+	}
+
+	/**创建收藏**/
+	private async nodeCreateStar(one: number) {
+		try {
+			const { code } = await nodeCreateStar({ one, type: 1 })
+			if (code === HttpStatus.OK) {
+				this.$emit('refresh', one)
+			}
+		} catch (e) {}
+	}
+
+	/**取消收藏**/
+	private async nodeCancelStar(one: number) {
+		try {
+			const { code } = await nodeCancelStar({ one, type: 1 })
+			if (code === HttpStatus.OK) {
+				this.$emit('refresh', one)
+			}
+		} catch (e) {}
+	}
 
 	@Watch('loading', { immediate: true })
 	private onMounte() {
@@ -107,9 +146,15 @@ export default class NodeMultipleStpone extends Vue {
 										<i class="el-icon-view" style={{ fontSize: '16px', marginTop: '2px' }}></i>
 										<span style={{ marginLeft: '5px' }}>{state?.browse || 0}</span>
 									</div>
-									<div class={style['nick-conter']}>
-										<i class="el-icon-star-on" style={{ fontSize: '18px' }}></i>
-										<span style={{ marginLeft: '5px' }}>{state?.browse || 0}</span>
+									<div class={style['nick-conter']} onClick={(e: Event) => this.onNodeStar(state, e)}>
+										<i
+											class="el-icon-star-on"
+											style={{
+												fontSize: '18px',
+												color: state?.star?.where ? '#1989fa' : '#999999'
+											}}
+										></i>
+										<span style={{ marginLeft: '5px' }}>{state?.star?.total || 0}</span>
 									</div>
 								</div>
 								<div class={style['node-user-source']}>
