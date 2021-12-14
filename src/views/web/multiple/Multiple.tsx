@@ -64,9 +64,8 @@ export default class Multiple extends Vue {
 			}
 		},
 		onRefresh: () => {
-			const { dataSource } = this.client
-			const size = dataSource.length > 12 ? dataSource.length : 12
-			this.client.initSource(false, 1, size)
+			const size = this.client.dataSource.length
+			this.client.initSource(false, 1, size > 12 ? size : 12)
 		},
 		onSearch: async value => {
 			try {

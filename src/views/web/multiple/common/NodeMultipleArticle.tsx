@@ -1,7 +1,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
+import { Image, Empty, Skeleton, SkeletonItem, Loading } from 'element-ui'
+import { nodeCreateStar, nodeCancelStar } from '@/api'
 import { isToken } from '@/directives/command/is-login'
-import { NodeArticle } from '@/types'
+import { NodeArticle, HttpStatus } from '@/types'
 import style from '@/style/web/common/node.multiple.article.module.less'
 
 @Component
@@ -11,14 +12,44 @@ export default class NodeMultipleArticle extends Vue {
 	@Prop({ type: Number, default: 0 }) total!: number
 
 	/**收藏、取消**/
-	private async onNodeStar() {
-		const status = await isToken()
-		console.log(status)
-		if (status === 2) {
+	private async onNodeStar(props: NodeArticle, e?: Event) {
+		const code = await isToken()
+		if (code === 2) {
 			this.$emit('refresh')
-		} else if (status === 1) {
-			try {
-			} catch (e) {}
+		} else if (code === 1 && props.star.where) {
+			//已收藏
+			this.nodeCancelStar(props.id)
+		} else if (code === 1 && !props.star.where) {
+			//未收藏
+			this.nodeCreateStar(props.id)
+		}
+	}
+
+	/**创建收藏**/
+	private async nodeCreateStar(one: number) {
+		const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.5)' })
+		try {
+			const { code } = await nodeCreateStar({ one, type: 1 })
+			if (code === HttpStatus.OK) {
+				this.$emit('refresh')
+				loading.close()
+			}
+		} catch (e) {
+			loading.close()
+		}
+	}
+
+	/**取消收藏**/
+	private async nodeCancelStar(one: number) {
+		const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.5)' })
+		try {
+			const { code } = await nodeCancelStar({ one, type: 1 })
+			if (code === HttpStatus.OK) {
+				this.$emit('refresh')
+				loading.close()
+			}
+		} catch (e) {
+			loading.close()
 		}
 	}
 
@@ -99,7 +130,7 @@ export default class NodeMultipleArticle extends Vue {
 												</div>
 												<div
 													class={style['node-icon']}
-													onClick={(e: Event) => isToken(this.onNodeStar, e)}
+													onClick={(e: Event) => this.onNodeStar(k, e)}
 												>
 													<i
 														class="el-icon-star-on"

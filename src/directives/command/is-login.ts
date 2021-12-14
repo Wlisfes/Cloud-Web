@@ -8,7 +8,7 @@ import { init as initMain } from '@/components/instance/init-main'
  * @param e Event
  * @returns number 0.拒绝登录 1.已经登录 2.执行登录
  */
-export function isToken(callback?: Function, e?: Event): Promise<number> {
+export function isToken(callback?: Function, e?: Event): Promise<0 | 1 | 2> {
 	return new Promise(resolve => {
 		e?.preventDefault()
 		e?.stopPropagation()
