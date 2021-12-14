@@ -26,14 +26,14 @@ export default class Intense extends Vue {
 			data: [],
 			loading: false
 		},
-		initSource: (merge = false) => {
+		initSource: (merge = false, page?: number, size?: number) => {
 			return new Promise(async (resolve, rejcet) => {
 				try {
 					this.client.loading = true
 					const { client } = this
 					const { code, data } = await nodeClientClouds({
-						page: client.page,
-						size: client.size,
+						page: page || client.page,
+						size: size || client.size,
 						title: client.keyword
 					})
 					if (code === HttpStatus.OK) {
@@ -61,6 +61,10 @@ export default class Intense extends Vue {
 				this.client.page++
 				this.client.initSource(true)
 			}
+		},
+		onRefresh: () => {
+			const size = this.client.dataSource.length
+			this.client.initSource(false, 1, size > 12 ? size : 12)
 		},
 		onSearch: async value => {
 			try {
@@ -119,7 +123,12 @@ export default class Intense extends Vue {
 					onChange={client.onChange}
 					onSubmit={client.onSubmit}
 				></AppSearch>
-				<NodeIntense total={client.total} loading={client.loading} dataSource={client.dataSource}></NodeIntense>
+				<NodeIntense
+					total={client.total}
+					loading={client.loading}
+					dataSource={client.dataSource}
+					onRefresh={client.onRefresh}
+				></NodeIntense>
 			</div>
 		)
 	}

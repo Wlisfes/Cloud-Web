@@ -2,7 +2,9 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Spin, Icon } from 'ant-design-vue'
 import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
 import { AppAvatar } from '@/components/common'
-import { NodeCloud } from '@/types'
+import { nodeCreateStar, nodeCancelStar } from '@/api'
+import { isToken } from '@/directives/command/is-login'
+import { NodeCloud, HttpStatus } from '@/types'
 import style from '@/style/web/common/node.intense.cloud.module.less'
 
 @Component
@@ -10,6 +12,43 @@ export default class NodeIntenseCloud extends Vue {
 	@Prop({ type: Array, default: () => [] }) dataSource!: NodeCloud[]
 	@Prop({ type: Boolean, default: true }) loading!: boolean
 	@Prop({ type: Number, default: 0 }) total!: number
+
+	/**收藏、取消**/
+	private async onNodeStar(props: NodeCloud, e?: Event) {
+		e?.preventDefault()
+		e?.stopPropagation()
+
+		const code = await isToken()
+		if (code === 2) {
+			this.$emit('refresh')
+		} else if (code === 1 && props.star.where) {
+			//已收藏
+			this.nodeCancelStar(props.id)
+		} else if (code === 1 && !props.star.where) {
+			//未收藏
+			this.nodeCreateStar(props.id)
+		}
+	}
+
+	/**创建收藏**/
+	private async nodeCreateStar(one: number) {
+		try {
+			const { code } = await nodeCreateStar({ one, type: 2 })
+			if (code === HttpStatus.OK) {
+				this.$emit('refresh')
+			}
+		} catch (e) {}
+	}
+
+	/**取消收藏**/
+	private async nodeCancelStar(one: number) {
+		try {
+			const { code } = await nodeCancelStar({ one, type: 2 })
+			if (code === HttpStatus.OK) {
+				this.$emit('refresh')
+			}
+		} catch (e) {}
+	}
 
 	protected render() {
 		return (
@@ -96,7 +135,10 @@ export default class NodeIntenseCloud extends Vue {
 															<i class="el-icon-view"></i>
 															<span style={{ marginLeft: '5px' }}>{k.browse || 0}</span>
 														</div>
-														<div class={style['node-play']}>
+														<div
+															class={style['node-play']}
+															onClick={(e: Event) => this.onNodeStar(k, e)}
+														>
 															<i
 																class="el-icon-star-on"
 																style={{

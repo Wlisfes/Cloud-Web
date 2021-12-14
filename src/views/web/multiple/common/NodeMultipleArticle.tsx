@@ -1,5 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Image, Empty, Skeleton, SkeletonItem, Loading } from 'element-ui'
+import { Image, Empty, Skeleton, SkeletonItem } from 'element-ui'
 import { nodeCreateStar, nodeCancelStar } from '@/api'
 import { isToken } from '@/directives/command/is-login'
 import { NodeArticle, HttpStatus } from '@/types'
@@ -27,30 +27,22 @@ export default class NodeMultipleArticle extends Vue {
 
 	/**创建收藏**/
 	private async nodeCreateStar(one: number) {
-		const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.5)' })
 		try {
 			const { code } = await nodeCreateStar({ one, type: 1 })
 			if (code === HttpStatus.OK) {
 				this.$emit('refresh')
-				loading.close()
 			}
-		} catch (e) {
-			loading.close()
-		}
+		} catch (e) {}
 	}
 
 	/**取消收藏**/
 	private async nodeCancelStar(one: number) {
-		const loading = Loading.service({ lock: true, background: 'rgba(0, 0, 0, 0.5)' })
 		try {
 			const { code } = await nodeCancelStar({ one, type: 1 })
 			if (code === HttpStatus.OK) {
 				this.$emit('refresh')
-				loading.close()
 			}
-		} catch (e) {
-			loading.close()
-		}
+		} catch (e) {}
 	}
 
 	protected render() {
