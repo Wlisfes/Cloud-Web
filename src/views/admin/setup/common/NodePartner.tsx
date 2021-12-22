@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Radio, Spin, notification } from 'ant-design-vue'
-import { AppEditor } from '@/components/common'
+import { AppEditor, AppCover } from '@/components/common'
 import { NodeAppCover } from '@/components/multiple'
 import { nodePartner, nodeCreatePartner, nodeUpdatePartner } from '@/api'
 import { HttpStatus, NodePoster } from '@/types'
@@ -94,6 +94,7 @@ export default class NodePartner extends Vue {
 
 	/**图片回调**/
 	private onSubmitCover(props: never) {
+		console.log(props)
 		if (Array.isArray(props)) {
 			this.form.cover = this.form.cover.concat(props)
 		} else {
@@ -178,12 +179,13 @@ export default class NodePartner extends Vue {
 							<Input v-model={form.title} placeholder="日志标题"></Input>
 						</FormModel.Item>
 						<FormModel.Item label="封面列表" prop="cover">
-							<NodeAppCover
+							<AppCover
+								multiple
 								ratio={16 / 9}
 								dataSource={form.cover}
 								onSubmit={this.onSubmitCover}
 								onDelete={this.onDeleteCover}
-							></NodeAppCover>
+							></AppCover>
 						</FormModel.Item>
 						<FormModel.Item prop="status" label="角色状态">
 							<Radio.Group v-model={form.status} style={{ marginLeft: '10px' }}>
