@@ -1,7 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { FormModel, Input, Modal, Button, Radio, Spin, notification } from 'ant-design-vue'
 import { AppEditor, AppCover } from '@/components/common'
-import { NodeAppCover } from '@/components/multiple'
 import { nodePartner, nodeCreatePartner, nodeUpdatePartner } from '@/api'
 import { HttpStatus, NodePoster } from '@/types'
 
