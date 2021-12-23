@@ -38,7 +38,7 @@ export default class AppCover extends Vue {
 				})
 			})
 			node.$once('submit', ({ props, done }: { props: NodePoster; done: Function }) => {
-				this.$emit('submit', { props, name: props.path, path: props.url })
+				this.$emit('submit', { ...props, name: props.path, path: props.url })
 				done()
 			})
 		})
