@@ -1,7 +1,9 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import BScroll from '@better-scroll/core'
 import MouseWheel from '@better-scroll/mouse-wheel'
+import ScrollBar from '@better-scroll/scroll-bar'
 BScroll.use(MouseWheel)
+BScroll.use(ScrollBar)
 
 @Component
 export default class NodeScroll extends Vue {
@@ -46,6 +48,7 @@ export default class NodeScroll extends Vue {
 			probeType: this.probeType,
 			click: this.click,
 			scrollX: this.scrollX,
+			scrollbar: true,
 			mouseWheel: {
 				speed: 20,
 				invert: false,
