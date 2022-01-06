@@ -1,5 +1,6 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { AppAvatar } from '@/components/common'
+import { RootComment } from '@/components/comment'
 import { Tag, notification } from 'ant-design-vue'
 import { Skeleton, SkeletonItem } from 'element-ui'
 import { nodeCreateStar, nodeCancelStar } from '@/api'
@@ -124,6 +125,7 @@ export default class NodeMultipleStpone extends Vue {
 					</div>
 					<div class={style['node-conter']}>
 						<h1 class={style['node-h-title']}>{state?.title}</h1>
+						<RootComment></RootComment>
 						<div class={style['node-user']}>
 							<div class={style['node-user-avatar']}>
 								<AppAvatar
