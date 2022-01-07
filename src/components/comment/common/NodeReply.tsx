@@ -31,8 +31,14 @@ export default class NodeReply extends Vue {
 	}
 
 	private onContentClick(e: Event) {
+		const DivRef = this.$refs.reply
 		if (!this.$refs.container.contains(e.target as HTMLDivElement)) {
-			this.$emit('blur', { target: this.$refs.reply })
+			if (!DivRef.innerHTML) {
+				if (DivRef.classList.contains(style['is-form-conter-focus'])) {
+					DivRef.classList.remove(style['is-form-conter-focus'])
+				}
+			}
+			this.$emit('blur', { target: DivRef })
 		}
 	}
 
@@ -82,7 +88,7 @@ export default class NodeReply extends Vue {
 
 	protected render() {
 		return (
-			<div ref="container" class={style['node-reply']}>
+			<div class={style['node-reply']}>
 				{this.avatar && (
 					<div class={style['node-reply-avatar']}>
 						{this.uid ? (
@@ -98,7 +104,7 @@ export default class NodeReply extends Vue {
 						)}
 					</div>
 				)}
-				<div class={style['node-reply-container']}>
+				<div ref="container" class={style['node-reply-container']}>
 					<div
 						class={style['node-reply-form-conter']}
 						ref="reply"
