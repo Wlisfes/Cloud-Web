@@ -1,9 +1,8 @@
 .root-comment {
 	position: relative;
+	display: flex;
+	flex-direction: column;
 	:global {
-		.ant-spin {
-			max-height: 100% !important;
-		}
 		.emoji {
 			vertical-align: sub;
 			width: auto;
@@ -13,32 +12,99 @@
 			margin: 0 2px;
 		}
 	}
-	.root-form {
+}
+
+/*************************************************************/
+.node-reply {
+	position: relative;
+	display: flex;
+	&-avatar {
+		width: 40px;
+		height: 40px;
+		margin-right: 16px;
+	}
+	&-container {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+	&-form-conter {
 		position: relative;
-		&-container {
-			position: relative;
-			transition: all 300ms;
-			background-color: #f8f8f8;
-			border: 1px solid #f8f8f8;
-			border-radius: 4px;
-			padding: 8px 12px;
-			outline: none;
-			min-height: 64px;
-			box-sizing: border-box;
-			color: #252933;
+		transition: all 300ms;
+		background-color: #f8f8f8;
+		border: 1px solid #f8f8f8;
+		border-radius: 4px;
+		padding: 8px 12px;
+		outline: none;
+		min-height: 64px;
+		box-sizing: border-box;
+		color: #252933;
+		font-size: 14px;
+		line-height: 22px;
+		resize: none;
+		&.is-form-conter-focus {
+			border-color: #1e80ff;
+			background-color: #fff;
+		}
+		&:empty::before {
+			content: attr(placeholder);
+			position: absolute;
+			pointer-events: none;
+			user-select: none;
+			color: #8a919f;
+		}
+	}
+	&-form-footer {
+		display: flex;
+		align-items: center;
+		padding: 8px 0;
+		user-select: none;
+
+		.reply-place {
+			display: flex;
+			align-items: center;
+			color: #515767;
 			font-size: 14px;
 			line-height: 22px;
-			resize: both;
-			&:focus-visible {
-				border-color: #1e80ff;
-				background-color: #fff;
+			cursor: pointer;
+			margin-right: 20px;
+			transition: fill 0.3s;
+			&:hover {
+				color: #1e80ff;
+				svg {
+					fill: #1e80ff;
+				}
 			}
-			&:empty::before {
-				content: attr(placeholder);
-				position: absolute;
-				pointer-events: none;
-				user-select: none;
-				color: #8a919f;
+			svg {
+				width: 18px;
+				height: 18px;
+				fill: #515767;
+				margin-right: 4px;
+				background-repeat: no-repeat;
+				background-size: cover;
+				transition: fill 0.3s;
+			}
+		}
+		.reply-submit {
+			flex: 0 0 auto;
+			margin-left: auto;
+			color: #fff;
+			&-promote {
+				font-size: 14px;
+				line-height: 22px;
+				letter-spacing: 0.2px;
+				color: #515767;
+				margin-right: 16px;
+			}
+			:global {
+				.ant-btn-primary {
+					border: none;
+				}
+				.ant-btn-primary[disabled] {
+					background: #abcdff;
+					color: #ffffff;
+				}
 			}
 		}
 	}
