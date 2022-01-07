@@ -7,10 +7,11 @@ import style from '@/style/common/root.comment.module.less'
 
 @Component
 export default class NodeReply extends Vue {
-	$refs!: { reply: HTMLDivElement }
+	$refs!: { reply: HTMLDivElement; container: HTMLDivElement }
 
 	@Prop({ type: Boolean, default: false }) avatar!: boolean
 	@Prop({ type: String }) placeholder!: string
+	@Prop({ type: Boolean, default: false }) autoFocus!: boolean
 
 	@Getter('user/uid') uid!: number
 	@Getter('user/nickname') nickname!: string
@@ -19,25 +20,46 @@ export default class NodeReply extends Vue {
 	private content: string = ''
 	private loading: boolean = false
 
+	protected mounted() {
+		if (this.autoFocus) {
+			this.$refs.reply.focus()
+		}
+		window.addEventListener('click', this.onContentClick, false)
+		this.$once('hook:beforeDestroy', () => {
+			window.removeEventListener('click', this.onContentClick)
+		})
+	}
+
+	private onContentClick(e: Event) {
+		if (!this.$refs.container.contains(e.target as HTMLDivElement)) {
+			this.$emit('blur', { target: this.$refs.reply })
+		}
+	}
+
 	/**文本域Focus事件**/
 	private onContentFocus(e: { target: HTMLDivElement }) {
 		if (!e.target.classList.contains(style['is-form-conter-focus'])) {
 			e.target.classList.add(style['is-form-conter-focus'])
 		}
+		this.$emit('focus', e)
 	}
 
 	/**文本域Blur事件**/
 	private onContentBlur(e: { target: HTMLDivElement }) {
-		if (!e.target.innerHTML) {
-			if (e.target.classList.contains(style['is-form-conter-focus'])) {
-				e.target.classList.remove(style['is-form-conter-focus'])
+		if (!this.$refs.container.contains(e.target)) {
+			if (!e.target.innerHTML) {
+				if (e.target.classList.contains(style['is-form-conter-focus'])) {
+					e.target.classList.remove(style['is-form-conter-focus'])
+				}
 			}
+			this.$emit('blur', e)
 		}
 	}
 
 	/**文本域Input事件**/
 	private onContentInput(e: { target: HTMLDivElement }) {
 		this.content = e.target.innerHTML
+		this.$emit('input', e)
 	}
 
 	/**文本域Ctrl + Enter组合事件**/
@@ -60,7 +82,7 @@ export default class NodeReply extends Vue {
 
 	protected render() {
 		return (
-			<div class={style['node-reply']}>
+			<div ref="container" class={style['node-reply']}>
 				{this.avatar && (
 					<div class={style['node-reply-avatar']}>
 						{this.uid ? (
