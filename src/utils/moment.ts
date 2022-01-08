@@ -11,7 +11,7 @@ Day.locale('zh')
  * DayJS实例
  * @param date
  */
-export function initDate(date?: IDate): Day.Dayjs {
+export function useDate(date?: IDate): Day.Dayjs {
 	return Day(date)
 }
 
@@ -19,8 +19,8 @@ export function initDate(date?: IDate): Day.Dayjs {
  * 过去时间、多久前
  * @param date
  */
-export function initFormer(date?: IDate): string {
-	const current = initDate()
-	const former = initDate(date)
+export function useFormer(date?: IDate): string {
+	const current = useDate()
+	const former = useDate(date)
 	return current.to(former)
 }

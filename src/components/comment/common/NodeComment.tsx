@@ -3,7 +3,7 @@ import { AppAvatar } from '@/components/common'
 import { NodeReply } from '@/components/comment/common'
 import { SVGLike, SVGReply } from '@/components/icons/svg-icon'
 import { stopBack } from '@/utils/auth'
-import { initFormer } from '@/utils/moment'
+import { useFormer } from '@/utils/moment'
 import { NodeComment as NodeCommentInter } from '@/types'
 import style from '@/style/common/root.comment.module.less'
 
@@ -35,7 +35,7 @@ export class VNodeReply extends Vue {
 						<div class={style['comment-user-nickname']}>
 							<span>{node.user.nickname}</span>
 						</div>
-						<div>{initFormer(node.createTime)}</div>
+						<div>{useFormer(node.createTime)}</div>
 					</div>
 					<div class={style['comment-content']}>{node.comment}</div>
 					<div class={style['comment-footer']}>
@@ -96,7 +96,7 @@ export class VNodeComment extends Vue {
 						<div class={style['comment-user-nickname']}>
 							<span>{node.user.nickname}</span>
 						</div>
-						<div>{initFormer(node.createTime)}</div>
+						<div>{useFormer(node.createTime)}</div>
 					</div>
 					<div class={style['comment-content']}>{node.comment}</div>
 					<div class={style['comment-footer']}>
