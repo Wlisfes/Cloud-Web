@@ -21,24 +21,32 @@ export default class NodeReply extends Vue {
 	private loading: boolean = false
 
 	protected mounted() {
-		if (this.autoFocus) {
-			this.$refs.reply.focus()
-		}
-		window.addEventListener('click', this.onContentClick, false)
-		this.$once('hook:beforeDestroy', () => {
-			window.removeEventListener('click', this.onContentClick)
+		this.initIalize()
+	}
+
+	private initIalize() {
+		this.$nextTick(() => {
+			if (this.autoFocus) {
+				this.$refs.reply.focus()
+			}
 		})
+		setTimeout(() => {
+			window.addEventListener('click', this.onContentClick, false)
+			this.$once('hook:beforeDestroy', () => {
+				window.removeEventListener('click', this.onContentClick)
+			})
+		}, 60)
 	}
 
 	private onContentClick(e: Event) {
-		const DivRef = this.$refs.reply
-		if (!this.$refs.container.contains(e.target as HTMLDivElement)) {
-			if (!DivRef.innerHTML) {
-				if (DivRef.classList.contains(style['is-form-conter-focus'])) {
-					DivRef.classList.remove(style['is-form-conter-focus'])
+		const { container, reply } = this.$refs
+		if (container && !container.contains(e.target as HTMLDivElement)) {
+			if (reply && !reply.innerHTML) {
+				if (reply.classList.contains(style['is-form-conter-focus'])) {
+					reply.classList.remove(style['is-form-conter-focus'])
 				}
 			}
-			this.$emit('blur', { target: DivRef })
+			this.$emit('blur', { target: reply })
 		}
 	}
 

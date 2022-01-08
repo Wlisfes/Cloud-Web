@@ -2,7 +2,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { AppAvatar } from '@/components/common'
 import { NodeReply } from '@/components/comment/common'
 import { SVGLike, SVGReply } from '@/components/icons/svg-icon'
-import { stopBack } from '@/utils/auth'
+import { stopAuth } from '@/utils/auth'
 import { useFormer } from '@/utils/moment'
 import { NodeComment as NodeCommentInter } from '@/types'
 import style from '@/style/common/root.comment.module.less'
@@ -45,7 +45,7 @@ export class VNodeReply extends Vue {
 						</div>
 						<div
 							class={style['comment-footer-place']}
-							onClick={(e: Event) => stopBack(e, () => (this.visible = !this.visible))}
+							onClick={(e: Event) => stopAuth(() => (this.visible = !this.visible))}
 						>
 							<SVGReply />
 							<span>回复</span>
@@ -79,6 +79,11 @@ export class VNodeComment extends Vue {
 		}
 	}
 
+	private onContentSubmit(props: { value: string; done: Function }) {
+		console.log(props)
+		props.done()
+	}
+
 	protected render() {
 		const { node } = this
 		return (
@@ -106,7 +111,7 @@ export class VNodeComment extends Vue {
 						</div>
 						<div
 							class={style['comment-footer-place']}
-							onClick={(e: Event) => stopBack(e, () => (this.visible = !this.visible))}
+							onClick={(e: Event) => stopAuth(() => (this.visible = !this.visible))}
 						>
 							<SVGReply />
 							<span>回复</span>
@@ -118,16 +123,19 @@ export class VNodeComment extends Vue {
 								auto-focus
 								placeholder={`回复${node.user.nickname}`}
 								onBlur={this.onContentBlur}
+								onSubmit={this.onContentSubmit}
 							></NodeReply>
 						</div>
 					)}
-					{this.total > 0 && (
-						<div class={style['comment-reply']}>
-							{this.dataSource.map(item => {
-								return <VNodeReply {...{ props: { node: item } }}></VNodeReply>
-							})}
-						</div>
-					)}
+					<keep-alive>
+						{this.total > 0 && (
+							<div class={style['comment-reply']}>
+								{this.dataSource.map(item => {
+									return <VNodeReply key={item.id} node={item}></VNodeReply>
+								})}
+							</div>
+						)}
+					</keep-alive>
 				</div>
 			</div>
 		)
@@ -143,7 +151,7 @@ export default class NodeComment extends Vue {
 			<div style={{ paddingTop: '32px' }}>
 				<div class={style['node-comment']}>
 					{this.dataSource.map(item => {
-						return <VNodeComment {...{ props: { node: item } }}></VNodeComment>
+						return <VNodeComment key={item.id} node={item}></VNodeComment>
 					})}
 				</div>
 			</div>
