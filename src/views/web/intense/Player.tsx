@@ -2,9 +2,10 @@ import { Vue, Component } from 'vue-property-decorator'
 import { NodePlayer } from '@/views/web/intense/common'
 import { DPlayer, AppSelectNode } from '@/components/common'
 import { nodeClientCloud, nodeAliyunPlay } from '@/api'
-import { HttpStatus, NodeCloud } from '@/types'
 import { initPlayer, initCutover } from '@/utils/aliyun-player'
+import { RootComment } from '@/components/comment'
 import { DPlayerEvents } from 'dplayer'
+import { HttpStatus, NodeCloud } from '@/types'
 import style from '@/style/web/web.player.module.less'
 
 type Current = {
@@ -23,6 +24,7 @@ export default class Player extends Vue {
 	$refs!: { player: HTMLElement }
 
 	private player!: DPlayer | null
+	private primary: number = 0
 	private node!: AppSelectNode | null
 	private loading: boolean = true
 	private current: Current = { path: '', cover: '', key: '' }
@@ -74,6 +76,7 @@ export default class Player extends Vue {
 								key: props.key
 							})
 						}
+						this.primary = data.id
 						this.state = Object.assign(this.state, {
 							type: data.type,
 							title: data.title,
@@ -167,6 +170,15 @@ export default class Player extends Vue {
 				<NodePlayer loading={this.loading}>
 					<div id="player" ref="player" slot="player"></div>
 				</NodePlayer>
+				{!this.loading && (
+					<div class={style['app-conter-comment']}>
+						<div
+							style={{ padding: '60px 10px 0', backgroundColor: '#ffffff', borderRadius: '0 0 4px 4px' }}
+						>
+							<RootComment primary={this.primary} type={2}></RootComment>
+						</div>
+					</div>
+				)}
 			</div>
 		)
 	}
