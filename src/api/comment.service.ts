@@ -28,6 +28,15 @@ export function nodeComments(params: types.NodeCommentsParameter) {
 	})
 }
 
+/**子评论列表**/
+export function nodeChildComments(params: types.NodeCommentsParameter) {
+	return request<types.NodeCommentsResponse>({
+		url: `/api/comment/child/list-node`,
+		method: 'GET',
+		params
+	})
+}
+
 /**删除评论**/
 export function nodeDeleteComment(params: types.NodeDeleteCommentParameter) {
 	return request<types.NodeDeleteCommentResponse>({

@@ -3,6 +3,7 @@ import { Getter } from 'vuex-class'
 import { Avatar, Button } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
 import { SVGEmoji, SVGImage } from '@/components/icons/svg-icon'
+import { stopBack } from '@/utils/auth'
 import style from '@/style/common/root.comment.module.less'
 
 @Component
@@ -59,7 +60,7 @@ export default class NodeReply extends Vue {
 	}
 
 	/**文本域Blur事件**/
-	private onContentBlur(e: { target: HTMLDivElement }) {
+	private onContentBlur(e: { target: HTMLDivElement } & Event) {
 		if (!this.$refs.container.contains(e.target)) {
 			if (!e.target.innerHTML) {
 				if (e.target.classList.contains(style['is-form-conter-focus'])) {
@@ -79,7 +80,9 @@ export default class NodeReply extends Vue {
 	/**文本域Ctrl + Enter组合事件**/
 	private onContentKeydown(e: KeyboardEvent & { target: HTMLDivElement }) {
 		if (e.target.innerHTML && e.ctrlKey && e.key === 'Enter' && !this.loading) {
-			this.onSubmit(e.target)
+			stopBack(e, () => {
+				this.onSubmit(e.target)
+			})
 		}
 	}
 
@@ -122,8 +125,8 @@ export default class NodeReply extends Vue {
 						placeholder={this.placeholder || '输入评论（Enter换行，Ctrl + Enter发送）'}
 						onInput={this.onContentInput}
 						onFocus={this.onContentFocus}
-						onBlur={this.onContentBlur}
 						onKeydown={this.onContentKeydown}
+						onBlur={this.onContentBlur}
 					></div>
 					<div class={style['node-reply-form-footer']}>
 						<div class={style['reply-place']}>
@@ -140,7 +143,7 @@ export default class NodeReply extends Vue {
 								type="primary"
 								loading={this.loading}
 								disabled={!this.content || this.loading}
-								onClick={() => this.onSubmit(this.$refs.reply)}
+								onClick={(e: Event) => stopBack(e, () => this.onSubmit(this.$refs.reply))}
 							>
 								发表评论
 							</Button>

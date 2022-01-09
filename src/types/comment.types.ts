@@ -26,7 +26,10 @@ export type NodeCommentParameter = NodeComment & {
 /**
  * 创建评论
  */
-export type NodeCreateCommentParameter = Pick<NodeCommentParameter, 'one' | 'type' | 'comment' | 'super' | 'parent'>
+export type NodeCreateCommentParameter = Pick<NodeCommentParameter, 'one' | 'type' | 'comment'> & {
+	super?: number | null
+	parent?: number | null
+}
 export type NodeCreateCommentResponse = Pick<NodeCommentParameter, 'message'>
 
 /**

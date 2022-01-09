@@ -79,7 +79,7 @@ export default class NodeMultipleStpone extends Vue {
 		const { state } = this
 		return (
 			<div class={style['app-conter']}>
-				<Skeleton loading={this.loading} animated count={1} class={style['node-skeleton']}>
+				<Skeleton loading={this.loading || state === null} animated count={1} class={style['node-skeleton']}>
 					<div slot="template" class={style['node-skeleton-item']}>
 						<h1 class={style['node-h-title']} style={{ display: 'flex' }}>
 							<SkeletonItem
@@ -125,7 +125,6 @@ export default class NodeMultipleStpone extends Vue {
 					</div>
 					<div class={style['node-conter']}>
 						<h1 class={style['node-h-title']}>{state?.title}</h1>
-						<RootComment></RootComment>
 						<div class={style['node-user']}>
 							<div class={style['node-user-avatar']}>
 								<AppAvatar
@@ -174,6 +173,8 @@ export default class NodeMultipleStpone extends Vue {
 							</div>
 						</div>
 						<div class="node-html markdown-body" ref="html" domPropsInnerHTML={state.html}></div>
+
+						<RootComment primary={state.id} type={1} style={{ marginTop: '60px' }}></RootComment>
 					</div>
 				</Skeleton>
 			</div>

@@ -4,17 +4,40 @@ import { NodeReply } from '@/components/comment/common'
 import { SVGLike, SVGReply } from '@/components/icons/svg-icon'
 import { stopAuth } from '@/utils/auth'
 import { useFormer } from '@/utils/moment'
-import { NodeComment as NodeCommentInter } from '@/types'
+import { nodeChildComments, nodeCreateComment } from '@/api'
+import { HttpStatus, NodeComment as NodeCommentInter } from '@/types'
 import style from '@/style/common/root.comment.module.less'
 
 @Component
 export class VNodeReply extends Vue {
+	@Prop({ type: Number }) super!: number
+	@Prop({ type: Number }) primary!: number
+	@Prop({ type: Number, default: 1 }) type!: number
 	@Prop({ type: Object, default: () => null }) node!: NodeCommentInter
 	private visible: boolean = false
 
 	private onContentBlur(e: { target: HTMLDivElement }) {
 		if (!e.target.innerHTML) {
 			this.visible = !this.visible
+		}
+	}
+
+	/**创建评论**/
+	private async onContentSubmit(props: { value: string; done: Function }) {
+		try {
+			const { code } = await nodeCreateComment({
+				one: this.primary,
+				type: this.type,
+				super: this.super,
+				parent: this.node?.id || null,
+				comment: props.value
+			})
+			if (code === HttpStatus.OK) {
+				this.$emit('refresh')
+			}
+			props.done()
+		} catch (e) {
+			props.done()
 		}
 	}
 
@@ -57,6 +80,7 @@ export class VNodeReply extends Vue {
 								auto-focus
 								placeholder={`回复${node.user.nickname}`}
 								onBlur={this.onContentBlur}
+								onSubmit={this.onContentSubmit}
 							></NodeReply>
 						</div>
 					)}
@@ -68,8 +92,13 @@ export class VNodeReply extends Vue {
 
 @Component
 export class VNodeComment extends Vue {
+	@Prop({ type: Number }) primary!: number
+	@Prop({ type: Number, default: 1 }) type!: number
 	@Prop({ type: Object, default: () => null }) node!: NodeCommentInter
 	private visible: boolean = false
+	private page: number = 1
+	private size: number = 5
+	private loading: boolean = false
 	private total: number = this.node?.reply.total || 0
 	private dataSource: Array<NodeCommentInter> = this.node?.reply.list || []
 
@@ -79,9 +108,44 @@ export class VNodeComment extends Vue {
 		}
 	}
 
-	private onContentSubmit(props: { value: string; done: Function }) {
-		console.log(props)
-		props.done()
+	/**评论列表**/
+	private async initNodeComments() {
+		try {
+			const { code, data } = await nodeChildComments({
+				one: this.primary,
+				type: this.type,
+				page: this.page,
+				size: this.size,
+				super: this.node?.id
+			})
+			if (code === HttpStatus.OK) {
+				this.dataSource = data.list
+				this.total = data.total
+			}
+			return (this.loading = false)
+		} catch (e) {
+			return (this.loading = false)
+		}
+	}
+
+	/**创建评论**/
+	private async onContentSubmit(props: { value: string; done: Function }) {
+		try {
+			const { code } = await nodeCreateComment({
+				one: this.primary,
+				type: this.type,
+				super: this.node?.id,
+				parent: this.node?.id || null,
+				comment: props.value
+			})
+			if (code === HttpStatus.OK) {
+				this.loading = true
+				await this.initNodeComments()
+			}
+			props.done()
+		} catch (e) {
+			props.done()
+		}
 	}
 
 	protected render() {
@@ -131,7 +195,16 @@ export class VNodeComment extends Vue {
 						{this.total > 0 && (
 							<div class={style['comment-reply']}>
 								{this.dataSource.map(item => {
-									return <VNodeReply key={item.id} node={item}></VNodeReply>
+									return (
+										<VNodeReply
+											key={item.id}
+											super={this.node.id}
+											primary={this.primary}
+											type={this.type}
+											node={item}
+											onRefresh={this.initNodeComments}
+										></VNodeReply>
+									)
 								})}
 							</div>
 						)}
@@ -144,6 +217,8 @@ export class VNodeComment extends Vue {
 
 @Component
 export default class NodeComment extends Vue {
+	@Prop({ type: Number }) primary!: number
+	@Prop({ type: Number, default: 1 }) type!: number
 	@Prop({ type: Array, default: () => [] }) dataSource!: NodeCommentInter[]
 
 	protected render() {
@@ -151,7 +226,14 @@ export default class NodeComment extends Vue {
 			<div style={{ paddingTop: '32px' }}>
 				<div class={style['node-comment']}>
 					{this.dataSource.map(item => {
-						return <VNodeComment key={item.id} node={item}></VNodeComment>
+						return (
+							<VNodeComment
+								key={item.id}
+								node={item}
+								primary={this.primary}
+								type={this.type}
+							></VNodeComment>
+						)
 					})}
 				</div>
 			</div>
