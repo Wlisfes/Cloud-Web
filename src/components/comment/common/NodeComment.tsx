@@ -4,7 +4,7 @@ import { NodeReply } from '@/components/comment/common'
 import { SVGLike, SVGReply } from '@/components/icons/svg-icon'
 import { stopAuth } from '@/utils/auth'
 import { useFormer } from '@/utils/moment'
-import { nodeChildComments, nodeCreateComment } from '@/api'
+import { nodeChildComments, nodeCreateComment, nodeDeleteComment } from '@/api'
 import { HttpStatus, NodeComment as NodeCommentInter } from '@/types'
 import style from '@/style/common/root.comment.module.less'
 
@@ -15,6 +15,7 @@ export class VNodeReply extends Vue {
 	@Prop({ type: Number, default: 1 }) type!: number
 	@Prop({ type: Object, default: () => null }) node!: NodeCommentInter
 	private visible: boolean = false
+	private delete: boolean = this.node?.status === 2
 
 	private onContentBlur(e: { target: HTMLDivElement }) {
 		if (!e.target.innerHTML) {
@@ -41,8 +42,22 @@ export class VNodeReply extends Vue {
 		}
 	}
 
+	/**删除评论**/
+	private async initNodeDeleteComment({ id }: NodeCommentInter) {
+		try {
+			const { code, data } = await nodeDeleteComment({ id })
+			if (code === HttpStatus.OK) {
+				this.delete = !this.delete
+			}
+		} catch (e) {}
+	}
+
 	protected render() {
 		const { node } = this
+		if (this.delete) {
+			return null //已删除
+		}
+
 		return (
 			<div key={node.id} class={style['comment-reply-item']}>
 				<div class={style['comment-reply-avatar']}>
@@ -60,7 +75,13 @@ export class VNodeReply extends Vue {
 						</div>
 						<div>{useFormer(node.createTime)}</div>
 					</div>
-					<div class={style['comment-content']}>{node.comment}</div>
+					<div class={style['comment-content']} domPropsInnerHTML={node.comment}></div>
+					{node.parent && !(node.parent.id === this.super) && (
+						<div
+							class={`${style['comment-content']} ${style['is-parent-content']}`}
+							domPropsInnerHTML={node.parent.comment}
+						></div>
+					)}
 					<div class={style['comment-footer']}>
 						<div class={style['comment-footer-place']}>
 							<SVGLike />
@@ -72,6 +93,17 @@ export class VNodeReply extends Vue {
 						>
 							<SVGReply />
 							<span>回复</span>
+						</div>
+						<div style={{ marginLeft: 'auto' }}>
+							<button
+								class="delete-button"
+								v-user={{
+									uid: node.user.uid,
+									onClick: (e: Event) => stopAuth(() => this.initNodeDeleteComment(node))
+								}}
+							>
+								删除
+							</button>
 						</div>
 					</div>
 					{this.visible && (
@@ -96,6 +128,7 @@ export class VNodeComment extends Vue {
 	@Prop({ type: Number, default: 1 }) type!: number
 	@Prop({ type: Object, default: () => null }) node!: NodeCommentInter
 	private visible: boolean = false
+	private delete: boolean = this.node?.status === 2
 	private page: number = 1
 	private size: number = 5
 	private loading: boolean = false
@@ -148,8 +181,22 @@ export class VNodeComment extends Vue {
 		}
 	}
 
+	/**删除评论**/
+	private async initNodeDeleteComment({ id }: NodeCommentInter) {
+		try {
+			const { code, data } = await nodeDeleteComment({ id })
+			if (code === HttpStatus.OK) {
+				this.delete = !this.delete
+			}
+		} catch (e) {}
+	}
+
 	protected render() {
 		const { node } = this
+		if (this.delete) {
+			return null //已删除
+		}
+
 		return (
 			<div key={node.id} class={style['node-comment-item']}>
 				<div class={style['node-comment-avatar']}>
@@ -161,36 +208,49 @@ export class VNodeComment extends Vue {
 					/>
 				</div>
 				<div class={style['node-comment-container']}>
-					<div class={style['comment-user']}>
-						<div class={style['comment-user-nickname']}>
-							<span>{node.user.nickname}</span>
+					<div class={style['comment-parent-container']}>
+						<div class={style['comment-user']}>
+							<div class={style['comment-user-nickname']}>
+								<span>{node.user.nickname}</span>
+							</div>
+							<div>{useFormer(node.createTime)}</div>
 						</div>
-						<div>{useFormer(node.createTime)}</div>
+						<div class={style['comment-content']} domPropsInnerHTML={node.comment}></div>
+						<div class={style['comment-footer']}>
+							<div class={style['comment-footer-place']}>
+								<SVGLike />
+								<span>点赞</span>
+							</div>
+							<div
+								class={style['comment-footer-place']}
+								onClick={(e: Event) => stopAuth(() => (this.visible = !this.visible))}
+							>
+								<SVGReply />
+								<span>回复</span>
+							</div>
+							<div style={{ marginLeft: 'auto' }}>
+								<button
+									class="delete-button"
+									v-user={{
+										uid: node.user.uid,
+										onClick: (e: Event) => stopAuth(() => this.initNodeDeleteComment(node))
+									}}
+								>
+									删除
+								</button>
+							</div>
+						</div>
+						{this.visible && (
+							<div style={{ marginTop: '12px' }}>
+								<NodeReply
+									auto-focus
+									placeholder={`回复${node.user.nickname}`}
+									onBlur={this.onContentBlur}
+									onSubmit={this.onContentSubmit}
+								></NodeReply>
+							</div>
+						)}
 					</div>
-					<div class={style['comment-content']}>{node.comment}</div>
-					<div class={style['comment-footer']}>
-						<div class={style['comment-footer-place']}>
-							<SVGLike />
-							<span>点赞</span>
-						</div>
-						<div
-							class={style['comment-footer-place']}
-							onClick={(e: Event) => stopAuth(() => (this.visible = !this.visible))}
-						>
-							<SVGReply />
-							<span>回复</span>
-						</div>
-					</div>
-					{this.visible && (
-						<div style={{ marginTop: '12px' }}>
-							<NodeReply
-								auto-focus
-								placeholder={`回复${node.user.nickname}`}
-								onBlur={this.onContentBlur}
-								onSubmit={this.onContentSubmit}
-							></NodeReply>
-						</div>
-					)}
 					<keep-alive>
 						{this.total > 0 && (
 							<div class={style['comment-reply']}>
