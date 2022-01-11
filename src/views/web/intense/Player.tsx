@@ -173,7 +173,11 @@ export default class Player extends Vue {
 				{!this.loading && (
 					<div class={style['app-conter-comment']}>
 						<div
-							style={{ padding: '60px 10px 0', backgroundColor: '#ffffff', borderRadius: '0 0 4px 4px' }}
+							style={{
+								padding: '60px 20px 20px',
+								backgroundColor: '#ffffff',
+								borderRadius: '0 0 4px 4px'
+							}}
 						>
 							<RootComment primary={this.primary} type={2}></RootComment>
 						</div>

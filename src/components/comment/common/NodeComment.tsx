@@ -17,6 +17,7 @@ export class VNodeReply extends Vue {
 	@Prop({ type: Number, default: () => 0 }) total!: number
 	@Prop({ type: Object, default: () => null }) node!: NodeCommentInter
 	private visible: boolean = false
+	private delete: boolean = this.node?.status === 2
 
 	private onContentBlur(e: { target: HTMLDivElement }) {
 		if (!e.target.innerHTML) {
@@ -49,13 +50,19 @@ export class VNodeReply extends Vue {
 			const { code, data } = await nodeDeleteComment({ id: props.id })
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '', duration: 1 })
-				this.$emit('refresh')
+				this.delete = true
+				if (this.$el.parentElement?.children?.length === 1) {
+					this.$el.parentElement.style.display = 'none'
+				}
 			}
 		} catch (e) {}
 	}
 
 	protected render() {
 		const { node } = this
+		if (this.delete) {
+			return null
+		}
 
 		return (
 			<div key={node.id} class={style['comment-reply-item']}>
@@ -132,6 +139,7 @@ export class VNodeComment extends Vue {
 	private page: number = 1
 	private size: number = 5
 	private loading: boolean = false
+	private delete: boolean = this.node?.status === 2
 	private total: number = this.node?.reply.total || 0
 	private dataSource: Array<NodeCommentInter> = this.node?.reply.list || []
 
@@ -187,13 +195,16 @@ export class VNodeComment extends Vue {
 			const { code, data } = await nodeDeleteComment({ id })
 			if (code === HttpStatus.OK) {
 				notification.success({ message: data.message, description: '', duration: 1 })
-				this.$el.remove()
+				this.delete = true
 			}
 		} catch (e) {}
 	}
 
 	protected render() {
 		const { node } = this
+		if (this.delete) {
+			return null
+		}
 
 		return (
 			<div key={node.id} class={style['node-comment-item']}>
@@ -298,6 +309,7 @@ export default class NodeComment extends Vue {
 									node={item}
 									primary={this.primary}
 									type={this.type}
+									onRefresh={() => this.$emit('refresh')}
 								></VNodeComment>
 							)
 						})}
