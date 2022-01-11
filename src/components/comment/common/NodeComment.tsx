@@ -1,4 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { notification, Popconfirm } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
 import { NodeReply } from '@/components/comment/common'
 import { SVGLike, SVGReply } from '@/components/icons/svg-icon'
@@ -13,9 +14,9 @@ export class VNodeReply extends Vue {
 	@Prop({ type: Number }) super!: number
 	@Prop({ type: Number }) primary!: number
 	@Prop({ type: Number, default: 1 }) type!: number
+	@Prop({ type: Number, default: () => 0 }) total!: number
 	@Prop({ type: Object, default: () => null }) node!: NodeCommentInter
 	private visible: boolean = false
-	private delete: boolean = this.node?.status === 2
 
 	private onContentBlur(e: { target: HTMLDivElement }) {
 		if (!e.target.innerHTML) {
@@ -43,20 +44,18 @@ export class VNodeReply extends Vue {
 	}
 
 	/**删除评论**/
-	private async initNodeDeleteComment({ id }: NodeCommentInter) {
+	private async initNodeDeleteComment(props: NodeCommentInter) {
 		try {
-			const { code, data } = await nodeDeleteComment({ id })
+			const { code, data } = await nodeDeleteComment({ id: props.id })
 			if (code === HttpStatus.OK) {
-				this.delete = !this.delete
+				notification.success({ message: data.message, description: '', duration: 1 })
+				this.$emit('refresh')
 			}
 		} catch (e) {}
 	}
 
 	protected render() {
 		const { node } = this
-		if (this.delete) {
-			return null //已删除
-		}
 
 		return (
 			<div key={node.id} class={style['comment-reply-item']}>
@@ -95,15 +94,17 @@ export class VNodeReply extends Vue {
 							<span>回复</span>
 						</div>
 						<div style={{ marginLeft: 'auto' }}>
-							<button
-								class="delete-button"
-								v-user={{
-									uid: node.user.uid,
-									onClick: (e: Event) => stopAuth(() => this.initNodeDeleteComment(node))
-								}}
+							<Popconfirm
+								placement="topRight"
+								title="确定要删除吗？"
+								ok-text="确定"
+								cancel-text="取消"
+								onConfirm={() => stopAuth(() => this.initNodeDeleteComment(node))}
 							>
-								删除
-							</button>
+								<button class="delete-button" v-user={{ uid: node.user.uid }}>
+									删除
+								</button>
+							</Popconfirm>
 						</div>
 					</div>
 					{this.visible && (
@@ -128,7 +129,6 @@ export class VNodeComment extends Vue {
 	@Prop({ type: Number, default: 1 }) type!: number
 	@Prop({ type: Object, default: () => null }) node!: NodeCommentInter
 	private visible: boolean = false
-	private delete: boolean = this.node?.status === 2
 	private page: number = 1
 	private size: number = 5
 	private loading: boolean = false
@@ -186,16 +186,14 @@ export class VNodeComment extends Vue {
 		try {
 			const { code, data } = await nodeDeleteComment({ id })
 			if (code === HttpStatus.OK) {
-				this.delete = !this.delete
+				notification.success({ message: data.message, description: '', duration: 1 })
+				this.$el.remove()
 			}
 		} catch (e) {}
 	}
 
 	protected render() {
 		const { node } = this
-		if (this.delete) {
-			return null //已删除
-		}
 
 		return (
 			<div key={node.id} class={style['node-comment-item']}>
@@ -229,15 +227,17 @@ export class VNodeComment extends Vue {
 								<span>回复</span>
 							</div>
 							<div style={{ marginLeft: 'auto' }}>
-								<button
-									class="delete-button"
-									v-user={{
-										uid: node.user.uid,
-										onClick: (e: Event) => stopAuth(() => this.initNodeDeleteComment(node))
-									}}
+								<Popconfirm
+									placement="topRight"
+									title="确定要删除吗？"
+									ok-text="确定"
+									cancel-text="取消"
+									onConfirm={() => stopAuth(() => this.initNodeDeleteComment(node))}
 								>
-									删除
-								</button>
+									<button class="delete-button" v-user={{ uid: node.user.uid }}>
+										删除
+									</button>
+								</Popconfirm>
 							</div>
 						</div>
 						{this.visible && (
@@ -258,6 +258,7 @@ export class VNodeComment extends Vue {
 									return (
 										<VNodeReply
 											key={item.id}
+											total={this.total}
 											super={this.node.id}
 											primary={this.primary}
 											type={this.type}
