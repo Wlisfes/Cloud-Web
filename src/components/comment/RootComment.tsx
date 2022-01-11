@@ -1,4 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Pagination } from 'ant-design-vue'
 import { NodeReply, NodeComment } from '@/components/comment/common'
 import { nodeComments, nodeCreateComment } from '@/api'
 import { HttpStatus, NodeComment as NodeCommentInter } from '@/types'
@@ -34,6 +35,15 @@ export default class RootComment extends Vue {
 		}
 	}
 
+	/**评论分页**/
+	private async onChange(page: number, size: number) {
+		this.page = page
+		this.size = size
+		this.loading = true
+		await this.$nextTick()
+		await this.initNodeComments()
+	}
+
 	/**创建评论**/
 	private async onContentSubmit(props: { value: string; done: Function }) {
 		try {
@@ -55,7 +65,23 @@ export default class RootComment extends Vue {
 		return (
 			<div class={style['root-comment']}>
 				<NodeReply avatar onSubmit={this.onContentSubmit}></NodeReply>
-				<NodeComment primary={this.primary} type={this.type} dataSource={this.dataSource}></NodeComment>
+				<NodeComment
+					primary={this.primary}
+					type={this.type}
+					total={this.total}
+					loading={this.loading}
+					dataSource={this.dataSource}
+				></NodeComment>
+				{this.total > 0 && (
+					<div class={style['root-comment-pagination']}>
+						<Pagination
+							show-size-changer
+							total={this.total}
+							onChange={this.onChange}
+							onShowSizeChange={(page: number, size: number) => this.onChange(page, size)}
+						></Pagination>
+					</div>
+				)}
 			</div>
 		)
 	}

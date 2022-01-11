@@ -1,5 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { notification, Popconfirm } from 'ant-design-vue'
+import { notification, Popconfirm, Empty } from 'ant-design-vue'
 import { AppAvatar } from '@/components/common'
 import { NodeReply } from '@/components/comment/common'
 import { SVGLike, SVGReply } from '@/components/icons/svg-icon'
@@ -280,23 +280,29 @@ export class VNodeComment extends Vue {
 export default class NodeComment extends Vue {
 	@Prop({ type: Number }) primary!: number
 	@Prop({ type: Number, default: 1 }) type!: number
+	@Prop({ type: Number, default: 0 }) total!: number
+	@Prop({ type: Boolean, default: true }) loading!: boolean
 	@Prop({ type: Array, default: () => [] }) dataSource!: NodeCommentInter[]
 
 	protected render() {
 		return (
-			<div style={{ paddingTop: '32px' }}>
-				<div class={style['node-comment']}>
-					{this.dataSource.map(item => {
-						return (
-							<VNodeComment
-								key={item.id}
-								node={item}
-								primary={this.primary}
-								type={this.type}
-							></VNodeComment>
-						)
-					})}
-				</div>
+			<div style={{ paddingTop: '32px' }} v-loading={this.loading}>
+				{this.total === 0 ? (
+					<Empty image={(Empty as any).PRESENTED_IMAGE_SIMPLE} description="暂无评论"></Empty>
+				) : (
+					<div class={style['node-comment']}>
+						{this.dataSource.map(item => {
+							return (
+								<VNodeComment
+									key={item.id}
+									node={item}
+									primary={this.primary}
+									type={this.type}
+								></VNodeComment>
+							)
+						})}
+					</div>
+				)}
 			</div>
 		)
 	}
