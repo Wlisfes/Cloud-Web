@@ -1,6 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppSearch } from '@/components/common'
-import { NodeMultipleArticle } from '@/views/web/multiple/common'
+import { NodeMultiple } from '@/views/web/multiple/common'
 import { nodeClientArticles, nodeSearchArticles } from '@/api'
 import { HttpStatus, Client, NodeArticle } from '@/types'
 import { intheEnd } from '@/utils/common'
@@ -124,12 +124,12 @@ export default class Multiple extends Vue {
 					onChange={client.onChange}
 					onSubmit={client.onSubmit}
 				></AppSearch>
-				<NodeMultipleArticle
+				<NodeMultiple
 					total={client.total}
 					loading={client.loading}
 					dataSource={client.dataSource}
 					onRefresh={this.client.onRefresh}
-				></NodeMultipleArticle>
+				></NodeMultiple>
 			</div>
 		)
 	}
