@@ -23,7 +23,6 @@ export default class Partner extends Vue {
 					page: source.page,
 					size: source.size
 				})
-				console.log(data)
 				if (code === HttpStatus.OK) {
 					this.source.total = data.total
 					this.source.dataSource = data.list
