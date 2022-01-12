@@ -2,7 +2,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Empty, Skeleton } from 'element-ui'
 import { RootArticle } from '@/views/web/multiple/common'
 import { NodeArticle } from '@/types'
-import style from '@/style/web/common/node.multiple.article.module.less'
+import style from '@/style/web/common/node.multiple.module.less'
 
 @Component
 export default class NodeMultiple extends Vue {

@@ -7,10 +7,10 @@ import { nodeCreateStar, nodeCancelStar } from '@/api'
 import { isToken } from '@/directives/command/is-login'
 import { NodeArticle, HttpStatus } from '@/types'
 import Clipboard from 'clipboard'
-import style from '@/style/web/common/node.multiple.stpone.module.less'
+import style from '@/style/web/common/node.matter.module.less'
 
 @Component
-export default class NodeMultipleStpone extends Vue {
+export default class NodeMatter extends Vue {
 	$refs!: { html: HTMLElement }
 
 	@Prop({ type: Object, default: () => null }) state!: NodeArticle

@@ -3,7 +3,7 @@ import { Image, Skeleton, SkeletonItem } from 'element-ui'
 import { nodeCreateStar, nodeCancelStar } from '@/api'
 import { isToken } from '@/directives/command/is-login'
 import { NodeArticle, HttpStatus } from '@/types'
-import style from '@/style/web/common/node.multiple.article.module.less'
+import style from '@/style/web/common/node.multiple.module.less'
 
 @Component
 export default class RootArticle extends Vue {

@@ -24,8 +24,8 @@ export const routes: RouteConfig[] = [
 			},
 			{
 				path: '/multiple/:id',
-				name: 'WEB-Stpone',
-				component: () => import('@/views/web/multiple/Stpone')
+				name: 'WEB-Matter',
+				component: () => import('@/views/web/multiple/Matter')
 			},
 			/********************************************************************/
 			{

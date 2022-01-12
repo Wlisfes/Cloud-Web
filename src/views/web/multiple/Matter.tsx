@@ -1,11 +1,11 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { NodeMultipleStpone } from '@/views/web/multiple/common'
+import { NodeMatter } from '@/views/web/multiple/common'
 import { nodeClientArticle } from '@/api'
 import { HttpStatus } from '@/types'
-import style from '@/style/web/web.stpone.module.less'
+import style from '@/style/web/web.matter.module.less'
 
 @Component
-export default class Stpone extends Vue {
+export default class Matter extends Vue {
 	private loading: boolean = true
 	private state: any = {}
 
@@ -42,11 +42,7 @@ export default class Stpone extends Vue {
 		const { state } = this
 		return (
 			<div class={style['app-conter']}>
-				<NodeMultipleStpone
-					state={state}
-					loading={this.loading}
-					onRefresh={(id: number) => this.init(id)}
-				></NodeMultipleStpone>
+				<NodeMatter state={state} loading={this.loading} onRefresh={(id: number) => this.init(id)}></NodeMatter>
 			</div>
 		)
 	}
