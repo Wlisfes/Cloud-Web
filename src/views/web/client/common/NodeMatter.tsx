@@ -22,10 +22,10 @@ export default class NodeMatter extends Vue {
 		const code = await isToken()
 		if (code === 2) {
 			this.$emit('refresh')
-		} else if (code === 1 && props.star.where) {
+		} else if (code === 1 && this.star.where) {
 			//已收藏
 			this.nodeCancelStar(props.id)
-		} else if (code === 1 && !props.star.where) {
+		} else if (code === 1 && !this.star.where) {
 			//未收藏
 			this.nodeCreateStar(props.id)
 		}
