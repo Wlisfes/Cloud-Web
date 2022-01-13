@@ -1,5 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator'
-import { NodePlayer } from '@/views/web/intense/common'
+import { NodePlayer } from '@/views/web/client/common'
 import { DPlayer, AppSelectNode } from '@/components/common'
 import { nodeClientCloud, nodeAliyunPlay } from '@/api'
 import { initPlayer, initCutover } from '@/utils/aliyun-player'

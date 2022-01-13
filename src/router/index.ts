@@ -29,14 +29,14 @@ export const routes: RouteConfig[] = [
 			},
 			/********************************************************************/
 			{
-				path: '/intense',
-				name: 'WEB-Intense',
-				component: () => import('@/views/web/intense/Intense')
+				path: '/client',
+				name: 'WEB-Client',
+				component: () => import('@/views/web/client/RootClient')
 			},
 			{
 				path: '/player/:id',
 				name: 'WEB-Player',
-				component: () => import('@/views/web/intense/Player')
+				component: () => import('@/views/web/client/RootPlayer')
 			},
 			/********************************************************************/
 			{

@@ -22,7 +22,7 @@ export default class NodeLink extends Vue {
 						<router-link to="/multiple">🍀 归档</router-link>
 					</li>
 					<li class={style['node-link-item']}>
-						<router-link to="/intense">🍓 视频</router-link>
+						<router-link to="/client">🍓 视频</router-link>
 					</li>
 					<li class={style['node-link-item']}>
 						<router-link to="/minute">🍒 收录</router-link>

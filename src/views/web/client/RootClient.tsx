@@ -1,10 +1,10 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { AppSearch } from '@/components/common'
-import { NodeIntense } from '@/views/web/intense/common'
+import { NodeClient } from '@/views/web/client/common'
 import { nodeClientClouds, nodeSearchClouds } from '@/api'
 import { HttpStatus, Client, NodeCloud } from '@/types'
 import { intheEnd } from '@/utils/common'
-import style from '@/style/web/web.intense.module.less'
+import style from '@/style/web/web.client.module.less'
 
 type ClientNode = {
 	data: Array<{ id: number; value: string }>
@@ -12,7 +12,7 @@ type ClientNode = {
 }
 
 @Component
-export default class Intense extends Vue {
+export default class RootClient extends Vue {
 	$refs!: { appSearch: AppSearch }
 
 	private client: Client<Array<NodeCloud>, ClientNode> = {
@@ -123,12 +123,12 @@ export default class Intense extends Vue {
 					onChange={client.onChange}
 					onSubmit={client.onSubmit}
 				></AppSearch>
-				<NodeIntense
+				<NodeClient
 					total={client.total}
 					loading={client.loading}
 					dataSource={client.dataSource}
 					onRefresh={client.onRefresh}
-				></NodeIntense>
+				></NodeClient>
 			</div>
 		)
 	}

@@ -5,7 +5,7 @@ import { AppAvatar } from '@/components/common'
 import { nodeCreateStar, nodeCancelStar } from '@/api'
 import { isToken } from '@/directives/command/is-login'
 import { NodeCloud, HttpStatus } from '@/types'
-import style from '@/style/web/common/node.intense.cloud.module.less'
+import style from '@/style/web/common/node.client.module.less'
 
 @Component
 export default class NodeIntenseCloud extends Vue {
