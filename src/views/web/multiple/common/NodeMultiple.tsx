@@ -1,4 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Spin, Icon } from 'ant-design-vue'
 import { Empty, Skeleton } from 'element-ui'
 import { RootArticle } from '@/views/web/multiple/common'
 import { NodeArticle } from '@/types'
@@ -29,6 +30,13 @@ export default class NodeMultiple extends Vue {
 								{this.dataSource.map(item => (
 									<RootArticle key={item.id} node={item}></RootArticle>
 								))}
+								{this.total > this.dataSource.length && (
+									<div class={style['node-conter-more']}>
+										<Spin
+											indicator={<Icon spin type="loading" style={{ fontSize: '42px' }} />}
+										></Spin>
+									</div>
+								)}
 							</div>
 						) : !this.loading && this.dataSource.length === 0 ? (
 							<div class={style['node-empty']}>

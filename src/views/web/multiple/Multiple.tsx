@@ -17,7 +17,7 @@ export default class Multiple extends Vue {
 
 	private client: Client<Array<NodeArticle>, ClientNode> = {
 		page: 1,
-		size: 12,
+		size: 10,
 		keyword: '',
 		total: 0,
 		loading: true,
@@ -59,13 +59,13 @@ export default class Multiple extends Vue {
 			const { end } = intheEnd()
 			if (!client.loading && end && client.total > client.dataSource.length) {
 				this.client.page++
-				this.client.size = 12
+				this.client.size = 10
 				this.client.initSource(true)
 			}
 		},
 		onRefresh: () => {
 			const size = this.client.dataSource.length
-			this.client.initSource(false, 1, size > 12 ? size : 12)
+			this.client.initSource(false, 1, size > 10 ? size : 10)
 		},
 		onSearch: async value => {
 			try {
