@@ -8,10 +8,11 @@ export type Source<T> = {
 	showSize: boolean
 	sizeOption: string[]
 	dataSource: T
-	initSource: () => void
+	initSource: (merge?: boolean, page?: number, size?: number) => Promise<any>
 	onClose: () => void
 	onSearch?: () => void
 	onReset?: () => void
+	onMore?: () => void
 	onChange?: (
 		pagination: {
 			current: number
