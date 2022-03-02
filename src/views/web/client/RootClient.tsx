@@ -102,14 +102,21 @@ export default class RootClient extends Vue {
 		}
 	}
 
-	protected created() {
-		this.client.initSource().finally(() => {
-			this.client.onSearch?.('')
+	private initSourceMore() {
+		const initService = () => {
+			this.client.onMore?.()
+		}
+		window.addEventListener('scroll', initService, false)
+		this.$once('hook:beforeDestroy', () => {
+			window.removeEventListener('scroll', initService, false)
 		})
 	}
 
-	protected mounted() {
-		window.addEventListener('scroll', this.client.onMore as any, false)
+	protected created() {
+		this.client.initSource().finally(() => {
+			this.client.onSearch?.('')
+			this.initSourceMore()
+		})
 	}
 
 	protected render() {
