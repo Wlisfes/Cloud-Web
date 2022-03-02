@@ -81,8 +81,8 @@ module.exports = {
 		disableHostCheck: true,
 		proxy: {
 			[process.env.VUE_APP_BASE_API]: {
-				target: 'http://localhost:3005',
-				// target: 'https://lisfes.cn',
+				// target: 'http://localhost:3005',
+				target: 'https://lisfes.cn',
 				ws: false,
 				changeOrigin: true,
 				pathRewrite: {

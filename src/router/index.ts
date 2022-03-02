@@ -10,6 +10,7 @@ export const routes: RouteConfig[] = [
 		path: '/',
 		name: 'WEB-Container',
 		component: Container,
+		redirect: '/',
 		children: [
 			{
 				path: '/',
@@ -52,7 +53,6 @@ export const routes: RouteConfig[] = [
 			}
 		]
 	},
-
 	{
 		path: '/404',
 		name: 'WEB-404',
