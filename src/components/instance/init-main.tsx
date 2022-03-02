@@ -19,7 +19,7 @@ export function init(props?: VMInstanceProps): Promise<VMInstance> {
 		private type: boolean = true
 		private codeDateTime: number = Date.now()
 		private cation = { codeTime: 0, loading: false }
-		private form = { account: '', password: '', code: '', nickname: '', email: '' }
+		private form = { account: '99999999', password: '123456', code: '', nickname: '', email: '' }
 		private rules = {
 			account: [{ required: true, message: '请输入用户名、邮箱、手机号', trigger: 'change' }],
 			password: [
