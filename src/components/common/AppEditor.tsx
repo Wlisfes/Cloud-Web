@@ -16,24 +16,6 @@ export default class AppEditor extends Vue {
 	private get editorStyle() {
 		return { height: this.full ? '100%' : `${this.height}px`, zIndex: this.full ? 1500 : 98 }
 	}
-	private externalLink = {
-		markdown_css: false,
-		hljs_js: () => {
-			return 'https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js'
-		},
-		hljs_lang: (lang: any) => {
-			return 'https://cdn.bootcss.com/highlight.js/9.12.0/languages/' + lang + '.min.js'
-		},
-		hljs_css: (css: any) => {
-			return 'https://cdn.bootcss.com/highlight.js/9.12.0/styles/' + css + '.min.css'
-		},
-		katex_js: () => {
-			return 'https://cdn.bootcss.com/KaTeX/0.8.3/katex.min.js'
-		},
-		katex_css: () => {
-			return 'https://cdn.bootcss.com/KaTeX/0.8.3/katex.min.css'
-		}
-	}
 
 	private onChange(content: string, html: string) {
 		this.$emit('change', { content, html })
@@ -74,7 +56,6 @@ export default class AppEditor extends Vue {
 				ref="editor"
 				ishljs={true}
 				autofocus={false}
-				externalLink={this.externalLink}
 				defaultOpen={this.defaultOpen}
 				style={this.editorStyle}
 				codeStyle="atom-one-dark"

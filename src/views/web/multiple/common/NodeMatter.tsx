@@ -3,6 +3,7 @@ import { AppAvatar } from '@/components/common'
 import { RootComment } from '@/components/comment'
 import { Tag, notification } from 'ant-design-vue'
 import { Skeleton, SkeletonItem } from 'element-ui'
+import { NodeHtmlMitter } from '@/views/web/multiple/common'
 import { nodeCreateStar, nodeCancelStar } from '@/api'
 import { isToken } from '@/directives/command/is-login'
 import { NodeArticle, HttpStatus } from '@/types'
@@ -172,7 +173,10 @@ export default class NodeMatter extends Vue {
 								</div>
 							</div>
 						</div>
-						<div class="node-html markdown-body" ref="html" domPropsInnerHTML={state.html}></div>
+						{/* <div class="node-html markdown-body" ref="html" domPropsInnerHTML={state.html}></div> */}
+						<div class="node-html html-container" ref="html">
+							<NodeHtmlMitter content={state.content}></NodeHtmlMitter>
+						</div>
 
 						<RootComment primary={state.id} type={1} style={{ marginTop: '60px' }}></RootComment>
 					</div>
