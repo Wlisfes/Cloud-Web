@@ -61,6 +61,26 @@ export default class AppEditor extends Vue {
 				codeStyle="atom-one-dark"
 				tabSize={null}
 				value={this.content}
+				externalLink={{
+					markdown_css: () => {
+						return `https://cdn.jsdelivr.net/npm/mavon-editor@2.10.4/dist/markdown/github-markdown.min.css`
+					},
+					hljs_js: () => {
+						return `https://cdn.jsdelivr.net/npm/mavon-editor@2.10.4/dist/highlightjs/highlight.min.js`
+					},
+					hljs_css: (css: string) => {
+						return `https://cdn.jsdelivr.net/npm/mavon-editor@2.10.4/dist/highlightjs/styles/${css}.min.css`
+					},
+					hljs_lang: (lang: string) => {
+						return `https://cdn.jsdelivr.net/npm/mavon-editor@2.10.4/dist/highlightjs/languages/${lang}.min.js`
+					},
+					katex_css: () => {
+						return `https://cdn.jsdelivr.net/npm/mavon-editor@2.10.4/dist/katex/katex.min.css`
+					},
+					katex_js: () => {
+						return `https://cdn.jsdelivr.net/npm/mavon-editor@2.10.4/dist/katex/katex.min.js`
+					}
+				}}
 				onChange={this.onChange}
 				onImgAdd={this.onImageCreate}
 				onFullScreen={(full: boolean) => (this.full = full)}
